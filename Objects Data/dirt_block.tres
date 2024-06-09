@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="ObjectsData" load_steps=3 format=3 uid="uid://dumqyq6yh3stv"]
+
+[ext_resource type="Script" path="res://ObjectsData.cs" id="1_bv8wr"]
+[ext_resource type="Texture2D" uid="uid://bidews83m4vie" path="res://Textures/block/dirt.png" id="2_7d43p"]
+
+[resource]
+script = ExtResource("1_bv8wr")
+object_type = 1
+object_name = "dirt block"
+object_id = 3
+object_is_block = true
+texture_top = ExtResource("2_7d43p")
+texture_bottom = ExtResource("2_7d43p")
+texture_front = ExtResource("2_7d43p")
+texture_back = ExtResource("2_7d43p")
+texture_right = ExtResource("2_7d43p")
+texture_left = ExtResource("2_7d43p")
+object_held_position = Vector3(0, 0, 0)
+object_held_rotation = Vector3(0, 0, 0)

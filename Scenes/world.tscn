@@ -1,0 +1,83 @@
+[gd_scene load_steps=19 format=3 uid="uid://dbsahl043aa4t"]
+
+[ext_resource type="Script" path="res://Scripts/Block_Manager.cs" id="1_iut7u"]
+[ext_resource type="Script" path="res://Scripts/Chunk_World_Manager.cs" id="1_rxrwf"]
+[ext_resource type="PackedScene" uid="uid://cmg0782dxuoqe" path="res://Scenes/player.tscn" id="1_wrubq"]
+[ext_resource type="Script" path="res://Block.cs" id="2_4vmcx"]
+[ext_resource type="PackedScene" uid="uid://v1b67nixagfo" path="res://Scenes/chunk.tscn" id="3_nko5p"]
+[ext_resource type="Texture2D" uid="uid://bidews83m4vie" path="res://Textures/block/dirt.png" id="3_xdyay"]
+[ext_resource type="Texture2D" uid="uid://c6ytnsi1sw4hg" path="res://Textures/block/grass_top_temp.png" id="4_beh1k"]
+[ext_resource type="Texture2D" uid="uid://di4vtbocqscbr" path="res://Textures/block/grass_side_temp.png" id="4_epyh1"]
+[ext_resource type="Texture2D" uid="uid://bmwq8rt5wryvr" path="res://Textures/block/stone.png" id="5_ql5md"]
+
+[sub_resource type="Gradient" id="Gradient_p6iue"]
+colors = PackedColorArray(1, 1, 1, 1, 0.470588, 0.654902, 1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_df317"]
+gradient = SubResource("Gradient_p6iue")
+fill_from = Vector2(1, 1)
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_owxcj"]
+panorama = SubResource("GradientTexture2D_df317")
+filter = false
+
+[sub_resource type="Sky" id="Sky_jpxk4"]
+sky_material = SubResource("PanoramaSkyMaterial_owxcj")
+
+[sub_resource type="Environment" id="Environment_mlvxh"]
+background_mode = 2
+background_color = Color(0.470588, 0.654902, 1, 1)
+background_canvas_max_layer = 2
+sky = SubResource("Sky_jpxk4")
+fog_light_color = Color(0.851053, 0.866227, 0.890078, 1)
+fog_sky_affect = 0.0
+
+[sub_resource type="Resource" id="Resource_1i5cw"]
+script = ExtResource("2_4vmcx")
+isTransparent = false
+
+[sub_resource type="Resource" id="Resource_5wpis"]
+script = ExtResource("2_4vmcx")
+Texture_Top = ExtResource("3_xdyay")
+isTransparent = false
+
+[sub_resource type="Resource" id="Resource_swevy"]
+script = ExtResource("2_4vmcx")
+Texture_Top = ExtResource("4_beh1k")
+Texture_Bottom = ExtResource("3_xdyay")
+Texture_Right = ExtResource("4_epyh1")
+Texture_Left = ExtResource("4_epyh1")
+Texture_Forward = ExtResource("4_epyh1")
+Texture_Back = ExtResource("4_epyh1")
+isTransparent = false
+
+[sub_resource type="Resource" id="Resource_orqex"]
+script = ExtResource("2_4vmcx")
+Texture_Top = ExtResource("5_ql5md")
+isTransparent = false
+
+[node name="World" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_mlvxh")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.54074, 0.84119, 0, -0.84119, 0.54074, 0, 0, 0)
+shadow_enabled = true
+
+[node name="Block Manager" type="Node" parent="."]
+script = ExtResource("1_iut7u")
+Air = SubResource("Resource_1i5cw")
+Dirt = SubResource("Resource_5wpis")
+Grass = SubResource("Resource_swevy")
+Stone = SubResource("Resource_orqex")
+
+[node name="Chunk World Manager" type="Node" parent="." node_paths=PackedStringArray("playerManager")]
+script = ExtResource("1_rxrwf")
+ChunkScene = ExtResource("3_nko5p")
+playerManager = NodePath("../Player")
+
+[node name="World Manager" type="Node" parent="."]
+
+[node name="Player" parent="." instance=ExtResource("1_wrubq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 60, 8)

@@ -1,0 +1,140 @@
+[gd_scene load_steps=22 format=3 uid="uid://cmg0782dxuoqe"]
+
+[ext_resource type="Script" path="res://Scripts/PlayerBody.cs" id="1_2ctm6"]
+[ext_resource type="Script" path="res://Scripts/Player_Manager.cs" id="1_cvkl3"]
+[ext_resource type="PackedScene" uid="uid://gn7kr4rv6xo0" path="res://Scenes/ui.tscn" id="1_lp3y2"]
+[ext_resource type="Script" path="res://Scripts/Actions_Manager.cs" id="2_dlnfw"]
+[ext_resource type="Script" path="res://Scripts/Camera_Controller.cs" id="2_y1166"]
+[ext_resource type="Script" path="res://Scripts/Inventory_Manager.cs" id="3_a3ji4"]
+[ext_resource type="Resource" uid="uid://5v5ow4rhsgrk" path="res://Objects Data/hand.tres" id="4_d4mma"]
+[ext_resource type="PackedScene" uid="uid://b2y8u66mjxlkf" path="res://Scenes/block.tscn" id="4_tuvca"]
+[ext_resource type="Resource" uid="uid://cmxvu0xlds5qd" path="res://Objects Data/air_block.tres" id="5_heqkl"]
+[ext_resource type="Resource" uid="uid://dumqyq6yh3stv" path="res://Objects Data/dirt_block.tres" id="6_h3x21"]
+[ext_resource type="Resource" uid="uid://j77cdfdqr6gk" path="res://Objects Data/grass_block.tres" id="7_s3ubv"]
+[ext_resource type="Resource" uid="uid://51cuhreirrk3" path="res://Objects Data/stick.tres" id="8_27e2q"]
+[ext_resource type="PackedScene" uid="uid://dgw1ihjslknv1" path="res://Models/BlockOutline.blend" id="8_pga75"]
+[ext_resource type="Script" path="res://Scripts/Voxel_Mesh_Creator.cs" id="11_wq2v2"]
+[ext_resource type="PackedScene" uid="uid://ha74jk5u4n8q" path="res://Models/Body.blend" id="12_r716d"]
+[ext_resource type="Script" path="res://Scripts/Body_Mesh_Controller.cs" id="12_uifak"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_x1tcr"]
+shading_mode = 0
+disable_receive_shadows = true
+
+[sub_resource type="BoxMesh" id="BoxMesh_pq88g"]
+size = Vector3(0.479, 0.479, 0.479)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_km0lp"]
+load_path = "res://.godot/imported/stick.png-c221c4064cc07ee724efd50bc3991192.ctex"
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_e7tcp"]
+height = 1.8
+radius = 0.25
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_f6r3m"]
+shading_mode = 0
+
+[node name="Player" type="Node3D" node_paths=PackedStringArray("playerBody", "cameraController", "playerMesh", "uiManager", "actionsManager", "inventoryManager", "vmCreator", "chunkOutline")]
+script = ExtResource("1_cvkl3")
+playerBody = NodePath("Body")
+cameraController = NodePath("Camera Controller")
+playerMesh = NodePath("Body/mesh")
+uiManager = NodePath("UI")
+actionsManager = NodePath("Actions Manager")
+inventoryManager = NodePath("Inventory Manager")
+vmCreator = NodePath("Cam Holder/Player Head/SpringArm3D/Main Camera/Held Object/Stick")
+chunkOutline = NodePath("Chunk Outline")
+
+[node name="UI" parent="." node_paths=PackedStringArray("playerManager") instance=ExtResource("1_lp3y2")]
+playerManager = NodePath("..")
+
+[node name="Inventory Manager" type="Node" parent="." node_paths=PackedStringArray("playerManager")]
+script = ExtResource("3_a3ji4")
+ObjectsArchive = Array[Resource]([ExtResource("4_d4mma"), ExtResource("5_heqkl"), ExtResource("6_h3x21"), ExtResource("7_s3ubv"), ExtResource("8_27e2q")])
+playerManager = NodePath("..")
+
+[node name="Actions Manager" type="Node" parent="." node_paths=PackedStringArray("playerRaycast", "blockbreakRaycast", "block_outline_node", "playerManager")]
+script = ExtResource("2_dlnfw")
+emptyBlock = ExtResource("4_tuvca")
+playerRaycast = NodePath("../Body/Player Raycast")
+blockbreakRaycast = NodePath("../Block Outline/RayCast3D")
+block_outline_node = NodePath("../Block Outline")
+playerManager = NodePath("..")
+
+[node name="Camera Controller" type="Node" parent="." node_paths=PackedStringArray("mainCamera", "camHolder", "playerHead", "mainBody", "playerManager", "cameraSpringArm")]
+script = ExtResource("2_y1166")
+mouseSensitivity = 1.0
+mainCamera = NodePath("../Cam Holder/Player Head/SpringArm3D/Main Camera")
+camHolder = NodePath("../Cam Holder")
+playerHead = NodePath("../Cam Holder/Player Head")
+mainBody = NodePath("../Body")
+playerManager = NodePath("..")
+cameraSpringArm = NodePath("../Cam Holder/Player Head/SpringArm3D")
+
+[node name="Cam Holder" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.73075, 0)
+
+[node name="Player Head" type="MeshInstance3D" parent="Cam Holder"]
+material_override = SubResource("StandardMaterial3D_x1tcr")
+mesh = SubResource("BoxMesh_pq88g")
+skeleton = NodePath("../../Body")
+
+[node name="SpringArm3D" type="SpringArm3D" parent="Cam Holder/Player Head"]
+spring_length = 0.0
+
+[node name="Main Camera" type="Camera3D" parent="Cam Holder/Player Head/SpringArm3D"]
+
+[node name="Held Object" type="Node3D" parent="Cam Holder/Player Head/SpringArm3D/Main Camera"]
+
+[node name="Stick" type="Node3D" parent="Cam Holder/Player Head/SpringArm3D/Main Camera/Held Object" node_paths=PackedStringArray("meshLocation")]
+script = ExtResource("11_wq2v2")
+itemTextureR = SubResource("CompressedTexture2D_km0lp")
+meshLocation = NodePath("mesh")
+
+[node name="mesh" type="Node3D" parent="Cam Holder/Player Head/SpringArm3D/Main Camera/Held Object/Stick"]
+transform = Transform3D(0.939693, 0, 0.34202, 0, 1, 0, -0.34202, 0, 0.939693, 0.195, -1.29, -1.425)
+
+[node name="Body" type="CharacterBody3D" parent="." node_paths=PackedStringArray("playerManager")]
+script = ExtResource("1_2ctm6")
+playerManager = NodePath("..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CylinderShape3D_e7tcp")
+
+[node name="mesh" parent="Body" instance=ExtResource("12_r716d")]
+transform = Transform3D(0.06, 0, 0, 0, 0.06, 0, 0, 0, 0.06, 0, 0.961, 0.479806)
+top_level = true
+
+[node name="Steve_02 - Default_0" parent="Body/mesh/Sketchfab_model/21d0206dd6d3419fae876636965f5f90_fbx/RootNode/Steve/Object_4" index="0"]
+material_override = SubResource("StandardMaterial3D_f6r3m")
+
+[node name="Body Mesh Controller" type="Node" parent="Body/mesh" node_paths=PackedStringArray("head", "body", "playerManager")]
+script = ExtResource("12_uifak")
+head = NodePath("../../../Cam Holder")
+body = NodePath("..")
+playerManager = NodePath("../../..")
+
+[node name="Player Raycast" type="RayCast3D" parent="Body"]
+transform = Transform3D(1, 0, 1.42109e-14, 0, 1, 0, -1.42109e-14, 0, 1, 0, 1.65, 0)
+target_position = Vector3(0, 0, -5)
+
+[node name="Block Outline" type="Node3D" parent="."]
+visible = false
+
+[node name="mesh" parent="Block Outline" instance=ExtResource("8_pga75")]
+transform = Transform3D(0.503, 0, 0, 0, 0.503, 0, 0, 0, 0.503, 0, 0, 0)
+
+[node name="RayCast3D" type="RayCast3D" parent="Block Outline"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0.5, 0.5)
+target_position = Vector3(0, 0.51, 0)
+hit_from_inside = true
+hit_back_faces = false
+
+[node name="Chunk Outline" type="Node3D" parent="."]
+visible = false
+
+[node name="mesh" parent="Chunk Outline" instance=ExtResource("8_pga75")]
+transform = Transform3D(8.048, 0, 0, 0, 8.048, 0, 0, 0, 8.048, 8, 8, 8)
+
+[editable path="Body/mesh"]

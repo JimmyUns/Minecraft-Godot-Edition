@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ObjectsData" load_steps=3 format=3 uid="uid://51cuhreirrk3"]
+
+[ext_resource type="Script" path="res://ObjectsData.cs" id="1_6s3ks"]
+[ext_resource type="Texture2D" uid="uid://7s0757ffhnbi" path="res://Textures/item/diamond_shovel.png" id="2_wwyoq"]
+
+[resource]
+script = ExtResource("1_6s3ks")
+object_type = 2
+object_name = "stick"
+object_id = 280
+object_is_block = false
+texture_top = ExtResource("2_wwyoq")
+object_held_position = Vector3(0.75, -0.25, -1.506)
+object_held_rotation = Vector3(0, -90, 25)

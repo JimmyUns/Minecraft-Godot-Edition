@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="ObjectsData" load_steps=5 format=3 uid="uid://j77cdfdqr6gk"]
+
+[ext_resource type="Script" path="res://ObjectsData.cs" id="1_xfx56"]
+[ext_resource type="Texture2D" uid="uid://c6ytnsi1sw4hg" path="res://Textures/block/grass_top_temp.png" id="2_4lqck"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_pm1u6"]
+load_path = "res://.godot/imported/grass_side.png-5c77ecd3184c8a86d38d1930fe17666b.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_i7hyp"]
+load_path = "res://.godot/imported/dirt.png-3ac4b1a70f9c4f625c091c4dac28f8ed.ctex"
+
+[resource]
+script = ExtResource("1_xfx56")
+object_type = 1
+object_name = "grass block"
+object_id = 2
+object_is_block = true
+texture_top = ExtResource("2_4lqck")
+texture_bottom = SubResource("CompressedTexture2D_i7hyp")
+texture_front = SubResource("CompressedTexture2D_pm1u6")
+texture_back = SubResource("CompressedTexture2D_pm1u6")
+texture_right = SubResource("CompressedTexture2D_pm1u6")
+texture_left = SubResource("CompressedTexture2D_pm1u6")
+object_held_position = Vector3(0, 0, 0)
+object_held_rotation = Vector3(0, 0, 0)

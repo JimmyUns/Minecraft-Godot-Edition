@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="ObjectsData" load_steps=2 format=3 uid="uid://cmxvu0xlds5qd"]
+
+[ext_resource type="Script" path="res://ObjectsData.cs" id="1_ij1ag"]
+
+[resource]
+script = ExtResource("1_ij1ag")
+object_type = 0
+object_name = "air"
+object_id = 0
+object_is_block = true
+object_held_position = Vector3(0, 0, 0)
+object_held_rotation = Vector3(0, 0, 0)

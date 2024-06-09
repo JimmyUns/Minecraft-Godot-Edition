@@ -1,0 +1,116 @@
+[gd_scene load_steps=10 format=3 uid="uid://gn7kr4rv6xo0"]
+
+[ext_resource type="Script" path="res://Scripts/UI_Manager.cs" id="1_aedfe"]
+[ext_resource type="Texture2D" uid="uid://dlkdjrf84ep4b" path="res://Textures/gui/crosshair.png" id="1_rn7cl"]
+[ext_resource type="Shader" path="res://Shaders/Invert_Colors_Shader.gdshader" id="2_vu4c1"]
+[ext_resource type="Texture2D" uid="uid://bo8j7onc6sc45" path="res://Textures/gui/Hotbar.png" id="4_vfssn"]
+[ext_resource type="Texture2D" uid="uid://bp44g5g1pxca5" path="res://Textures/gui/Hotbar_Selected.png" id="5_1ccnn"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_maf0u"]
+shader = ExtResource("2_vu4c1")
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_j2b2s"]
+load_path = "res://.godot/imported/grass_top.png-be8546320bca043d267793411b8af8d2.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_km0lp"]
+load_path = "res://.godot/imported/stick.png-c221c4064cc07ee724efd50bc3991192.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_i7hyp"]
+load_path = "res://.godot/imported/dirt.png-3ac4b1a70f9c4f625c091c4dac28f8ed.ctex"
+
+[node name="UI" type="CanvasLayer" node_paths=PackedStringArray("coordinates", "hotbarSelected_TextureRect")]
+script = ExtResource("1_aedfe")
+coordinates = NodePath("Control/Coordinates")
+hotbarSelected_TextureRect = NodePath("Control/Hotbar/Outline")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CrossHair" type="TextureRect" parent="Control"]
+texture_filter = 1
+material = SubResource("ShaderMaterial_maf0u")
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("1_rn7cl")
+
+[node name="Coordinates" type="Label" parent="Control"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 23.0
+grow_horizontal = 2
+text = "X: 0, y:0, z=0"
+
+[node name="Hotbar" type="TextureRect" parent="Control"]
+modulate = Color(1, 1, 1, 0.823529)
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -235.5
+offset_top = -57.0
+offset_right = 235.5
+grow_horizontal = 2
+grow_vertical = 0
+texture = ExtResource("4_vfssn")
+
+[node name="Outline" type="TextureRect" parent="Control/Hotbar"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 176.0
+offset_top = -30.5
+offset_right = 240.0
+offset_bottom = 33.5
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("5_1ccnn")
+
+[node name="TextureRect2" type="TextureRect" parent="Control/Hotbar"]
+layout_mode = 0
+offset_left = 67.5
+offset_top = 17.0
+offset_right = 93.5
+offset_bottom = 43.0
+texture = SubResource("CompressedTexture2D_j2b2s")
+
+[node name="TextureRect4" type="TextureRect" parent="Control/Hotbar"]
+layout_mode = 0
+offset_left = 112.5
+offset_top = 9.0
+offset_right = 264.5
+offset_bottom = 161.0
+scale = Vector2(0.25, 0.25)
+texture = SubResource("CompressedTexture2D_km0lp")
+
+[node name="TextureRect3" type="TextureRect" parent="Control/Hotbar"]
+layout_mode = 0
+offset_left = 15.5
+offset_top = 17.0
+offset_right = 41.5
+offset_bottom = 43.0
+texture = SubResource("CompressedTexture2D_i7hyp")

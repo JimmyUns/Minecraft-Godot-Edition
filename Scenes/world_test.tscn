@@ -1,0 +1,18 @@
+[gd_scene load_steps=4 format=3 uid="uid://byq63b16xcr4b"]
+
+[ext_resource type="Script" path="res://Scripts/Seed_Generator2.cs" id="1_8wivs"]
+[ext_resource type="Resource" uid="uid://j77cdfdqr6gk" path="res://Objects Data/grass_block.tres" id="2_8apga"]
+[ext_resource type="PackedScene" uid="uid://cmg0782dxuoqe" path="res://Scenes/player.tscn" id="2_eeqfd"]
+
+[node name="world Test" type="Node3D"]
+script = ExtResource("1_8wivs")
+height = 50
+depth = 100
+octaves = 6
+gain = 1.0
+objData = ExtResource("2_8apga")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.707107, 0.612372, -0.353553, 0, 0.5, 0.866025, 0.707107, -0.612372, 0.353553, 0, 0, 0)
+
+[node name="Player" parent="." instance=ExtResource("2_eeqfd")]
