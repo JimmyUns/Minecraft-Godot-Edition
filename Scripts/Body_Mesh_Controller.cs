@@ -18,6 +18,9 @@ public partial class Body_Mesh_Controller : Node
 		if (playerManager.playerBody.inputDir.Y == -1f)
 		{
 			body.RotationDegrees = new Vector3(body.RotationDegrees.X, Mathf.Lerp(body.RotationDegrees.Y, head.RotationDegrees.Y, (float) delta * 15f), body.RotationDegrees.Z);
+		} else if (playerManager.playerBody.inputDir.Y == 1f)
+		{
+			body.RotationDegrees = new Vector3(body.RotationDegrees.X, Mathf.Lerp(body.RotationDegrees.Y, 45f, (float) delta * 9f), body.RotationDegrees.Z);
 		}
 		RotateBodyTowardsHead();
 		body.Scale = new Vector3(0.06f, 0.06f, 0.06f);

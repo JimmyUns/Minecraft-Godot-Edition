@@ -38,7 +38,7 @@ public partial class Actions_Manager : Node
 				var placeblockPos = (Vector3I)(intbPos + playerRaycast.GetCollisionNormal());
 				if(placeblockPos == playerManager.GetCoordinatesGround() || placeblockPos == playerManager.GetCoordinatesHead()) return; 
 				
-				Chunk_World_Manager.instance.SetBlock(placeblockPos, Block_Manager.Instance.Stone);
+				Chunk_World_Manager.instance.SetBlock(placeblockPos, playerManager.blockInHand);
 			}
 		}
 		else

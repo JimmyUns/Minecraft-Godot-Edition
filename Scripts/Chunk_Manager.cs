@@ -27,7 +27,7 @@ public partial class Chunk_Manager : StaticBody3D
 	private static readonly int[] _back = new int[] { 7, 5, 4, 6 };
 	private static readonly int[] _front = new int[] { 2, 0, 1, 3 };
 
-	private SurfaceTool _surfaceTool = new SurfaceTool();
+	private SurfaceTool _surfaceTool = new SurfaceTool();//Tool that creats the 3dShape
 
 	private Block[,,] _blocks = new Block[dimensions.X, dimensions.Y, dimensions.Z];
 
@@ -152,7 +152,6 @@ public partial class Chunk_Manager : StaticBody3D
 		var UV_B = UV_Offset + new Vector2(0, UV_Height);
 		var UV_C = UV_Offset + new Vector2(UV_Width, UV_Height);
 		var UV_D = UV_Offset + new Vector2(UV_Width, 0);
-
 
 		//Setting Mesh
 		var a = _vertices[face[0]] + bPos;

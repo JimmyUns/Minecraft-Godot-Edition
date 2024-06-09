@@ -1,19 +1,32 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
 
 public partial class Inventory_Manager : Node
 {
-	[Export] public ObjectsData[] ObjectsArchive;
 	[Export] public Player_Manager playerManager;
-
 	private bool isHotbarSelectionChanged = false;
+	
+	private InventorySlot[,] _inventorySlots = new InventorySlot[10, 5];
 
 	public override void _Ready()
 	{
 		isHotbarSelectionChanged = true;
 		playerManager.uiManager.currentHotbarSelected = 1;
+		
+		_inventorySlots[0, 0] = new InventorySlot(Block_Manager.Instance.Dirt, 1);
+		_inventorySlots[1, 0] = new InventorySlot(Block_Manager.Instance.Grass, 1);
+		_inventorySlots[8, 0] = new InventorySlot(Block_Manager.Instance.Stone, 1);
+		
+		for (int i = 0; i < 9; i++)
+		{
+			if(_inventorySlots[i, 0] == null) continue;
+			playerManager.uiManager.FillHotbarIcons(_inventorySlots[i, 0].Block.Texture_Top, i);
+			
+		}
+
 	}
 
 	public override void _Process(double delta)
@@ -47,43 +60,32 @@ public partial class Inventory_Manager : Node
 		if (isHotbarSelectionChanged)
 		{
 			isHotbarSelectionChanged = false;
-			if (playerManager.uiManager.currentHotbarSelected == 1) //dirt
+			if(_inventorySlots[playerManager.uiManager.currentHotbarSelected - 1, 0] == null)
 			{
-				ChangeHeldItem(3);
+				ChangeHeldItem(Block_Manager.Instance.Air);
+				playerManager.heldObjectMaker.HandMesh();
+				return;
 			}
-			else if (playerManager.uiManager.currentHotbarSelected == 2) //grass
-			{
-				ChangeHeldItem(2);
-			}
-			else if (playerManager.uiManager.currentHotbarSelected == 3) //stick
-			{
-				ChangeHeldItem(280);
-			}
-			else //hand
-			{
-				playerManager.vmCreator.RemoveMesh();
-				playerManager.actionsManager.heldObjectData = playerManager.inventoryManager.ObjectsArchive[playerManager.inventoryManager.GetIndexOfObjectWithId(-1)];
-			}
+			
+			ChangeHeldItem(_inventorySlots[playerManager.uiManager.currentHotbarSelected - 1, 0].Block);
 		}
 	}
 
-	public void ChangeHeldItem(int objectID)
+	public void ChangeHeldItem(Block block)
 	{
-		playerManager.vmCreator.RemoveMesh();
-		playerManager.actionsManager.heldObjectData = playerManager.inventoryManager.ObjectsArchive[playerManager.inventoryManager.GetIndexOfObjectWithId(objectID)];
-		playerManager.vmCreator.GenerateVoxelMesh(playerManager.inventoryManager.ObjectsArchive[playerManager.inventoryManager.GetIndexOfObjectWithId(objectID)]);
+		playerManager.heldObjectMaker.CreateBlockMesh(block);
+		playerManager.blockInHand = block;
 	}
+	
+	public class InventorySlot
+{
+	public Block Block { get; set; }
+	public int Amount { get; set; }
 
-	public int GetIndexOfObjectWithId(int id)
+	public InventorySlot(Block block, int amount)
 	{
-		for (int i = 0; i <= ObjectsArchive.Length; i++)
-		{
-			if (ObjectsArchive[i].object_id == id)
-			{
-				return i;
-			}
-		}
-		Debug.Print("Error, Object with this ID was not found");
-		return -2;
+		Block = block;
+		Amount = amount;
 	}
+}
 }

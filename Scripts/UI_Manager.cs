@@ -8,6 +8,7 @@ public partial class UI_Manager : CanvasLayer
 	[Export] private TextureRect hotbarSelected_TextureRect;
 	public int currentHotbarSelected;
 
+	[Export] public TextureRect[] hotbarIcons;
 
 	public override void _Ready()
 	{
@@ -21,9 +22,9 @@ public partial class UI_Manager : CanvasLayer
 
 	public void ChangeSelectedHotbar(int index)
 	{
-		if(index > 9) index = 1;
+		if (index > 9) index = 1;
 		else if (index < 1) index = 9;
-		
+
 		currentHotbarSelected = index;
 		switch (index)
 		{
@@ -55,5 +56,10 @@ public partial class UI_Manager : CanvasLayer
 				hotbarSelected_TextureRect.SetPosition(new Vector2(411.5f, -2.5f));
 				break;
 		}
+	}
+
+	public void FillHotbarIcons(Texture2D texture, int index)
+	{
+		hotbarIcons[index].Texture = texture;
 	}
 }

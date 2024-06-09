@@ -47,17 +47,17 @@ public partial class Camera_Controller : Node
 			case 0:
 				cameraSpringArm.SpringLength = 0f;
 				mainCamera.Rotation = Vector3.Zero;
-				playerManager.playerMesh.Visible = false;
+				playerManager.lowerbodyMesh.Visible = false;
 				break;
 			case 1:
 				cameraSpringArm.SpringLength = 3f;
 				mainCamera.Rotation = new Vector3(0f, 0f, 0f);
-				playerManager.playerMesh.Visible = true;
+				playerManager.lowerbodyMesh.Visible = true;
 				break;
 			case 2:
 				cameraSpringArm.SpringLength = -3f;
 				mainCamera.RotationDegrees = new Vector3(0f, 180f, 0f);
-				playerManager.playerMesh.Visible = true;
+				playerManager.lowerbodyMesh.Visible = true;
 				break;
 		}
 	}

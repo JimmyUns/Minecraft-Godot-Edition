@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://gn7kr4rv6xo0"]
+[gd_scene load_steps=7 format=3 uid="uid://gn7kr4rv6xo0"]
 
 [ext_resource type="Script" path="res://Scripts/UI_Manager.cs" id="1_aedfe"]
 [ext_resource type="Texture2D" uid="uid://dlkdjrf84ep4b" path="res://Textures/gui/crosshair.png" id="1_rn7cl"]
@@ -9,19 +9,11 @@
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_maf0u"]
 shader = ExtResource("2_vu4c1")
 
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_j2b2s"]
-load_path = "res://.godot/imported/grass_top.png-be8546320bca043d267793411b8af8d2.ctex"
-
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_km0lp"]
-load_path = "res://.godot/imported/stick.png-c221c4064cc07ee724efd50bc3991192.ctex"
-
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_i7hyp"]
-load_path = "res://.godot/imported/dirt.png-3ac4b1a70f9c4f625c091c4dac28f8ed.ctex"
-
-[node name="UI" type="CanvasLayer" node_paths=PackedStringArray("coordinates", "hotbarSelected_TextureRect")]
+[node name="UI" type="CanvasLayer" node_paths=PackedStringArray("coordinates", "hotbarSelected_TextureRect", "hotbarIcons")]
 script = ExtResource("1_aedfe")
 coordinates = NodePath("Control/Coordinates")
 hotbarSelected_TextureRect = NodePath("Control/Hotbar/Outline")
+hotbarIcons = [NodePath("Control/Hotbar/slot 0"), NodePath("Control/Hotbar/slot 1"), NodePath("Control/Hotbar/slot 2"), NodePath("Control/Hotbar/slot 3"), NodePath("Control/Hotbar/slot 4"), NodePath("Control/Hotbar/slot 5"), NodePath("Control/Hotbar/slot 6"), NodePath("Control/Hotbar/slot 7"), NodePath("Control/Hotbar/slot 8")]
 
 [node name="Control" type="Control" parent="."]
 layout_mode = 3
@@ -90,27 +82,65 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("5_1ccnn")
 
-[node name="TextureRect2" type="TextureRect" parent="Control/Hotbar"]
-layout_mode = 0
-offset_left = 67.5
-offset_top = 17.0
-offset_right = 93.5
-offset_bottom = 43.0
-texture = SubResource("CompressedTexture2D_j2b2s")
-
-[node name="TextureRect4" type="TextureRect" parent="Control/Hotbar"]
-layout_mode = 0
-offset_left = 112.5
-offset_top = 9.0
-offset_right = 264.5
-offset_bottom = 161.0
-scale = Vector2(0.25, 0.25)
-texture = SubResource("CompressedTexture2D_km0lp")
-
-[node name="TextureRect3" type="TextureRect" parent="Control/Hotbar"]
+[node name="slot 0" type="TextureRect" parent="Control/Hotbar"]
 layout_mode = 0
 offset_left = 15.5
 offset_top = 17.0
 offset_right = 41.5
 offset_bottom = 43.0
-texture = SubResource("CompressedTexture2D_i7hyp")
+
+[node name="slot 1" type="TextureRect" parent="Control/Hotbar"]
+layout_mode = 0
+offset_left = 67.5
+offset_top = 17.0
+offset_right = 93.5
+offset_bottom = 43.0
+
+[node name="slot 2" type="TextureRect" parent="Control/Hotbar"]
+layout_mode = 0
+offset_left = 119.5
+offset_top = 17.0
+offset_right = 145.5
+offset_bottom = 43.0
+
+[node name="slot 3" type="TextureRect" parent="Control/Hotbar"]
+layout_mode = 0
+offset_left = 170.5
+offset_top = 17.0
+offset_right = 196.5
+offset_bottom = 43.0
+
+[node name="slot 4" type="TextureRect" parent="Control/Hotbar"]
+layout_mode = 0
+offset_left = 223.5
+offset_top = 17.0
+offset_right = 249.5
+offset_bottom = 43.0
+
+[node name="slot 5" type="TextureRect" parent="Control/Hotbar"]
+layout_mode = 0
+offset_left = 274.5
+offset_top = 17.0
+offset_right = 300.5
+offset_bottom = 43.0
+
+[node name="slot 6" type="TextureRect" parent="Control/Hotbar"]
+layout_mode = 0
+offset_left = 326.5
+offset_top = 17.0
+offset_right = 352.5
+offset_bottom = 43.0
+
+[node name="slot 7" type="TextureRect" parent="Control/Hotbar"]
+layout_mode = 0
+offset_left = 378.5
+offset_top = 17.0
+offset_right = 404.5
+offset_bottom = 43.0
+
+[node name="slot 8" type="TextureRect" parent="Control/Hotbar"]
+layout_mode = 0
+offset_left = 428.5
+offset_top = 17.0
+offset_right = 454.5
+offset_bottom = 43.0
