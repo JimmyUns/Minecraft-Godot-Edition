@@ -11,6 +11,8 @@ public partial class Player_Manager : Node3D
 	[Export] public Actions_Manager actionsManager;
 	[Export] public Inventory_Manager inventoryManager;
 	[Export] public Held_Object_Maker heldObjectMaker;
+	[Export] public Player_Mesh_Maker bodyMeshMaker;
+	
 
 	[Export] public Node3D chunkOutline;
 
@@ -18,6 +20,7 @@ public partial class Player_Manager : Node3D
 	public int gameMode = 0;
 	public int perspectiveMode = 0; //0=fps, 1=tps back view, 2=tps front view
 	public bool guiVisible = true;
+	private bool debugscreenExtra;
 
 	public override void _Ready()
 	{
@@ -70,16 +73,36 @@ public partial class Player_Manager : Node3D
 				Input.MouseMode = Input.MouseModeEnum.Captured;
 		}
 
-		if (Input.IsActionJustPressed("toggle_gamemode"))
+
+		if (Input.IsActionPressed("toggle_debug_screen") && debugscreenExtra == false)
 		{
-			gameMode++;
-			if (gameMode >= 2) gameMode = 0;
+			if (Input.IsKeyPressed(Key.N)) //Change Gamemode
+			{
+				debugscreenExtra = true;
+				gameMode++;
+				if (gameMode >= 2) gameMode = 0;
+			}
+			else if (Input.IsKeyPressed(Key.G)) //Toggle Chunk Border
+			{
+				debugscreenExtra = true;
+				chunkOutline.Visible = !chunkOutline.Visible;
+			}
+		}
+		else if (Input.IsActionJustReleased("toggle_debug_screen"))
+		{
+			if (debugscreenExtra)
+				debugscreenExtra = false;
+			else 
+			{
+				uiManager.debugScreen.Visible = !uiManager.debugScreen.Visible;
+				
+			}
 		}
 
 		//Debug.Print(GetNode<World_Manager>("%World Manager").chunk);
 		Vector3 newPoss = new Vector3(
 				(int)Math.Floor(GetCoordinatesGround().X / 16),
-				(int)Math.Floor(GetCoordinatesGround().Y / 16),
+				0,
 				(int)Math.Floor(GetCoordinatesGround().Z / 16)
 			);
 

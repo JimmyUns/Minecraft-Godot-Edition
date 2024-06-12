@@ -1,17 +1,20 @@
 using Godot;
 using System;
+using System.Diagnostics;
 
 public partial class PlayerBody : CharacterBody3D
 {
 	[Export] Player_Manager playerManager;
-	public const float Speed = 5.0f, flySpeed = 15f;
+	[Export] public float Speed = 5.0f, flySpeed = 15f;
+	private float sprintMultiplier =  1f;
 	private float currSpeed;
-	public const float JumpVelocity = 4.5f;
+	public float JumpVelocity = 8.8f;
 	public Vector2 inputDir;
 	public Vector3 direction;
 
 	// Get the gravity from the project settings to be synced with RigidBody nodes.
-	public float gravity = ProjectSettings.GetSetting("physics/3d/default_gravity").AsSingle();
+	public float gravity = 35;
+	private float gravityMultiplyer = 0.1f;
 
 	public override void _PhysicsProcess(double delta)
 	{
@@ -26,7 +29,14 @@ public partial class PlayerBody : CharacterBody3D
 
 			// Handle Jump.
 			if (Input.IsActionJustPressed("ui_accept") && IsOnFloor())
+			{
+				gravityMultiplyer = 0.1f;
 				velocity.Y = JumpVelocity;
+			}
+				
+			gravityMultiplyer += (float) delta / 3f;
+			if(gravityMultiplyer > 1f) gravityMultiplyer = 1f;
+			if(velocity.Y < -40 * gravityMultiplyer) velocity.Y = -40f * gravityMultiplyer;
 		}
 		else if (playerManager.gameMode == 1)
 		{
@@ -46,8 +56,11 @@ public partial class PlayerBody : CharacterBody3D
 		direction = (Transform.Basis * new Vector3(inputDir.X, 0, inputDir.Y)).Normalized();
 		if (direction != Vector3.Zero)
 		{
+			if(Input.IsActionPressed("sprint") && inputDir.Y == -1) sprintMultiplier += (float)delta; else sprintMultiplier = 1;
+			if(sprintMultiplier > 1.3f) sprintMultiplier = 1.3f;
 			velocity.X = direction.X * currSpeed;
-			velocity.Z = direction.Z * currSpeed;
+			velocity.Z = direction.Z * (currSpeed * sprintMultiplier);
+			Debug.Print((currSpeed * sprintMultiplier).ToString());
 		}
 		else
 		{

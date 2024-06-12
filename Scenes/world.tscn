@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://dbsahl043aa4t"]
+[gd_scene load_steps=23 format=3 uid="uid://dbsahl043aa4t"]
 
 [ext_resource type="Script" path="res://Scripts/Block_Manager.cs" id="1_iut7u"]
 [ext_resource type="Script" path="res://Scripts/Chunk_World_Manager.cs" id="1_rxrwf"]
@@ -9,6 +9,8 @@
 [ext_resource type="Texture2D" uid="uid://c6ytnsi1sw4hg" path="res://Textures/block/grass_top_temp.png" id="4_beh1k"]
 [ext_resource type="Texture2D" uid="uid://di4vtbocqscbr" path="res://Textures/block/grass_side_temp.png" id="4_epyh1"]
 [ext_resource type="Texture2D" uid="uid://bmwq8rt5wryvr" path="res://Textures/block/stone.png" id="5_ql5md"]
+[ext_resource type="Texture2D" uid="uid://ccinnisnilmbv" path="res://Textures/block/deepslate.png" id="7_h0o6c"]
+[ext_resource type="Texture2D" uid="uid://b2xoq5vxi0lsq" path="res://Textures/block/bedrock.png" id="8_jxegf"]
 
 [sub_resource type="Gradient" id="Gradient_p6iue"]
 colors = PackedColorArray(1, 1, 1, 1, 0.470588, 0.654902, 1, 1)
@@ -34,15 +36,18 @@ fog_sky_affect = 0.0
 
 [sub_resource type="Resource" id="Resource_1i5cw"]
 script = ExtResource("2_4vmcx")
+name = "Air"
 isTransparent = false
 
 [sub_resource type="Resource" id="Resource_5wpis"]
 script = ExtResource("2_4vmcx")
+name = "Dirt Block"
 Texture_Top = ExtResource("3_xdyay")
 isTransparent = false
 
 [sub_resource type="Resource" id="Resource_swevy"]
 script = ExtResource("2_4vmcx")
+name = "Grass Block"
 Texture_Top = ExtResource("4_beh1k")
 Texture_Bottom = ExtResource("3_xdyay")
 Texture_Right = ExtResource("4_epyh1")
@@ -53,7 +58,20 @@ isTransparent = false
 
 [sub_resource type="Resource" id="Resource_orqex"]
 script = ExtResource("2_4vmcx")
+name = "Stone Block"
 Texture_Top = ExtResource("5_ql5md")
+isTransparent = false
+
+[sub_resource type="Resource" id="Resource_chihm"]
+script = ExtResource("2_4vmcx")
+name = "Deepslate Block"
+Texture_Top = ExtResource("7_h0o6c")
+isTransparent = false
+
+[sub_resource type="Resource" id="Resource_28mty"]
+script = ExtResource("2_4vmcx")
+name = "Bedrock Block"
+Texture_Top = ExtResource("8_jxegf")
 isTransparent = false
 
 [node name="World" type="Node3D"]
@@ -63,7 +81,6 @@ environment = SubResource("Environment_mlvxh")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.54074, 0.84119, 0, -0.84119, 0.54074, 0, 0, 0)
-shadow_enabled = true
 
 [node name="Block Manager" type="Node" parent="."]
 script = ExtResource("1_iut7u")
@@ -71,6 +88,8 @@ Air = SubResource("Resource_1i5cw")
 Dirt = SubResource("Resource_5wpis")
 Grass = SubResource("Resource_swevy")
 Stone = SubResource("Resource_orqex")
+Deepslate = SubResource("Resource_chihm")
+Bedrock = SubResource("Resource_28mty")
 
 [node name="Chunk World Manager" type="Node" parent="." node_paths=PackedStringArray("playerManager")]
 script = ExtResource("1_rxrwf")
@@ -80,4 +99,4 @@ playerManager = NodePath("../Player")
 [node name="World Manager" type="Node" parent="."]
 
 [node name="Player" parent="." instance=ExtResource("1_wrubq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 60, 8)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 72.01, 8)

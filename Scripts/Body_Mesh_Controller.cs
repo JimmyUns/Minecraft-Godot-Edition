@@ -23,7 +23,7 @@ public partial class Body_Mesh_Controller : Node
 			body.RotationDegrees = new Vector3(body.RotationDegrees.X, Mathf.Lerp(body.RotationDegrees.Y, 45f, (float) delta * 9f), body.RotationDegrees.Z);
 		}
 		RotateBodyTowardsHead();
-		body.Scale = new Vector3(0.06f, 0.06f, 0.06f);
+		body.Scale = new Vector3(1f, 1f, 1f);
 	}
 
 	private void RotateBodyTowardsHead()

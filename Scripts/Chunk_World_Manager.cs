@@ -15,7 +15,7 @@ public partial class Chunk_World_Manager : Node
 
 	[Export] public PackedScene ChunkScene;
 
-	public int renderDistance = 8;
+	public int renderDistance = 4;
 
 	[Export] Player_Manager playerManager;
 	private Vector3 playerPosition;

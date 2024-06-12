@@ -36,7 +36,7 @@ public partial class Camera_Controller : Node
 	public override void _Process(double delta)
 	{
 
-		camHolder.GlobalPosition = mainBody.GlobalPosition + new Vector3(0f, 1.7f, 0f);
+		camHolder.GlobalPosition = mainBody.GlobalPosition + new Vector3(0f, 1.72f, 0f);
 
 	}
 
@@ -50,12 +50,12 @@ public partial class Camera_Controller : Node
 				playerManager.lowerbodyMesh.Visible = false;
 				break;
 			case 1:
-				cameraSpringArm.SpringLength = 3f;
+				cameraSpringArm.SpringLength = 4f;
 				mainCamera.Rotation = new Vector3(0f, 0f, 0f);
 				playerManager.lowerbodyMesh.Visible = true;
 				break;
 			case 2:
-				cameraSpringArm.SpringLength = -3f;
+				cameraSpringArm.SpringLength = -4f;
 				mainCamera.RotationDegrees = new Vector3(0f, 180f, 0f);
 				playerManager.lowerbodyMesh.Visible = true;
 				break;

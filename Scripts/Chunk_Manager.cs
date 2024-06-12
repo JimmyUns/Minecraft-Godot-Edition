@@ -1,12 +1,13 @@
 using Godot;
 using System;
+using System.Diagnostics;
 
 public partial class Chunk_Manager : StaticBody3D
 {
 	[Export] public CollisionShape3D colShape;
 	[Export] public MeshInstance3D meshInstance;
 
-	public static Vector3I dimensions = new Vector3I(16, 64, 16);
+	public static Vector3I dimensions = new Vector3I(16, 128, 16);
 
 	private static readonly Vector3I[] _vertices = new Vector3I[]
 	{
@@ -35,14 +36,14 @@ public partial class Chunk_Manager : StaticBody3D
 	public Vector2I chunkPosition { get; private set; }
 
 	[Export] public FastNoiseLite Noise;
-	
+
 	public void SetChunkPosition(Vector2I position)
 	{
 		Chunk_World_Manager.instance.UpdateChunkPosition(this, position, chunkPosition);
 		chunkPosition = position;
 		//Because in chunk_world_manager its also being calleddefered so that we set the position of the chunk after creating it
 		CallDeferred(Node3D.MethodName.SetGlobalPosition, new Godot.Vector3(chunkPosition.X * dimensions.X, 0, chunkPosition.Y * dimensions.Z));
-		
+
 		Generate();
 		Update();
 	}
@@ -61,7 +62,11 @@ public partial class Chunk_Manager : StaticBody3D
 					var globalBlockPosition = chunkPosition * new Vector2I(dimensions.X, dimensions.Z) + new Vector2I(x, z);
 					var groundHeight = (int)(dimensions.Y * ((Noise.GetNoise2D(globalBlockPosition.X, globalBlockPosition.Y) + 1f) / 2f)); //World Height 0 to dimensions.y which is 64
 
-					if (y < groundHeight - 3)
+					if (y == 0)
+					{
+						block = Block_Manager.Instance.Bedrock;
+					}
+					else if (y < groundHeight - 3)
 					{
 						block = Block_Manager.Instance.Stone;
 					}

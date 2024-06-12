@@ -4,28 +4,30 @@ using System;
 public partial class UI_Manager : CanvasLayer
 {
 	[Export] public Player_Manager playerManager;
-	[Export] public Label coordinates;
+	[Export] public Label coordinates, fps, hotbarObjectNamePopup;
 	[Export] private TextureRect hotbarSelected_TextureRect;
-	public int currentHotbarSelected;
-
 	[Export] public TextureRect[] hotbarIcons;
+	[Export] public AnimationPlayer ui_Anim;
+	[Export] public CanvasLayer debugScreen;
 
 	public override void _Ready()
 	{
-		ChangeSelectedHotbar(1);
+		hotbarObjectNamePopup.SelfModulate = new Color(1f, 1f, 1f, 1f);
 	}
 
 	public override void _Process(double delta)
 	{
 		coordinates.Text = "X:" + playerManager.GetCoordinatesGround().X + ", Y:" + playerManager.GetCoordinatesGround().Y + ", Z:" + playerManager.GetCoordinatesGround().Z;
+		fps.Text = "fps: " + Engine.GetFramesPerSecond().ToString();
 	}
 
-	public void ChangeSelectedHotbar(int index)
+	public void ChangeSelectedHotbar(int index, string objectName)
 	{
-		if (index > 9) index = 1;
-		else if (index < 1) index = 9;
+		hotbarObjectNamePopup.Text = objectName;
+		ui_Anim.Stop();
+		ui_Anim.Play("ObjectName_Hide");
 
-		currentHotbarSelected = index;
+		playerManager.inventoryManager.focusedHotbar = index;
 		switch (index)
 		{
 			case 1:
@@ -58,8 +60,9 @@ public partial class UI_Manager : CanvasLayer
 		}
 	}
 
+
 	public void FillHotbarIcons(Texture2D texture, int index)
 	{
-		hotbarIcons[index].Texture = texture;
+		hotbarIcons[index - 1].Texture = texture;
 	}
 }

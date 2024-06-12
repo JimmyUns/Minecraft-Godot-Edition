@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://gn7kr4rv6xo0"]
+[gd_scene load_steps=9 format=3 uid="uid://gn7kr4rv6xo0"]
 
 [ext_resource type="Script" path="res://Scripts/UI_Manager.cs" id="1_aedfe"]
 [ext_resource type="Texture2D" uid="uid://dlkdjrf84ep4b" path="res://Textures/gui/crosshair.png" id="1_rn7cl"]
@@ -6,14 +6,43 @@
 [ext_resource type="Texture2D" uid="uid://bo8j7onc6sc45" path="res://Textures/gui/Hotbar.png" id="4_vfssn"]
 [ext_resource type="Texture2D" uid="uid://bp44g5g1pxca5" path="res://Textures/gui/Hotbar_Selected.png" id="5_1ccnn"]
 
+[sub_resource type="Animation" id="Animation_aucct"]
+resource_name = "ObjectName_Hide"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Control/Hotbar/Object Name:theme_override_colors/font_color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.4, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_5djlg"]
+_data = {
+"ObjectName_Hide": SubResource("Animation_aucct")
+}
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_maf0u"]
 shader = ExtResource("2_vu4c1")
 
-[node name="UI" type="CanvasLayer" node_paths=PackedStringArray("coordinates", "hotbarSelected_TextureRect", "hotbarIcons")]
+[node name="UI" type="CanvasLayer" node_paths=PackedStringArray("coordinates", "fps", "hotbarObjectNamePopup", "hotbarSelected_TextureRect", "hotbarIcons", "ui_Anim", "debugScreen")]
 script = ExtResource("1_aedfe")
-coordinates = NodePath("Control/Coordinates")
+coordinates = NodePath("Control/Debug Screen/Coordinates")
+fps = NodePath("Control/Debug Screen/FPS")
+hotbarObjectNamePopup = NodePath("Control/Hotbar/Object Name")
 hotbarSelected_TextureRect = NodePath("Control/Hotbar/Outline")
 hotbarIcons = [NodePath("Control/Hotbar/slot 0"), NodePath("Control/Hotbar/slot 1"), NodePath("Control/Hotbar/slot 2"), NodePath("Control/Hotbar/slot 3"), NodePath("Control/Hotbar/slot 4"), NodePath("Control/Hotbar/slot 5"), NodePath("Control/Hotbar/slot 6"), NodePath("Control/Hotbar/slot 7"), NodePath("Control/Hotbar/slot 8")]
+ui_Anim = NodePath("UI Animation Player")
+debugScreen = NodePath("Control/Debug Screen")
+
+[node name="UI Animation Player" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_5djlg")
+}
 
 [node name="Control" type="Control" parent="."]
 layout_mode = 3
@@ -42,14 +71,6 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 texture = ExtResource("1_rn7cl")
 
-[node name="Coordinates" type="Label" parent="Control"]
-layout_mode = 1
-anchors_preset = 10
-anchor_right = 1.0
-offset_bottom = 23.0
-grow_horizontal = 2
-text = "X: 0, y:0, z=0"
-
 [node name="Hotbar" type="TextureRect" parent="Control"]
 modulate = Color(1, 1, 1, 0.823529)
 texture_filter = 1
@@ -65,6 +86,19 @@ offset_right = 235.5
 grow_horizontal = 2
 grow_vertical = 0
 texture = ExtResource("4_vfssn")
+
+[node name="Object Name" type="Label" parent="Control/Hotbar"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 139.5
+offset_top = -30.0
+offset_right = -140.5
+offset_bottom = -7.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0)
+text = "Dirt Block"
+horizontal_alignment = 1
 
 [node name="Outline" type="TextureRect" parent="Control/Hotbar"]
 texture_filter = 1
@@ -144,3 +178,20 @@ offset_left = 428.5
 offset_top = 17.0
 offset_right = 454.5
 offset_bottom = 43.0
+
+[node name="Debug Screen" type="CanvasLayer" parent="Control"]
+
+[node name="Coordinates" type="Label" parent="Control/Debug Screen"]
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 23.0
+grow_horizontal = 2
+text = "X: 0, y:0, z=0"
+
+[node name="FPS" type="Label" parent="Control/Debug Screen"]
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 19.0
+offset_bottom = 42.0
+grow_horizontal = 2
+text = "fps: 999"
