@@ -8,8 +8,8 @@
 [ext_resource type="Script" path="res://Scripts/Inventory_Manager.cs" id="3_a3ji4"]
 [ext_resource type="PackedScene" uid="uid://b2y8u66mjxlkf" path="res://Scenes/block.tscn" id="4_tuvca"]
 [ext_resource type="Script" path="res://Scripts/Player_Mesh_Maker.cs" id="7_tjpyf"]
+[ext_resource type="Texture2D" uid="uid://deltpcc73eyym" path="res://Skins/NuggetNutSKin.png" id="8_clqo5"]
 [ext_resource type="PackedScene" uid="uid://dgw1ihjslknv1" path="res://Models/BlockOutline.blend" id="8_pga75"]
-[ext_resource type="Texture2D" uid="uid://bgpiemgflpg2c" path="res://Skins/Original_Steve_with_Beard.png" id="8_s880w"]
 [ext_resource type="Script" path="res://Scripts/Held_Object_Maker.cs" id="12_eavra"]
 [ext_resource type="Script" path="res://Scripts/Body_Mesh_Controller.cs" id="12_uifak"]
 [ext_resource type="PackedScene" uid="uid://b857u2wluosuk" path="res://Models/player/scene.gltf" id="13_gygis"]
@@ -57,12 +57,12 @@ cameraSpringArm = NodePath("../Cam Holder/Head Rotater/SpringArm3D")
 
 [node name="Mesh Maker" type="Node" parent="." node_paths=PackedStringArray("textureVisualse", "head", "body", "armL", "armR", "legL", "legR")]
 script = ExtResource("7_tjpyf")
-textureVisualse = NodePath("../TextureRect")
-skin = ExtResource("8_s880w")
+textureVisualse = NodePath("")
+skin = ExtResource("8_clqo5")
 head = NodePath("../Cam Holder/head mesh")
 body = NodePath("../Body/mesh/Lower Body/body")
-armL = NodePath("../Body/mesh/Lower Body/armL")
-armR = NodePath("../Body/mesh/Lower Body/armR")
+armL = NodePath("../Body/mesh/Lower Body/armR")
+armR = NodePath("../Body/mesh/Lower Body/armL")
 legL = NodePath("../Body/mesh/Lower Body/legL")
 legR = NodePath("../Body/mesh/Lower Body/legR")
 
@@ -113,18 +113,23 @@ visible = false
 top_level = true
 
 [node name="body" type="MeshInstance3D" parent="Body/mesh/Lower Body"]
-skeleton = NodePath("../..")
-
-[node name="armR" type="MeshInstance3D" parent="Body/mesh/Lower Body"]
+transform = Transform3D(0.95, 0, 0, 0, 0.95, 0, 0, 0, 0.95, 0, 0.025, 0)
 skeleton = NodePath("../..")
 
 [node name="armL" type="MeshInstance3D" parent="Body/mesh/Lower Body"]
+transform = Transform3D(0.95, 0, 0, 0, 0.95, 0, 0, 0, 0.95, -0.237, 0.025, 0)
 skeleton = NodePath("../..")
 
-[node name="legR" type="MeshInstance3D" parent="Body/mesh/Lower Body"]
+[node name="armR" type="MeshInstance3D" parent="Body/mesh/Lower Body"]
+transform = Transform3D(0.95, 0, 0, 0, 0.95, 0, 0, 0, 0.95, 0.475, 0.025, 0)
 skeleton = NodePath("../..")
 
 [node name="legL" type="MeshInstance3D" parent="Body/mesh/Lower Body"]
+transform = Transform3D(0.95, 0, 0, 0, 0.95, 0, 0, 0, 0.95, 0, -0.687, 0)
+skeleton = NodePath("../..")
+
+[node name="legR" type="MeshInstance3D" parent="Body/mesh/Lower Body"]
+transform = Transform3D(0.95, 0, 0, 0, 0.95, 0, 0, 0, 0.95, 0.238, -0.687, 0)
 skeleton = NodePath("../..")
 
 [node name="Player Raycast" type="RayCast3D" parent="Body"]
@@ -149,11 +154,3 @@ visible = false
 
 [node name="mesh" parent="Chunk Outline" instance=ExtResource("8_pga75")]
 transform = Transform3D(8.048, 0, 0, 0, 128, 0, 0, 0, 8.048, 8, 128, 8)
-
-[node name="TextureRect" type="TextureRect" parent="."]
-texture_filter = 1
-offset_left = 881.0
-offset_top = 257.0
-offset_right = 1087.0
-offset_bottom = 463.0
-texture = ExtResource("8_s880w")

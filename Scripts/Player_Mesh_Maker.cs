@@ -5,167 +5,58 @@ using System.Diagnostics;
 
 public partial class Player_Mesh_Maker : Node
 {
-	[Export] public TextureRect textureVisualse;
 	[Export] public CompressedTexture2D skin;
 	[Export] private MeshInstance3D head, body, armL, armR, legL, legR;
-	private SurfaceTool _surfaceTool = new SurfaceTool();//Tool that creats the 3dShape
-
-	private int _gridWidth = 4;
-	private int _gridHeight;
-	public Vector2 textureAtlasSize { get; private set; }
-	private readonly Dictionary<Texture2D, Vector2I> _atlasLookup = new Dictionary<Texture2D, Vector2I>();
-	public StandardMaterial3D headMaterial { get; private set; }
-	public StandardMaterial3D bodyMaterial { get; private set; }
-	
+	private SurfaceTool _surfaceTool = new SurfaceTool(); //Tool that creates the 3dShape
 	Texture2D[] skinTextures = new Texture2D[12];
 
+	private StandardMaterial3D headMaterial, bodyMaterial, armLMaterial, armRMaterial, legLMaterial, legRMaterial; 
 
 	public override void _Ready()
 	{
-		CreateHeadAtlas();//Seperate the images and put them in an atlas
-		CreateBodyAtlas();
+		LoadTextures(); // Load the textures directly from the skin image
 		CreateHead();
 		CreateBody();
+		CreateArmLeft();
+		CreateArmRight();
+		CreateLegLeft();
+		CreateLegRight();
+
+		//textureVisualse.Texture = ImageTexture.CreateFromImage(skin.GetImage().GetRegion(new Rect2I(44, 8, 4, 4)));
 	}
 
-	private void CreateHeadAtlas()
+	private void LoadTextures()
 	{
 		for (int i = 0; i < skinTextures.Length; i++)
 		{
-			skinTextures[i] = ImageTexture.CreateFromImage(skin.GetImage().GetRegion(headSeperateTextures[i]));
+			skinTextures[i] = ImageTexture.CreateFromImage(skin.GetImage().GetRegion(texturesRect[i]));
 		}
-
-		Vector2I skinTextureSize = new Vector2I(8, 8);
-
-		for (int i = 0; i < skinTextures.Length; i++)
+		StandardMaterial3D awd0 = new StandardMaterial3D()
 		{
-			Texture2D texture = skinTextures[i];
-			_atlasLookup.Add(texture, new Vector2I(i % _gridWidth, Mathf.FloorToInt(i / _gridWidth)));
-		}
-
-		_gridHeight = Mathf.CeilToInt(skinTextures.Length / (float)_gridWidth); //if we have an image and grid is 4, we create a second row with only 1 cell
-
-		Image image = Image.Create(_gridWidth * skinTextureSize.X, _gridHeight * skinTextureSize.Y, false, Image.Format.Rgb8); //Create the actual image
-
-		for (int x = 0; x < _gridWidth; x++)
-		{
-			for (int y = 0; y < _gridHeight; y++)
-			{
-				int imgIndex = x + y * _gridWidth;
-
-				if (imgIndex >= skinTextures.Length) continue;
-
-				Image currentImage = skinTextures[imgIndex].GetImage();
-				currentImage.Convert(Image.Format.Rgb8);
-
-				image.BlitRect(currentImage, new Rect2I(Vector2I.Zero, skinTextureSize), new Vector2I(x, y) * skinTextureSize);
-			}
-		}
-
-		ImageTexture textureAtlas = ImageTexture.CreateFromImage(image);
-
-		headMaterial = new StandardMaterial3D()
-		{
-			AlbedoTexture = textureAtlas,
+			AlbedoTexture = skin,
 			TextureFilter = BaseMaterial3D.TextureFilterEnum.Nearest,
+			ShadingMode = BaseMaterial3D.ShadingModeEnum.Unshaded,
 		};
 
-		textureAtlasSize = new Vector2(_gridWidth, _gridHeight);
-	}
-	
-	private void CreateBodyAtlas()
-	{
-		for (int i = 0; i < skinTextures.Length; i++)
-		{
-			skinTextures[i] = ImageTexture.CreateFromImage(skin.GetImage().GetRegion(headSeperateTextures[i]));
-		}
+		headMaterial = awd0;
 
-		Vector2I skinTextureSize = new Vector2I(8, 8);
+		bodyMaterial = awd0;
 
-		for (int i = 0; i < skinTextures.Length; i++)
-		{
-			Texture2D texture = skinTextures[i];
-			_atlasLookup.Add(texture, new Vector2I(i % _gridWidth, Mathf.FloorToInt(i / _gridWidth)));
-		}
+		armLMaterial = awd0;
 
-		_gridHeight = Mathf.CeilToInt(skinTextures.Length / (float)_gridWidth); //if we have an image and grid is 4, we create a second row with only 1 cell
+		armRMaterial = awd0;
 
-		Image image = Image.Create(_gridWidth * skinTextureSize.X, _gridHeight * skinTextureSize.Y, false, Image.Format.Rgb8); //Create the actual image
+		legLMaterial = awd0;
 
-		for (int x = 0; x < _gridWidth; x++)
-		{
-			for (int y = 0; y < _gridHeight; y++)
-			{
-				int imgIndex = x + y * _gridWidth;
-
-				if (imgIndex >= skinTextures.Length) continue;
-
-				Image currentImage = skinTextures[imgIndex].GetImage();
-				currentImage.Convert(Image.Format.Rgb8);
-
-				image.BlitRect(currentImage, new Rect2I(Vector2I.Zero, skinTextureSize), new Vector2I(x, y) * skinTextureSize);
-			}
-		}
-
-		ImageTexture textureAtlas = ImageTexture.CreateFromImage(image);
-
-		bodyMaterial = new StandardMaterial3D()
-		{
-			AlbedoTexture = textureAtlas,
-			TextureFilter = BaseMaterial3D.TextureFilterEnum.Nearest,
-		};
-
-		textureAtlasSize = new Vector2(_gridWidth, _gridHeight);
+		legRMaterial = awd0;
 	}
 
-	private void CreateHead()
+	private void CreateMesh(int[] face, Rect2I region, int bodyArea, int horizontalIndex)
 	{
-		_surfaceTool.Begin(Mesh.PrimitiveType.Triangles);
-
-		CreateFaceMesh(_top, skinTextures[0], 0);
-		CreateFaceMesh(_bottom, skinTextures[1], 0);
-		CreateFaceMesh(_left, skinTextures[2], 0);
-		CreateFaceMesh(_right, skinTextures[4], 0);
-		CreateFaceMesh(_front, skinTextures[3], 0);
-		CreateFaceMesh(_back, skinTextures[5], 0);
-
-		_surfaceTool.SetMaterial(headMaterial); //Use the chunk Material
-
-		var mesh = _surfaceTool.Commit();
-		head.Mesh = mesh;
-	}
-
-	private void CreateBody()
-	{
-		_surfaceTool.Begin(Mesh.PrimitiveType.Triangles);
-
-		CreateFaceMesh(_top, skinTextures[6], 1);
-		CreateFaceMesh(_bottom, skinTextures[7], 1);
-		CreateFaceMesh(_left, skinTextures[8], 1);
-		CreateFaceMesh(_right, skinTextures[10], 1);
-		CreateFaceMesh(_front, skinTextures[9], 1);
-		CreateFaceMesh(_back, skinTextures[11], 1);
-		
-		_surfaceTool.SetMaterial(bodyMaterial); //Use the chunk Material
-
-		var mesh = _surfaceTool.Commit();
-		body.Mesh = mesh;
-	}
-
-	private void CreateFaceMesh(int[] face, Texture2D texture, int bodyArea)
-	{
-		//Setting UV's
-		var texturePosition = GetTextureAtlastPosition(texture);
-
-		var UV_Offset = texturePosition / textureAtlasSize;
-		float UV_Width = 1f / textureAtlasSize.X;
-		float UV_Height = 1f / textureAtlasSize.Y;
-
-		var UV_A = UV_Offset + new Vector2(0, 0);
-		var UV_B = UV_Offset + new Vector2(0, UV_Height);
-		var UV_C = UV_Offset + new Vector2(UV_Width, UV_Height);
-		var UV_D = UV_Offset + new Vector2(UV_Width, 0);
-
+		var UV_A = region.Position / skin.GetSize(); //top left
+		var UV_B = (region.Position + new Vector2(region.Size.X, 0)) / skin.GetSize(); //bottom left
+		var UV_C = (region.Position + region.Size) / skin.GetSize(); //bottom right
+		var UV_D = (region.Position + new Vector2(0, region.Size.Y)) / skin.GetSize(); //top right
 
 		Vector3 a = new();
 		Vector3 b = new();
@@ -190,10 +81,36 @@ public partial class Player_Mesh_Maker : Node
 				c = _bodyvertices[face[2]] - awd1;
 				d = _bodyvertices[face[3]] - awd1;
 				break;
+
+			case 2:
+				Vector3 awd2 = new Vector3(0.249f, 0.31f, 0.1245f);
+				a = _armvertices[face[0]] - awd2;
+				b = _armvertices[face[1]] - awd2;
+				c = _armvertices[face[2]] - awd2;
+				d = _armvertices[face[3]] - awd2;
+				break;
 		}
 
-		var UV_Triangle1 = new Vector2[] { UV_A, UV_B, UV_C };
-		var UV_Triangle2 = new Vector2[] { UV_A, UV_C, UV_D };
+		_ = new Vector2[3];
+		_ = new Vector2[3];
+		Vector2[] UV_Triangle1;
+		Vector2[] UV_Triangle2;
+
+		if (horizontalIndex == 1) //Facing Up Face
+		{
+			UV_Triangle1 = new Vector2[] { UV_C, UV_D, UV_A };
+			UV_Triangle2 = new Vector2[] { UV_C, UV_A, UV_B };
+		}
+		else if (horizontalIndex == 2) //Facing Down Face
+		{
+			UV_Triangle1 = new Vector2[] { UV_C, UV_B, UV_A };
+			UV_Triangle2 = new Vector2[] { UV_C, UV_A, UV_D };
+		}
+		else //Normal Sideways Face
+		{
+			UV_Triangle1 = new Vector2[] { UV_B, UV_C, UV_D };
+			UV_Triangle2 = new Vector2[] { UV_B, UV_D, UV_A };
+		}
 
 		var triangle_1 = new Vector3[] { a, b, c };
 		var triangle_2 = new Vector3[] { a, c, d };
@@ -205,14 +122,10 @@ public partial class Player_Mesh_Maker : Node
 		_surfaceTool.AddTriangleFan(triangle_1, UV_Triangle1, normals: normals);
 		_surfaceTool.AddTriangleFan(triangle_2, UV_Triangle2, normals: normals);
 	}
-	public Vector2I GetTextureAtlastPosition(Texture2D texture)
-	{
-		if (texture == null) return Vector2I.Zero;
 
-		return _atlasLookup[texture];
-	}
-	private static readonly Rect2I[] headSeperateTextures = new Rect2I[] //Starting top left corner and moving right
+	private static readonly Rect2I[] texturesRect = new Rect2I[] //Starting top left corner and moving right, 0:head 6:body 12:armL
 	{
+		//Head
 		new Rect2I(8, 0, 8, 8), //Top
 		new Rect2I(16, 0, 8, 8), //Bot
 		new Rect2I(0, 8, 8, 8), //Our Left
@@ -220,14 +133,154 @@ public partial class Player_Mesh_Maker : Node
 		new Rect2I(16, 8, 8, 8), //Our Right
 		new Rect2I(24, 8, 8, 8), //Backward
 
-
-		new Rect2I(20, 16, 4, 8), //Top
-		new Rect2I(28, 16, 4, 8), //Bot
-		new Rect2I(16, 20, 4, 8), //Our Left
+		//Body
+		new Rect2I(20, 16, 8, 4), //Top
+		new Rect2I(28, 16, 8, 4), //Bot
+		new Rect2I(28, 20, 4, 12), //Our Left
 		new Rect2I(20, 20, 8, 12), //Forward
-		new Rect2I(28, 20, 4, 8), //Our Right
+		new Rect2I(16, 20, 4, 12), //Our Right
 		new Rect2I(32, 20, 8, 12), //Backward
+		
+		//Right Arm
+		new Rect2I(44, 16, 4, 4), //Top
+		new Rect2I(48, 16, 4, 4), //Bot
+		new Rect2I(48, 20, 4, 12), //Our Left
+		new Rect2I(44, 20, 4, 12), //Our Right
+		new Rect2I(40, 20, 4, 12), //Forward
+		new Rect2I(52, 20, 4, 12), //Backward
+		
+		//Left Arm
+		new Rect2I(36, 48, 4, 4), //Top
+		new Rect2I(40, 48, 4, 4), //Bot
+		new Rect2I(40, 52, 4, 12), //Our Left
+		new Rect2I(36, 52, 4, 12), //Our Right
+		new Rect2I(32, 52, 4, 12), //Forward
+		new Rect2I(44, 52, 4, 12), //Backward
+		
+		//Right Leg
+		new Rect2I(4, 16, 4, 4), //Top
+		new Rect2I(8, 16, 4, 4), //Bot
+		new Rect2I(8, 20, 4, 12), //Our Right
+		new Rect2I(4, 20, 4, 12), //Forward
+		new Rect2I(0, 20, 4, 12), //Our Left
+		new Rect2I(12, 20, 4, 12), //Backward
+		
+		//Left Leg
+		new Rect2I(20, 48, 4, 4), //Top
+		new Rect2I(24, 48, 4, 4), //Bot
+		new Rect2I(24, 52, 4, 12), //Our Right
+		new Rect2I(20, 52, 4, 12), //Forward
+		new Rect2I(16, 52, 4, 12), //Our Left
+		new Rect2I(28, 52, 4, 12), //Backward
 	};
+
+	#region Create Body Parts
+	private void CreateHead()
+	{
+		_surfaceTool.Begin(Mesh.PrimitiveType.Triangles);
+
+		CreateMesh(_top, texturesRect[0], 0, 1);
+		CreateMesh(_bottom, texturesRect[1], 0, 2);
+		CreateMesh(_left, texturesRect[2], 0, 0);
+		CreateMesh(_right, texturesRect[4], 0, 0);
+		CreateMesh(_front, texturesRect[3], 0, 0);
+		CreateMesh(_back, texturesRect[5], 0, 0);
+
+		_surfaceTool.SetMaterial(headMaterial); // Use the chunk Material
+
+		var mesh = _surfaceTool.Commit();
+		head.Mesh = mesh;
+	}
+
+	private void CreateBody()
+	{
+		_surfaceTool.Begin(Mesh.PrimitiveType.Triangles);
+
+		CreateMesh(_top, texturesRect[6], 1, 1);
+		CreateMesh(_bottom, texturesRect[7], 1, 2);
+		CreateMesh(_left, texturesRect[8], 1, 0);
+		CreateMesh(_right, texturesRect[10], 1, 0);
+		CreateMesh(_front, texturesRect[9], 1, 0);
+		CreateMesh(_back, texturesRect[11], 1, 0);
+
+
+		_surfaceTool.SetMaterial(bodyMaterial); // Use the chunk Material
+
+		var mesh = _surfaceTool.Commit();
+		body.Mesh = mesh;
+	}
+
+	private void CreateArmLeft()
+	{
+		_surfaceTool.Begin(Mesh.PrimitiveType.Triangles);
+
+		CreateMesh(_top, texturesRect[12], 2, 1);
+		CreateMesh(_bottom, texturesRect[13], 2, 2);
+		CreateMesh(_left, texturesRect[14], 2, 0);
+		CreateMesh(_right, texturesRect[16], 2, 0);
+		CreateMesh(_front, texturesRect[15], 2, 0);
+		CreateMesh(_back, texturesRect[17], 2, 0);
+
+
+		_surfaceTool.SetMaterial(armLMaterial); // Use the chunk Material
+
+		var mesh = _surfaceTool.Commit();
+		armL.Mesh = mesh;
+	}
+
+	private void CreateArmRight()
+	{
+		_surfaceTool.Begin(Mesh.PrimitiveType.Triangles);
+
+		CreateMesh(_top, texturesRect[18], 2, 1);
+		CreateMesh(_bottom, texturesRect[19], 2, 2);
+		CreateMesh(_left, texturesRect[20], 2, 0);
+		CreateMesh(_right, texturesRect[22], 2, 0);
+		CreateMesh(_front, texturesRect[21], 2, 0);
+		CreateMesh(_back, texturesRect[23], 2, 0);
+
+
+		_surfaceTool.SetMaterial(armRMaterial); // Use the chunk Material
+
+		var mesh = _surfaceTool.Commit();
+		armR.Mesh = mesh;
+	}
+
+	private void CreateLegLeft()
+	{
+		_surfaceTool.Begin(Mesh.PrimitiveType.Triangles);
+
+		CreateMesh(_top, texturesRect[30], 2, 1);
+		CreateMesh(_bottom, texturesRect[31], 2, 2);
+		CreateMesh(_left, texturesRect[32], 2, 0);
+		CreateMesh(_right, texturesRect[34], 2, 0);
+		CreateMesh(_front, texturesRect[33], 2, 0);
+		CreateMesh(_back, texturesRect[35], 2, 0);
+
+		_surfaceTool.SetMaterial(legLMaterial); // Use the chunk Material
+
+		var mesh = _surfaceTool.Commit();
+		legL.Mesh = mesh;
+	}
+
+	private void CreateLegRight()
+	{
+		_surfaceTool.Begin(Mesh.PrimitiveType.Triangles);
+
+		CreateMesh(_top, texturesRect[24], 2, 1);
+		CreateMesh(_bottom, texturesRect[25], 2, 2);
+		CreateMesh(_left, texturesRect[26], 2, 0);
+		CreateMesh(_right, texturesRect[28], 2, 0);
+		CreateMesh(_front, texturesRect[27], 2, 0);
+		CreateMesh(_back, texturesRect[29], 2, 0);
+
+		_surfaceTool.SetMaterial(legRMaterial); // Use the chunk Material
+
+		var mesh = _surfaceTool.Commit();
+		legR.Mesh = mesh;
+	}
+	#endregion
+
 
 	#region Vertices
 	private static readonly Vector3[] _headvertices = new Vector3[]
@@ -254,6 +307,18 @@ public partial class Player_Mesh_Maker : Node
 		new Vector3(0.5f, 0.75f, 0.25f)
 	};
 
+	private static readonly Vector3[] _armvertices = new Vector3[]
+	{
+		new Vector3(0, 0, 0),
+		new Vector3(0.25f, 0f, 0f),
+		new Vector3(0, 0.75f, 0),
+		new Vector3(0.25f, 0.75f, 0),
+		new Vector3(0, 0, 0.25f),
+		new Vector3(0.25f, 0, 0.25f),
+		new Vector3(0, 0.75f, 0.25f),
+		new Vector3(0.25f, 0.75f, 0.25f)
+	};
+
 	private static readonly int[] _top = new int[] { 2, 3, 7, 6 };
 	private static readonly int[] _bottom = new int[] { 0, 4, 5, 1 };
 	private static readonly int[] _left = new int[] { 6, 4, 0, 2 };
@@ -261,5 +326,4 @@ public partial class Player_Mesh_Maker : Node
 	private static readonly int[] _back = new int[] { 7, 5, 4, 6 };
 	private static readonly int[] _front = new int[] { 2, 0, 1, 3 };
 	#endregion
-
 }

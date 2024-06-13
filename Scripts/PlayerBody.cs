@@ -60,7 +60,6 @@ public partial class PlayerBody : CharacterBody3D
 			if(sprintMultiplier > 1.3f) sprintMultiplier = 1.3f;
 			velocity.X = direction.X * currSpeed;
 			velocity.Z = direction.Z * (currSpeed * sprintMultiplier);
-			Debug.Print((currSpeed * sprintMultiplier).ToString());
 		}
 		else
 		{

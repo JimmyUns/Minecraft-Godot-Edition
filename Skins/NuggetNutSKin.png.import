@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bgpiemgflpg2c"
-path="res://.godot/imported/Original_Steve_with_Beard.png-316617a107622abcb4e188dfd60347d6.ctex"
+uid="uid://deltpcc73eyym"
+path="res://.godot/imported/NuggetNutSKin.png-981d97aff969cbb761042222fb3048ad.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Skins/Original_Steve_with_Beard.png"
-dest_files=["res://.godot/imported/Original_Steve_with_Beard.png-316617a107622abcb4e188dfd60347d6.ctex"]
+source_file="res://Skins/NuggetNutSKin.png"
+dest_files=["res://.godot/imported/NuggetNutSKin.png-981d97aff969cbb761042222fb3048ad.ctex"]
 
 [params]
 
@@ -31,4 +31,4 @@ process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
-detect_3d/compress_to=0
+detect_3d/compress_to=1
