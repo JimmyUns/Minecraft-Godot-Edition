@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://deltpcc73eyym"
-path="res://.godot/imported/NuggetNutSKin.png-981d97aff969cbb761042222fb3048ad.ctex"
+uid="uid://crc2mm6cynlcj"
+path="res://.godot/imported/KZ_Skin.png-47ba61a62115f83617d93d11ab04cf48.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Skins/NuggetNutSKin.png"
-dest_files=["res://.godot/imported/NuggetNutSKin.png-981d97aff969cbb761042222fb3048ad.ctex"]
+source_file="res://Skins/KZ_Skin.png"
+dest_files=["res://.godot/imported/KZ_Skin.png-47ba61a62115f83617d93d11ab04cf48.ctex"]
 
 [params]
 

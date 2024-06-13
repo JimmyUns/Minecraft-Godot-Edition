@@ -6,11 +6,13 @@ public partial class PlayerBody : CharacterBody3D
 {
 	[Export] Player_Manager playerManager;
 	[Export] public float Speed = 5.0f, flySpeed = 15f;
-	private float sprintMultiplier =  1f;
+	private float sprintMultiplier = 1f;
 	private float currSpeed;
-	public float JumpVelocity = 8.8f;
+	public float JumpVelocity = 8.4f;
 	public Vector2 inputDir;
 	public Vector3 direction;
+	
+	private float movementAnimationLerper;
 
 	// Get the gravity from the project settings to be synced with RigidBody nodes.
 	public float gravity = 35;
@@ -28,15 +30,15 @@ public partial class PlayerBody : CharacterBody3D
 				velocity.Y -= gravity * (float)delta;
 
 			// Handle Jump.
-			if (Input.IsActionJustPressed("ui_accept") && IsOnFloor())
+			if (Input.IsActionPressed("ui_accept") && IsOnFloor())
 			{
 				gravityMultiplyer = 0.1f;
 				velocity.Y = JumpVelocity;
 			}
-				
-			gravityMultiplyer += (float) delta / 3f;
-			if(gravityMultiplyer > 1f) gravityMultiplyer = 1f;
-			if(velocity.Y < -40 * gravityMultiplyer) velocity.Y = -40f * gravityMultiplyer;
+
+			gravityMultiplyer += (float)delta / 3f;
+			if (gravityMultiplyer > 1f) gravityMultiplyer = 1f;
+			if (velocity.Y < -40 * gravityMultiplyer) velocity.Y = -40f * gravityMultiplyer;
 		}
 		else if (playerManager.gameMode == 1)
 		{
@@ -46,7 +48,7 @@ public partial class PlayerBody : CharacterBody3D
 
 			else if (Input.IsActionPressed("sneak"))
 				velocity.Y -= JumpVelocity;
-				
+
 			else velocity.Y = 0f;
 		}
 
@@ -56,15 +58,21 @@ public partial class PlayerBody : CharacterBody3D
 		direction = (Transform.Basis * new Vector3(inputDir.X, 0, inputDir.Y)).Normalized();
 		if (direction != Vector3.Zero)
 		{
-			if(Input.IsActionPressed("sprint") && inputDir.Y == -1) sprintMultiplier += (float)delta; else sprintMultiplier = 1;
-			if(sprintMultiplier > 1.3f) sprintMultiplier = 1.3f;
-			velocity.X = direction.X * currSpeed;
+			if (Input.IsActionPressed("sprint") && inputDir.Y == -1) sprintMultiplier += (float)delta; else sprintMultiplier = 1;
+			if (sprintMultiplier > 1.45f) sprintMultiplier = 1.45f;
+			velocity.X = direction.X * currSpeed * sprintMultiplier;
 			velocity.Z = direction.Z * (currSpeed * sprintMultiplier);
+			movementAnimationLerper = Mathf.Clamp(movementAnimationLerper += ((float)delta * 4), 0, 1);
+			playerManager.bodyAnimTree.Set("parameters/idle_walk_blend/blend_amount", movementAnimationLerper);
+
 		}
 		else
 		{
 			velocity.X = Mathf.MoveToward(Velocity.X, 0, currSpeed);
 			velocity.Z = Mathf.MoveToward(Velocity.Z, 0, currSpeed);
+			movementAnimationLerper = Mathf.Clamp(movementAnimationLerper -= ((float)delta * 4), 0, 1);
+			playerManager.bodyAnimTree.Set("parameters/idle_walk_blend/blend_amount", movementAnimationLerper);
+
 		}
 
 		Velocity = velocity;

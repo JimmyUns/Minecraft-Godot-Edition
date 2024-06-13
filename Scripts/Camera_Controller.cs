@@ -7,11 +7,13 @@ public partial class Camera_Controller : Node
 	[Export] public Camera3D mainCamera;
 	[Export] public Node3D camHolder, playerHead;
 	[Export] public Node3D mainBody;
+	[Export] public Node3D headPivot;
 	[Export] private Player_Manager playerManager;
 	[Export] private SpringArm3D cameraSpringArm;
 
 	public override void _Ready()
 	{
+		TogglePerspective(0);
 		Input.MouseMode = Input.MouseModeEnum.Captured;
 	}
 
@@ -31,6 +33,7 @@ public partial class Camera_Controller : Node
 			cameraRot.Y = 0;
 			cameraRot.Z = 0;
 			playerHead.Rotation = cameraRot;
+			headPivot.Rotation = cameraRot;
 		}
 	}
 	public override void _Process(double delta)
@@ -48,16 +51,19 @@ public partial class Camera_Controller : Node
 				cameraSpringArm.SpringLength = 0f;
 				mainCamera.Rotation = Vector3.Zero;
 				playerManager.lowerbodyMesh.Visible = false;
+				playerManager.bodyMeshMaker.head.Visible = false;
 				break;
 			case 1:
 				cameraSpringArm.SpringLength = 4f;
 				mainCamera.Rotation = new Vector3(0f, 0f, 0f);
 				playerManager.lowerbodyMesh.Visible = true;
+				playerManager.bodyMeshMaker.head.Visible = true;
 				break;
 			case 2:
 				cameraSpringArm.SpringLength = -4f;
 				mainCamera.RotationDegrees = new Vector3(0f, 180f, 0f);
 				playerManager.lowerbodyMesh.Visible = true;
+				playerManager.bodyMeshMaker.head.Visible = true;
 				break;
 		}
 	}

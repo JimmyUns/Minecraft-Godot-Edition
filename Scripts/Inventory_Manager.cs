@@ -8,7 +8,7 @@ public partial class Inventory_Manager : Node
 {
 	public int focusedHotbar;
 	[Export] public Player_Manager playerManager;
-	private bool isHotbarSelectionChanged = false;
+	private bool isHotbarSelectionChanged = true;
 
 	private InventorySlot[,] _inventorySlots = new InventorySlot[10, 4];
 
@@ -41,12 +41,12 @@ public partial class Inventory_Manager : Node
 		}
 		if (Input.IsActionJustPressed("hotbar_up"))
 		{
-			focusedHotbar++;
+			focusedHotbar--;
 			isHotbarSelectionChanged = true;
 		}
 		else if (Input.IsActionJustPressed("hotbar_down"))
 		{
-			focusedHotbar--;
+			focusedHotbar++;
 			isHotbarSelectionChanged = true;
 		}
 

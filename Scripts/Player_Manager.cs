@@ -12,6 +12,8 @@ public partial class Player_Manager : Node3D
 	[Export] public Inventory_Manager inventoryManager;
 	[Export] public Held_Object_Maker heldObjectMaker;
 	[Export] public Player_Mesh_Maker bodyMeshMaker;
+	[Export] public AnimationTree bodyAnimTree;
+	
 	
 
 	[Export] public Node3D chunkOutline;
@@ -21,6 +23,7 @@ public partial class Player_Manager : Node3D
 	public int perspectiveMode = 0; //0=fps, 1=tps back view, 2=tps front view
 	public bool guiVisible = true;
 	private bool debugscreenExtra;
+	private bool isFullScreen = false;
 
 	public override void _Ready()
 	{
@@ -109,6 +112,17 @@ public partial class Player_Manager : Node3D
 		if (newPoss != chunkOutline.GlobalPosition)
 			chunkOutline.GlobalPosition = newPoss * 16;
 
+
+		if(Input.IsActionJustPressed("toggle_windowmode"))
+		{
+			isFullScreen = !isFullScreen;
+			if(isFullScreen)
+			{
+				DisplayServer.WindowSetMode(DisplayServer.WindowMode.ExclusiveFullscreen);
+			} else {
+				DisplayServer.WindowSetMode(DisplayServer.WindowMode.Windowed);
+			}
+		}
 	}
 
 	public Vector3 GetCoordinatesGround()

@@ -3,26 +3,28 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
+[Tool]
 public partial class Player_Mesh_Maker : Node
 {
 	[Export] public CompressedTexture2D skin;
-	[Export] private MeshInstance3D head, body, armL, armR, legL, legR;
+	[Export] public MeshInstance3D head, body, armL, armR, legL, legR;
+	[Export] public MeshInstance3D headOL, bodyOL, armLOL, armROL, legLOL, legROL;
 	private SurfaceTool _surfaceTool = new SurfaceTool(); //Tool that creates the 3dShape
 	Texture2D[] skinTextures = new Texture2D[12];
 
-	private StandardMaterial3D headMaterial, bodyMaterial, armLMaterial, armRMaterial, legLMaterial, legRMaterial; 
+	private StandardMaterial3D headMaterial, bodyMaterial, armLMaterial, armRMaterial, legLMaterial, legRMaterial;
+	private StandardMaterial3D headMaterialOL, bodyMaterialOL, armLMaterialOL, armRMaterialOL, legLMaterialOL, legRMaterialOL;
+
 
 	public override void _Ready()
 	{
-		LoadTextures(); // Load the textures directly from the skin image
+		LoadTextures();
 		CreateHead();
 		CreateBody();
 		CreateArmLeft();
 		CreateArmRight();
 		CreateLegLeft();
 		CreateLegRight();
-
-		//textureVisualse.Texture = ImageTexture.CreateFromImage(skin.GetImage().GetRegion(new Rect2I(44, 8, 4, 4)));
 	}
 
 	private void LoadTextures()
@@ -36,19 +38,30 @@ public partial class Player_Mesh_Maker : Node
 			AlbedoTexture = skin,
 			TextureFilter = BaseMaterial3D.TextureFilterEnum.Nearest,
 			ShadingMode = BaseMaterial3D.ShadingModeEnum.Unshaded,
+			Transparency = BaseMaterial3D.TransparencyEnum.Disabled
+		};
+
+		StandardMaterial3D awd1 = new StandardMaterial3D()
+		{
+			AlbedoTexture = skin,
+			TextureFilter = BaseMaterial3D.TextureFilterEnum.Nearest,
+			ShadingMode = BaseMaterial3D.ShadingModeEnum.Unshaded,
+			Transparency = BaseMaterial3D.TransparencyEnum.Alpha,
+			CullMode = BaseMaterial3D.CullModeEnum.Back
 		};
 
 		headMaterial = awd0;
-
 		bodyMaterial = awd0;
-
 		armLMaterial = awd0;
-
 		armRMaterial = awd0;
-
 		legLMaterial = awd0;
-
 		legRMaterial = awd0;
+		headMaterialOL = awd1;
+		bodyMaterialOL = awd1;
+		armLMaterialOL = awd1;
+		armRMaterialOL = awd1;
+		legLMaterialOL = awd1;
+		legRMaterialOL = awd1;
 	}
 
 	private void CreateMesh(int[] face, Rect2I region, int bodyArea, int horizontalIndex)
@@ -63,7 +76,7 @@ public partial class Player_Mesh_Maker : Node
 		Vector3 c = new();
 		Vector3 d = new();
 
-		//0:head 1:body 2:armL 3:armR 4:legL 5:legR	
+		//0:head 1:body 2:hands/legs
 		switch (bodyArea)
 		{
 			case 0:
@@ -96,20 +109,20 @@ public partial class Player_Mesh_Maker : Node
 		Vector2[] UV_Triangle1;
 		Vector2[] UV_Triangle2;
 
-		if (horizontalIndex == 1) //Facing Up Face
+		switch (horizontalIndex)
 		{
-			UV_Triangle1 = new Vector2[] { UV_C, UV_D, UV_A };
-			UV_Triangle2 = new Vector2[] { UV_C, UV_A, UV_B };
-		}
-		else if (horizontalIndex == 2) //Facing Down Face
-		{
-			UV_Triangle1 = new Vector2[] { UV_C, UV_B, UV_A };
-			UV_Triangle2 = new Vector2[] { UV_C, UV_A, UV_D };
-		}
-		else //Normal Sideways Face
-		{
-			UV_Triangle1 = new Vector2[] { UV_B, UV_C, UV_D };
-			UV_Triangle2 = new Vector2[] { UV_B, UV_D, UV_A };
+			case 1:
+				UV_Triangle1 = new Vector2[] { UV_C, UV_D, UV_A };
+				UV_Triangle2 = new Vector2[] { UV_C, UV_A, UV_B };
+				break;
+			case 2:
+				UV_Triangle1 = new Vector2[] { UV_C, UV_B, UV_A };
+				UV_Triangle2 = new Vector2[] { UV_C, UV_A, UV_D };
+				break;
+			default:
+				UV_Triangle1 = new Vector2[] { UV_B, UV_C, UV_D };
+				UV_Triangle2 = new Vector2[] { UV_B, UV_D, UV_A };
+				break;
 		}
 
 		var triangle_1 = new Vector3[] { a, b, c };
@@ -128,9 +141,9 @@ public partial class Player_Mesh_Maker : Node
 		//Head
 		new Rect2I(8, 0, 8, 8), //Top
 		new Rect2I(16, 0, 8, 8), //Bot
-		new Rect2I(0, 8, 8, 8), //Our Left
-		new Rect2I(8, 8, 8, 8), //Forward
 		new Rect2I(16, 8, 8, 8), //Our Right
+		new Rect2I(8, 8, 8, 8), //Forward
+		new Rect2I(0, 8, 8, 8), //Our Left
 		new Rect2I(24, 8, 8, 8), //Backward
 
 		//Body
@@ -174,6 +187,58 @@ public partial class Player_Mesh_Maker : Node
 		new Rect2I(28, 52, 4, 12), //Backward
 	};
 
+	private static readonly Rect2I[] texturesOLRect = new Rect2I[] //Starting top left corner and moving right, 0:head 6:body 12:armL
+	{
+		//Head
+		new Rect2I(40, 0, 8, 8), //Top
+		new Rect2I(48, 0, 8, 8), //Bot
+		new Rect2I(32, 8, 8, 8), //Our Left
+		new Rect2I(40, 8, 8, 8), //Forward
+		new Rect2I(48, 8, 8, 8), //Our Right
+		new Rect2I(56, 8, 8, 8), //Backward
+
+		//Body
+		new Rect2I(20, 32, 8, 4), //Top
+		new Rect2I(28, 32, 8, 4), //Bot
+		new Rect2I(28, 36, 4, 12), //Our Left
+		new Rect2I(20, 36, 8, 12), //Forward
+		new Rect2I(16, 36, 4, 12), //Our Right
+		new Rect2I(32, 36, 8, 12), //Backward
+		
+		//Left Arm
+		new Rect2I(52, 48, 4, 4), //Top
+		new Rect2I(56, 48, 4, 4), //Bot
+		new Rect2I(56, 52, 4, 12), //Our Left
+		new Rect2I(52, 52, 4, 12), //Our Right
+		new Rect2I(48, 52, 4, 12), //Forward
+		new Rect2I(60, 52, 4, 12), //Backward
+		
+		//Right Arm
+		new Rect2I(44, 32, 4, 4), //Top
+		new Rect2I(48, 32, 4, 4), //Bot
+		new Rect2I(48, 36, 4, 12), //Our Left
+		new Rect2I(44, 36, 4, 12), //Our Right
+		new Rect2I(40, 36, 4, 12), //Forward
+		new Rect2I(52, 36, 4, 12), //Backward
+		
+		//Right Leg
+		new Rect2I(4, 48, 4, 4), //Top
+		new Rect2I(8, 48, 4, 4), //Bot
+		new Rect2I(8, 52, 4, 12), //Our Right
+		new Rect2I(4, 52, 4, 12), //Forward
+		new Rect2I(0, 52, 4, 12), //Our Left
+		new Rect2I(12, 52, 4, 12), //Backward
+		
+		//Left Leg
+		new Rect2I(4, 32, 4, 4), //Top
+		new Rect2I(8, 32, 4, 4), //Bot
+		new Rect2I(8, 36, 4, 12), //Our Right
+		new Rect2I(4, 36, 4, 12), //Forward
+		new Rect2I(0, 36, 4, 12), //Our Left
+		new Rect2I(12, 36, 4, 12), //Backward
+		
+	};
+
 	#region Create Body Parts
 	private void CreateHead()
 	{
@@ -190,6 +255,20 @@ public partial class Player_Mesh_Maker : Node
 
 		var mesh = _surfaceTool.Commit();
 		head.Mesh = mesh;
+
+		_surfaceTool.Begin(Mesh.PrimitiveType.Triangles);
+
+		CreateMesh(_top, texturesOLRect[0], 0, 1);
+		CreateMesh(_bottom, texturesOLRect[1], 0, 2);
+		CreateMesh(_left, texturesOLRect[2], 0, 0);
+		CreateMesh(_right, texturesOLRect[4], 0, 0);
+		CreateMesh(_front, texturesOLRect[3], 0, 0);
+		CreateMesh(_back, texturesOLRect[5], 0, 0);
+
+		_surfaceTool.SetMaterial(headMaterialOL); // Use the chunk Material
+
+		var meshOL = _surfaceTool.Commit();
+		headOL.Mesh = meshOL;
 	}
 
 	private void CreateBody()
@@ -208,6 +287,20 @@ public partial class Player_Mesh_Maker : Node
 
 		var mesh = _surfaceTool.Commit();
 		body.Mesh = mesh;
+
+		_surfaceTool.Begin(Mesh.PrimitiveType.Triangles);
+
+		CreateMesh(_top, texturesOLRect[6], 1, 1);
+		CreateMesh(_bottom, texturesOLRect[7], 1, 2);
+		CreateMesh(_left, texturesOLRect[8], 1, 0);
+		CreateMesh(_right, texturesOLRect[10], 1, 0);
+		CreateMesh(_front, texturesOLRect[9], 1, 0);
+		CreateMesh(_back, texturesOLRect[11], 1, 0);
+
+		_surfaceTool.SetMaterial(bodyMaterialOL); // Use the chunk Material
+
+		var meshOL = _surfaceTool.Commit();
+		bodyOL.Mesh = meshOL;
 	}
 
 	private void CreateArmLeft()
@@ -226,6 +319,21 @@ public partial class Player_Mesh_Maker : Node
 
 		var mesh = _surfaceTool.Commit();
 		armL.Mesh = mesh;
+
+		_surfaceTool.Begin(Mesh.PrimitiveType.Triangles);
+
+		CreateMesh(_top, texturesOLRect[12], 2, 1);
+		CreateMesh(_bottom, texturesOLRect[13], 2, 2);
+		CreateMesh(_left, texturesOLRect[14], 2, 0);
+		CreateMesh(_right, texturesOLRect[16], 2, 0);
+		CreateMesh(_front, texturesOLRect[15], 2, 0);
+		CreateMesh(_back, texturesOLRect[17], 2, 0);
+
+
+		_surfaceTool.SetMaterial(armLMaterialOL); // Use the chunk Material
+
+		var meshOL = _surfaceTool.Commit();
+		armLOL.Mesh = meshOL;
 	}
 
 	private void CreateArmRight()
@@ -244,6 +352,20 @@ public partial class Player_Mesh_Maker : Node
 
 		var mesh = _surfaceTool.Commit();
 		armR.Mesh = mesh;
+
+		_surfaceTool.Begin(Mesh.PrimitiveType.Triangles);
+
+		CreateMesh(_top, texturesOLRect[18], 2, 1);
+		CreateMesh(_bottom, texturesOLRect[19], 2, 2);
+		CreateMesh(_left, texturesOLRect[20], 2, 0);
+		CreateMesh(_right, texturesOLRect[22], 2, 0);
+		CreateMesh(_front, texturesOLRect[21], 2, 0);
+		CreateMesh(_back, texturesOLRect[23], 2, 0);
+
+		_surfaceTool.SetMaterial(armRMaterialOL); // Use the chunk Material
+
+		var meshOL = _surfaceTool.Commit();
+		armROL.Mesh = meshOL;
 	}
 
 	private void CreateLegLeft()
@@ -261,6 +383,20 @@ public partial class Player_Mesh_Maker : Node
 
 		var mesh = _surfaceTool.Commit();
 		legL.Mesh = mesh;
+		
+		_surfaceTool.Begin(Mesh.PrimitiveType.Triangles);
+
+		CreateMesh(_top, texturesOLRect[30], 2, 1);
+		CreateMesh(_bottom, texturesOLRect[31], 2, 2);
+		CreateMesh(_left, texturesOLRect[32], 2, 0);
+		CreateMesh(_right, texturesOLRect[34], 2, 0);
+		CreateMesh(_front, texturesOLRect[33], 2, 0);
+		CreateMesh(_back, texturesOLRect[35], 2, 0);
+
+		_surfaceTool.SetMaterial(legLMaterialOL); // Use the chunk Material
+
+		var meshOL = _surfaceTool.Commit();
+		legROL.Mesh = meshOL;
 	}
 
 	private void CreateLegRight()
@@ -278,9 +414,22 @@ public partial class Player_Mesh_Maker : Node
 
 		var mesh = _surfaceTool.Commit();
 		legR.Mesh = mesh;
+		
+		_surfaceTool.Begin(Mesh.PrimitiveType.Triangles);
+
+		CreateMesh(_top, texturesOLRect[24], 2, 1);
+		CreateMesh(_bottom, texturesOLRect[25], 2, 2);
+		CreateMesh(_left, texturesOLRect[26], 2, 0);
+		CreateMesh(_right, texturesOLRect[28], 2, 0);
+		CreateMesh(_front, texturesOLRect[27], 2, 0);
+		CreateMesh(_back, texturesOLRect[29], 2, 0);
+
+		_surfaceTool.SetMaterial(legRMaterialOL); // Use the chunk Material
+
+		var meshOL = _surfaceTool.Commit();
+		legLOL.Mesh = meshOL;
 	}
 	#endregion
-
 
 	#region Vertices
 	private static readonly Vector3[] _headvertices = new Vector3[]
