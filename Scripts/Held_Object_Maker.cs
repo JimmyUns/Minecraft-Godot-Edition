@@ -4,6 +4,8 @@ using System;
 public partial class Held_Object_Maker : Node3D
 {
 	[Export] public MeshInstance3D meshInstance;
+	[Export] public MeshInstance3D heldobjectMeshInstance;
+	
 
 	public static Vector3I dimensions = new Vector3I(16, 64, 16);
 
@@ -44,6 +46,7 @@ public partial class Held_Object_Maker : Node3D
 
 		var mesh = _surfaceTool.Commit();
 		meshInstance.Mesh = mesh;
+		heldobjectMeshInstance.Mesh = meshInstance.Mesh;
 	}
 
 	private void CreateFaceMesh(int[] face, Texture2D texture)
@@ -83,5 +86,6 @@ public partial class Held_Object_Maker : Node3D
 	public void HandMesh()
 	{
 		meshInstance.Mesh = null;
+		heldobjectMeshInstance.Mesh = null;
 	}
 }

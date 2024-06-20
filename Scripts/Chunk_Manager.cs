@@ -37,15 +37,11 @@ public partial class Chunk_Manager : StaticBody3D
 
 	[Export] public FastNoiseLite Noise;
 
-	public void SetChunkPosition(Vector2I position)
+	public void SetChunkPosition(Vector2I positions)
 	{
-		Chunk_World_Manager.instance.UpdateChunkPosition(this, position, chunkPosition);
-		chunkPosition = position;
-		//Because in chunk_world_manager its also being calleddefered so that we set the position of the chunk after creating it
-		CallDeferred(Node3D.MethodName.SetGlobalPosition, new Godot.Vector3(chunkPosition.X * dimensions.X, 0, chunkPosition.Y * dimensions.Z));
+		chunkPosition = new Vector2I(positions.X, positions.Y);
 
-		Generate();
-		Update();
+		GlobalPosition = new Vector3(chunkPosition.X * dimensions.X, 0, chunkPosition.Y * dimensions.Z);
 	}
 
 	//Generate Mesh Chunk
@@ -86,6 +82,12 @@ public partial class Chunk_Manager : StaticBody3D
 				}
 			}
 		}
+	}
+
+	public void GenerateAndUpdate()
+	{
+		Generate();
+		Update();
 	}
 
 	//Generate Collision and mesh for chunk
@@ -180,17 +182,71 @@ public partial class Chunk_Manager : StaticBody3D
 
 	private bool CheckTransparent(Vector3I bPos)
 	{
-		if (bPos.X < 0 || bPos.X >= dimensions.X) return true;
-		if (bPos.Y < 0 || bPos.Y >= dimensions.Y) return true;
-		if (bPos.Z < 0 || bPos.Z >= dimensions.Z) return true;
+		if (bPos.X < 0 || bPos.X >= dimensions.X)
+		{
+			//return bPos.X < 0 ? CheckEdgeTransparentX(bPos, false) : CheckEdgeTransparentX(bPos, true);
+			return Chunk_World_Manager.instance.GetBlock(new Vector3I(bPos.X, bPos.Y, bPos.Z)) == Block_Manager.Instance.Air;
+			
+			//return false;
+		}
+		if (bPos.Y < 0 || bPos.Y >= dimensions.Y) return false;
+		if (bPos.Z < 0 || bPos.Z >= dimensions.Z)
+		{
+			//return bPos.Z < 0 ? CheckEdgeTransparentZ(bPos, false) : CheckEdgeTransparentZ(bPos, true);
+			return Chunk_World_Manager.instance.GetBlock(new Vector3I(bPos.X, bPos.Y, bPos.Z)) == Block_Manager.Instance.Air;
+			
+			//return false;
+			
+		}
 
 		//Adds transparent blocks
 		return _blocks[bPos.X, bPos.Y, bPos.Z] == Block_Manager.Instance.Air;
 	}
 
+	private bool CheckEdgeTransparentX(Vector3I bPos, bool isPositive)
+	{
+		int adjacentX = isPositive ? bPos.X + 1 : bPos.X - 1;
+
+		if (adjacentX < 0 || adjacentX >= dimensions.X)
+		{
+			return Chunk_World_Manager.instance.GetBlock(new Vector3I(adjacentX, bPos.Y, bPos.Z)) == Block_Manager.Instance.Air;
+		}
+		else
+		{
+			return _blocks[adjacentX, bPos.Y, bPos.Z] == Block_Manager.Instance.Air;
+		}
+	}
+
+
+	private bool CheckEdgeTransparentZ(Vector3I bPos, bool isPositive)
+	{
+		int adjacentZ = isPositive ? bPos.Z + 1 : bPos.Z - 1;
+
+		if (adjacentZ < 0 || adjacentZ >= dimensions.Z)
+		{
+			return Chunk_World_Manager.instance.GetBlock(new Vector3I(bPos.X, bPos.Y, adjacentZ)) == Block_Manager.Instance.Air;
+		}
+		else
+		{
+			return _blocks[bPos.X, bPos.Y, adjacentZ] == Block_Manager.Instance.Air;
+		}
+	}
+
+
+
 	public void SetBlock(Vector3I bPos, Block block)
 	{
 		_blocks[bPos.X, bPos.Y, bPos.Z] = block;
 		Update();
+	}
+
+	public Block GetBlock(Vector3I bPos)
+	{
+		return _blocks[bPos.X, bPos.Y, bPos.Z];
+	}
+
+	public Vector2I GetChunkPosition()
+	{
+		return new Vector2I((int)GlobalPosition.X / 16, (int)GlobalPosition.Z / 16);
 	}
 }

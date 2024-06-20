@@ -1,7 +1,22 @@
-[gd_scene load_steps=3 format=3 uid="uid://v1b67nixagfo"]
+[gd_scene load_steps=5 format=3 uid="uid://v1b67nixagfo"]
 
 [ext_resource type="Script" path="res://Scripts/Chunk_Manager.cs" id="1_h2mrt"]
 [ext_resource type="FastNoiseLite" uid="uid://c6yskkgcvxop" path="res://CurrentWorldNoise.tres" id="2_md6ua"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0ym7t"]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_o7k6w"]
+_surfaces = [{
+"aabb": AABB(-1, 0, -1, 1, 1e-05, 1.00001),
+"format": 34359742465,
+"index_count": 12,
+"index_data": PackedByteArray(0, 0, 2, 0, 1, 0, 1, 0, 2, 0, 3, 0, 1, 0, 3, 0, 0, 0, 0, 0, 3, 0, 2, 0),
+"material": SubResource("StandardMaterial3D_0ym7t"),
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 4,
+"vertex_data": PackedByteArray(0, 0, 128, 191, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 128, 191, 0, 0, 0, 0, 0, 0, 128, 191, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 128, 191)
+}]
 
 [node name="Chunk" type="StaticBody3D" node_paths=PackedStringArray("colShape", "meshInstance")]
 script = ExtResource("1_h2mrt")
@@ -12,3 +27,4 @@ Noise = ExtResource("2_md6ua")
 [node name="Collision" type="CollisionShape3D" parent="."]
 
 [node name="Mesh" type="MeshInstance3D" parent="."]
+mesh = SubResource("ArrayMesh_o7k6w")

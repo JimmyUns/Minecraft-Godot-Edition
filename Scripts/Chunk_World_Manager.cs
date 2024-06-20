@@ -1,67 +1,144 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
-using System.Threading;
+using System.Threading.Tasks;
 
 public partial class Chunk_World_Manager : Node
 {
 	public static Chunk_World_Manager instance { get; private set; }
-
-	private Dictionary<Chunk_Manager, Vector2I> _chunkToPosition = new();
+	List<(int, int)> _chunkPositions = new List<(int, int)>();
 	private Dictionary<Vector2I, Chunk_Manager> _positionToChunk = new();
 
-	private List<Chunk_Manager> _chunks;
+	private List<Chunk_Manager> _chunks = new List<Chunk_Manager>();
 
 	[Export] public PackedScene ChunkScene;
+	[Export] public Node3D chunkholderNode;
 
-	public int renderDistance = 4;
+	public int renderDistance = 6;
 
 	[Export] Player_Manager playerManager;
 	private Vector3 playerPosition;
 	private object playerPositionLock = new(); //This needs to be locked for the playerPosition to be changed
 
+	int centerX = 0;
+	int centerY = 0;
+
+	// Flag to check if initial terrain generation is complete
+	private bool isInitialGenerationComplete = false;
 
 	public override void _Ready()
 	{
 		instance = this;
-
-		_chunks = GetParent().GetChildren().Where(child => child is Chunk_Manager).Select(child => child as Chunk_Manager).ToList();
-
-		for (int i = _chunks.Count; i < renderDistance * renderDistance; i++)
-		{
-			var chunk = ChunkScene.Instantiate<Chunk_Manager>();
-			GetParent().CallDeferred(Node.MethodName.AddChild, chunk);
-			_chunks.Add(chunk);
-		}
-
-		for (int x = 0; x < renderDistance; x++)
-		{
-			for (int y = 0; y < renderDistance; y++)
-			{
-				var index = (y * renderDistance) + x;
-				var halfWidth = Mathf.FloorToInt(renderDistance / 2f);
-				_chunks[index].SetChunkPosition(new Vector2I(x - halfWidth, y - halfWidth));
-			}
-		}
-		
-		new Thread(new ThreadStart(ThreadProcess)).Start();
+		// Generate only the center chunk at startup
+		_ = SpawnInitialChunk();
 	}
 
-	public void UpdateChunkPosition(Chunk_Manager chunk, Vector2I currentPosition, Vector2I perviousPosition)
+	public override void _Process(double delta)
 	{
-		if (_positionToChunk.TryGetValue(perviousPosition, out var chunkAtPosition) && chunkAtPosition == chunk)
+		// Wait until the initial terrain generation is complete
+		if (!isInitialGenerationComplete)
+			return;
+
+		int newCenterX = playerManager.GetChunkPosition().X;
+		int newCenterY = playerManager.GetChunkPosition().Y;
+
+		if (newCenterX != centerX || newCenterY != centerY)
 		{
-			_positionToChunk.Remove(perviousPosition);
+			centerX = newCenterX;
+			centerY = newCenterY;
+
+			lock (playerPositionLock)
+			{
+				_ = UpdateChunks();
+			}
+		}
+	}
+
+	private async Task SpawnInitialChunk()
+	{
+		// Add the initial center chunk
+		_chunkPositions.Add((centerX, centerY));
+		CallDeferred(nameof(SpawnChunk), centerX, centerY);
+		await ToSignal(GetTree().CreateTimer(0.002f), "timeout");
+
+		// After initial chunk, start generating the rest
+		await GenerateAndSpawnChunks();
+
+		// Set the flag to true after the initial generation is complete
+		isInitialGenerationComplete = true;
+	}
+
+	private async Task GenerateAndSpawnChunks()
+	{
+		await UpdateChunks();
+	}
+
+	private async Task UpdateChunks()
+	{
+		HashSet<(int, int)> newChunkPositions = new HashSet<(int, int)>();
+
+		for (int r = 0; r <= renderDistance; r++)
+		{
+			for (int x = -r; x <= r; x++)
+			{
+				newChunkPositions.Add((centerX + x, centerY + r)); // Top row
+				if (r != 0) newChunkPositions.Add((centerX + x, centerY - r)); // Bottom row
+			}
+
+			for (int y = -r + 1; y <= r - 1; y++)
+			{
+				newChunkPositions.Add((centerX + r, centerY + y)); // Right column
+				if (r != 0) newChunkPositions.Add((centerX - r, centerY + y)); // Left column
+			}
 		}
 
-		_chunkToPosition[chunk] = currentPosition;
-		_positionToChunk[currentPosition] = chunk;
+		List<(int, int)> chunksToRemove = _chunkPositions.Except(newChunkPositions).ToList();
+		List<(int, int)> chunksToAdd = newChunkPositions.Except(_chunkPositions).ToList();
+
+		foreach (var pos in chunksToRemove)
+		{
+			RemoveChunk(pos.Item1, pos.Item2);
+		}
+
+		foreach (var pos in chunksToAdd)
+		{
+			_chunkPositions.Add(pos);
+			CallDeferred(nameof(SpawnChunk), pos.Item1, pos.Item2);
+			await ToSignal(GetTree().CreateTimer(0.002f), "timeout");
+		}
+
+		_chunkPositions = newChunkPositions.ToList();
+	}
+
+	private async void SpawnChunk(int x, int y)
+	{
+		var chunk = ChunkScene.Instantiate<Chunk_Manager>();
+		chunkholderNode.AddChild(chunk);
+
+		await ToSignal(GetTree().CreateTimer(0.002f), "timeout");
+		chunk.SetChunkPosition(new Vector2I(x, y));
+		chunk.GenerateAndUpdate();
+
+		_chunks.Add(chunk);
+		_positionToChunk[new Vector2I(x, y)] = chunk;
+	}
+
+	private void RemoveChunk(int x, int y)
+	{
+		var chunk = _chunks.FirstOrDefault(c => c.GetChunkPosition() == new Vector2I(x, y));
+		if (chunk != null)
+		{
+			chunk.QueueFree();
+			_chunks.Remove(chunk);
+			_positionToChunk.Remove(new Vector2I(x, y));
+		}
 	}
 
 	public void SetBlock(Vector3I globalPosition, Block block)
 	{
-		var chunkTilePosition = new Vector2I(Mathf.FloorToInt(globalPosition.X / (float)Chunk_Manager.dimensions.X), Mathf.FloorToInt(globalPosition.Z / (float)Chunk_Manager.dimensions.Z));
+		var chunkTilePosition = new Vector2I(Mathf.FloorToInt(globalPosition.X / 16f), Mathf.FloorToInt(globalPosition.Z / 16f));
 		lock (_positionToChunk)
 		{
 			if (_positionToChunk.TryGetValue(chunkTilePosition, out var chunk))
@@ -71,60 +148,30 @@ public partial class Chunk_World_Manager : Node
 		}
 	}
 
-	public override void _PhysicsProcess(double delta)
+	public Block GetBlock(Vector3I globalPosition)
 	{
-		lock (playerPositionLock)
+		var chunkTilePosition = new Vector2I(Mathf.FloorToInt(globalPosition.X / 16f), Mathf.FloorToInt(globalPosition.Z / 16f));
+		lock (_positionToChunk)
 		{
-			playerPosition = playerManager.playerBody.GlobalPosition;
+			if (_positionToChunk.TryGetValue(chunkTilePosition, out var chunk))
+			{
+				return chunk.GetBlock((Vector3I)(globalPosition - chunk.GlobalPosition));
+			}
+			return null;
 		}
 	}
 
-
-	//Seperate Thread
-	private void ThreadProcess()
+	public Chunk_Manager GetChunkManagerFromDictionary(Vector2I chunkTilePosition)
 	{
-		//Keep running as long as Chunk_World_manager exists
-		while (IsInstanceValid(this))
+		lock (_positionToChunk)
 		{
-			int playerChunkX, playerChunkZ;
-			lock (playerPositionLock)
+			if (_positionToChunk.TryGetValue(chunkTilePosition, out var chunk))
 			{
-				playerChunkX = Mathf.FloorToInt(playerPosition.X / Chunk_Manager.dimensions.X);
-				playerChunkZ = Mathf.FloorToInt(playerPosition.Z / Chunk_Manager.dimensions.Z);
+				return chunk;
 			}
-
-			foreach (var chunk in _chunks)
-			{
-				var chunkPosition = _chunkToPosition[chunk];
-				var chunkX = chunkPosition.X;
-				var chunkZ = chunkPosition.Y;
-
-				var newChunkX = (int)(Mathf.PosMod(chunkX - playerChunkX + renderDistance / 2, renderDistance) + playerChunkX - renderDistance / 2);
-				var newChunkZ = (int)(Mathf.PosMod(chunkZ - playerChunkZ + renderDistance / 2, renderDistance) + playerChunkZ - renderDistance / 2);
-
-				if (newChunkX != chunkX || newChunkZ != chunkZ)
-				{
-					lock (_positionToChunk)
-					{
-						if (_positionToChunk.ContainsKey(chunkPosition))
-						{
-							_positionToChunk.Remove(chunkPosition);
-						}
-
-						var newPosition = new Vector2I(newChunkX, newChunkZ);
-
-						_chunkToPosition[chunk] = newPosition;
-						_positionToChunk[newPosition] = chunk;
-
-						chunk.CallDeferred(nameof(chunk.SetChunkPosition), newPosition);
-					}
-
-					Thread.Sleep(100);
-				}
-			}
-			
-			Thread.Sleep(100);
+			return null;
 		}
 	}
 
 }
+

@@ -13,15 +13,16 @@ public partial class Player_Manager : Node3D
 	[Export] public Held_Object_Maker heldObjectMaker;
 	[Export] public Player_Mesh_Maker bodyMeshMaker;
 	[Export] public AnimationTree bodyAnimTree;
-	
-	
+
+
 
 	[Export] public Node3D chunkOutline;
 
 	public Block blockInHand;
-	public int gameMode = 0;
+	public int gameMode = 1;
 	public int perspectiveMode = 0; //0=fps, 1=tps back view, 2=tps front view
 	public bool guiVisible = true;
+	public bool interactiveGUIVisible = false;
 	private bool debugscreenExtra;
 	private bool isFullScreen = false;
 
@@ -40,13 +41,20 @@ public partial class Player_Manager : Node3D
 			{
 				perspectiveMode = 0;
 				if (guiVisible == true)
+				{
 					heldObjectMaker.meshInstance.Visible = true;
+					uiManager.crosshair.Visible = true;
+				}
 
 			}
 			else
 			{
 				if (guiVisible == true)
+				{
 					heldObjectMaker.meshInstance.Visible = false;
+					uiManager.crosshair.Visible = false;
+
+				}
 			}
 			cameraController.TogglePerspective(perspectiveMode);
 		}
@@ -71,9 +79,21 @@ public partial class Player_Manager : Node3D
 		if (Input.IsActionJustPressed("toggle_inventory"))
 		{
 			if (Input.MouseMode == Input.MouseModeEnum.Captured)
+			{
 				Input.MouseMode = Input.MouseModeEnum.Visible;
+				playerBody.lockMovement = true;
+				cameraController.lockRotation = true;
+				uiManager.ToggleInventory(true);
+				interactiveGUIVisible = true;
+			}
 			else
+			{
 				Input.MouseMode = Input.MouseModeEnum.Captured;
+				playerBody.lockMovement = false;
+				cameraController.lockRotation = false;
+				uiManager.ToggleInventory(false);
+				interactiveGUIVisible = false;
+			}
 		}
 
 
@@ -95,10 +115,10 @@ public partial class Player_Manager : Node3D
 		{
 			if (debugscreenExtra)
 				debugscreenExtra = false;
-			else 
+			else
 			{
 				uiManager.debugScreen.Visible = !uiManager.debugScreen.Visible;
-				
+
 			}
 		}
 
@@ -113,13 +133,15 @@ public partial class Player_Manager : Node3D
 			chunkOutline.GlobalPosition = newPoss * 16;
 
 
-		if(Input.IsActionJustPressed("toggle_windowmode"))
+		if (Input.IsActionJustPressed("toggle_windowmode"))
 		{
 			isFullScreen = !isFullScreen;
-			if(isFullScreen)
+			if (isFullScreen)
 			{
 				DisplayServer.WindowSetMode(DisplayServer.WindowMode.ExclusiveFullscreen);
-			} else {
+			}
+			else
+			{
 				DisplayServer.WindowSetMode(DisplayServer.WindowMode.Windowed);
 			}
 		}
@@ -127,22 +149,18 @@ public partial class Player_Manager : Node3D
 
 	public Vector3 GetCoordinatesGround()
 	{
-		Vector3 flooredPosition = new Vector3(
-				(int)Math.Floor(playerBody.GlobalPosition.X),
-				(int)Math.Floor(playerBody.GlobalPosition.Y + 1),
-				(int)Math.Floor(playerBody.GlobalPosition.Z)
-			);
-		return flooredPosition;
+		return new Vector3I(Mathf.FloorToInt(playerBody.GlobalPosition.X), Mathf.FloorToInt(playerBody.GlobalPosition.Y + 0.3f), Mathf.FloorToInt(playerBody.GlobalPosition.Z));
 	}
 
 	public Vector3 GetCoordinatesHead()
 	{
-		Vector3 flooredPosition = new Vector3(
-				(int)Math.Floor(playerBody.GlobalPosition.X),
-				(int)Math.Floor(playerBody.GlobalPosition.Y + 2),
-				(int)Math.Floor(playerBody.GlobalPosition.Z)
-			);
-		return flooredPosition;
+		return new Vector3I(Mathf.FloorToInt(playerBody.GlobalPosition.X), Mathf.FloorToInt(playerBody.GlobalPosition.Y + 1.3f), Mathf.FloorToInt(playerBody.GlobalPosition.Z));
+
+	}
+
+	public Vector2I GetChunkPosition()
+	{
+		return new Vector2I(Mathf.FloorToInt(playerBody.GlobalPosition.X / 16), Mathf.FloorToInt(playerBody.GlobalPosition.Z / 16));
 	}
 
 }

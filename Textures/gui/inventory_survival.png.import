@@ -2,27 +2,26 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://6yq8m032qoky"
-path.s3tc="res://.godot/imported/02_-_Default_baseColor.png-c76441e7a4c6dcab2041917c87b45ee8.s3tc.ctex"
+uid="uid://bglmbci4lrld4"
+path="res://.godot/imported/inventory_survival.png-89463777f7aa9af6f70d7d4e67d45481.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
-source_file="res://Models/textures/02_-_Default_baseColor.png"
-dest_files=["res://.godot/imported/02_-_Default_baseColor.png-c76441e7a4c6dcab2041917c87b45ee8.s3tc.ctex"]
+source_file="res://Textures/gui/inventory_survival.png"
+dest_files=["res://.godot/imported/inventory_survival.png-89463777f7aa9af6f70d7d4e67d45481.ctex"]
 
 [params]
 
-compress/mode=2
+compress/mode=0
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=true
+mipmaps/generate=false
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""

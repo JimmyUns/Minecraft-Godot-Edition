@@ -6,79 +6,66 @@ using System.Threading.Tasks;
 
 public partial class Inventory_Manager : Node
 {
-	public int focusedHotbar;
+	public int focusedHotbar = 0;
 	[Export] public Player_Manager playerManager;
-	private bool isHotbarSelectionChanged = true;
+	public bool isHotbarSelectionChanged = true;
 
-	private InventorySlot[,] _inventorySlots = new InventorySlot[10, 4];
+	public InventorySlot[,] _inventorySlots = new InventorySlot[10, 4];
+	public InventorySlot heldInventoryObject;
 
 	public override void _Ready()
 	{
-		focusedHotbar = 1;
-		
+
 		GiveOject(Block_Manager.Instance.Dirt, 1);
 		GiveOject(Block_Manager.Instance.Grass, 1);
 		GiveOject(Block_Manager.Instance.Stone, 1);
+		GiveOject(Block_Manager.Instance.Deepslate, 1);
+		GiveOject(Block_Manager.Instance.Bedrock, 1);
 
-		//Setting the hotbar icons
-		for (int i = 1; i < 10; i++)
-		{
-			if (_inventorySlots[i, 0] == null) continue;
-			playerManager.uiManager.FillHotbarIcons(_inventorySlots[i, 0].Block.Texture_Top, i);
-		}
 	}
 
 	public override void _Process(double delta)
 	{
-		//Hotbar Input
+		// Hotbar Input
 		for (int i = 1; i < 10; i++)
 		{
 			if (Input.IsActionJustPressed("hotbar_" + i))
 			{
-				focusedHotbar = i;
+				focusedHotbar = i - 1; // Adjust to zero-based index
 				isHotbarSelectionChanged = true;
 			}
 		}
+
 		if (Input.IsActionJustPressed("hotbar_up"))
 		{
-			focusedHotbar--;
+			focusedHotbar -= 1;
 			isHotbarSelectionChanged = true;
 		}
 		else if (Input.IsActionJustPressed("hotbar_down"))
 		{
-			focusedHotbar++;
+			focusedHotbar += 1;
 			isHotbarSelectionChanged = true;
 		}
 
-		if (focusedHotbar > 9) focusedHotbar = 1;
-		else if (focusedHotbar < 1) focusedHotbar = 9;
+		// Ensure focusedHotbar stays within valid range
+		if (focusedHotbar > 8) focusedHotbar = 0; // Zero-based index for slot 9
+		else if (focusedHotbar < 0) focusedHotbar = 8; // Zero-based index for slot 1
 
-		//Temporary
-		//when inventory system is built, simply change the if with a if(hotbar 0 is selected)
-		//then the heldObjectdata is the item in that hotbar data (as in x=0 y=0 is dirt by example)
-		//and update hotbar
 		if (isHotbarSelectionChanged)
 		{
-			//Update Hotbar Object Mesh
 			isHotbarSelectionChanged = false;
-			if (_inventorySlots[focusedHotbar, 0] == null)
+			var currentSlot = _inventorySlots[focusedHotbar, 0];
+
+			if (currentSlot == null || currentSlot.Block == Block_Manager.Instance.Air)
 			{
 				ChangeHeldItem(Block_Manager.Instance.Air);
 				playerManager.heldObjectMaker.HandMesh();
-			}
-			else
-			{
-				ChangeHeldItem(_inventorySlots[focusedHotbar, 0].Block);
-			}
-			
-			//Update Hotbar Object Name
-			if (_inventorySlots[focusedHotbar, 0] == null)
-			{
 				playerManager.uiManager.ChangeSelectedHotbar(focusedHotbar, "");
 			}
 			else
 			{
-				playerManager.uiManager.ChangeSelectedHotbar(focusedHotbar, _inventorySlots[focusedHotbar, 0].Block.name);
+				ChangeHeldItem(currentSlot.Block);
+				playerManager.uiManager.ChangeSelectedHotbar(focusedHotbar, currentSlot.Block.name);
 			}
 		}
 	}
@@ -100,16 +87,31 @@ public partial class Inventory_Manager : Node
 			Amount = amount;
 		}
 	}
-	
+
 	public void GiveOject(Block block, int Amount)
 	{
-		for (int i = 1; i < 10; i++)
+		for (int y = 0; y < 4; y++)
 		{
-			if(_inventorySlots[i, 0] == null) 
+			for (int x = 0; x < 9; x++)
 			{
-				_inventorySlots[i, 0] = new InventorySlot(block, Amount);
-				return;
+
+				if (_inventorySlots[x, y] == null)
+				{
+					_inventorySlots[x, y] = new InventorySlot(block, Amount);
+					playerManager.uiManager.UpdateInventory();
+					return;
+				}
 			}
+		}
+	}
+
+	public void GiveOject(Block block, int Amount, int x, int y)
+	{
+		if (_inventorySlots[x, y] == null)
+		{
+			_inventorySlots[x, y] = new InventorySlot(block, Amount);
+			playerManager.uiManager.UpdateInventory();
+			return;
 		}
 	}
 }

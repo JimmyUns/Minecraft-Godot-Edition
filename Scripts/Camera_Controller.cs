@@ -4,12 +4,13 @@ using System;
 public partial class Camera_Controller : Node
 {
 	[Export] public float mouseSensitivity;
-	[Export] public Camera3D mainCamera;
+	[Export] public Camera3D mainCamera, subviewportCamera;
 	[Export] public Node3D camHolder, playerHead;
 	[Export] public Node3D mainBody;
 	[Export] public Node3D headPivot;
 	[Export] private Player_Manager playerManager;
 	[Export] private SpringArm3D cameraSpringArm;
+	public bool lockRotation;
 
 	public override void _Ready()
 	{
@@ -19,7 +20,7 @@ public partial class Camera_Controller : Node
 
 	public override void _Input(InputEvent @event)
 	{
-		if (@event is InputEventMouseMotion)
+		if (@event is InputEventMouseMotion && lockRotation == false)
 		{
 			float current_mouseSensitivity = mouseSensitivity * 0.005f;
 			InputEventMouseMotion mouseMotion = @event as InputEventMouseMotion;
@@ -40,7 +41,8 @@ public partial class Camera_Controller : Node
 	{
 
 		camHolder.GlobalPosition = mainBody.GlobalPosition + new Vector3(0f, 1.72f, 0f);
-
+		subviewportCamera.GlobalPosition = camHolder.GlobalPosition;
+		subviewportCamera.GlobalRotation = mainCamera.GlobalRotation;
 	}
 
 	public void TogglePerspective(int perspectiveIndex)

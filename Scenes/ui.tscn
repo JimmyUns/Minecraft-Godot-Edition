@@ -1,10 +1,11 @@
-[gd_scene load_steps=9 format=3 uid="uid://gn7kr4rv6xo0"]
+[gd_scene load_steps=12 format=3 uid="uid://gn7kr4rv6xo0"]
 
 [ext_resource type="Script" path="res://Scripts/UI_Manager.cs" id="1_aedfe"]
 [ext_resource type="Texture2D" uid="uid://dlkdjrf84ep4b" path="res://Textures/gui/crosshair.png" id="1_rn7cl"]
 [ext_resource type="Shader" path="res://Shaders/Invert_Colors_Shader.gdshader" id="2_vu4c1"]
 [ext_resource type="Texture2D" uid="uid://bo8j7onc6sc45" path="res://Textures/gui/Hotbar.png" id="4_vfssn"]
 [ext_resource type="Texture2D" uid="uid://bp44g5g1pxca5" path="res://Textures/gui/Hotbar_Selected.png" id="5_1ccnn"]
+[ext_resource type="Texture2D" uid="uid://bglmbci4lrld4" path="res://Textures/gui/inventory_survival.png" id="6_yr1qv"]
 
 [sub_resource type="Animation" id="Animation_aucct"]
 resource_name = "ObjectName_Hide"
@@ -29,15 +30,28 @@ _data = {
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_maf0u"]
 shader = ExtResource("2_vu4c1")
 
-[node name="UI" type="CanvasLayer" node_paths=PackedStringArray("coordinates", "fps", "hotbarObjectNamePopup", "hotbarSelected_TextureRect", "hotbarIcons", "ui_Anim", "debugScreen")]
+[sub_resource type="Gradient" id="Gradient_ueqbu"]
+offsets = PackedFloat32Array(1)
+colors = PackedColorArray(0.85098, 0.85098, 0.85098, 0.764706)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_o1jy4"]
+gradient = SubResource("Gradient_ueqbu")
+
+[node name="UI" type="CanvasLayer" node_paths=PackedStringArray("coordinates", "chunk", "fps", "hotbarObjectNamePopup", "hotbarSelected_TextureRect", "inventory_survival", "hotbar", "hotbarIcons", "ui_Anim", "debugScreen", "crosshair", "slotHighlight", "heldInventoryObjectTextureRect")]
 script = ExtResource("1_aedfe")
-coordinates = NodePath("Control/Debug Screen/Coordinates")
-fps = NodePath("Control/Debug Screen/FPS")
+coordinates = NodePath("Control/Debug Screen/VBoxContainer/Coordinates")
+chunk = NodePath("Control/Debug Screen/VBoxContainer/Chunks")
+fps = NodePath("Control/Debug Screen/VBoxContainer/FPS")
 hotbarObjectNamePopup = NodePath("Control/Hotbar/Object Name")
 hotbarSelected_TextureRect = NodePath("Control/Hotbar/Outline")
+inventory_survival = NodePath("Control/Inventory")
+hotbar = NodePath("Control/Hotbar")
 hotbarIcons = [NodePath("Control/Hotbar/slot 0"), NodePath("Control/Hotbar/slot 1"), NodePath("Control/Hotbar/slot 2"), NodePath("Control/Hotbar/slot 3"), NodePath("Control/Hotbar/slot 4"), NodePath("Control/Hotbar/slot 5"), NodePath("Control/Hotbar/slot 6"), NodePath("Control/Hotbar/slot 7"), NodePath("Control/Hotbar/slot 8")]
 ui_Anim = NodePath("UI Animation Player")
 debugScreen = NodePath("Control/Debug Screen")
+crosshair = NodePath("Control/CrossHair")
+slotHighlight = NodePath("Control/Inventory/Slot Highlight")
+heldInventoryObjectTextureRect = NodePath("Control/Inventory/Held Cursor Object")
 
 [node name="UI Animation Player" type="AnimationPlayer" parent="."]
 libraries = {
@@ -51,6 +65,25 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="Control/SubViewportContainer"]
+transparent_bg = true
+handle_input_locally = false
+positional_shadow_atlas_size = 4096
+size = Vector2i(1152, 648)
+render_target_update_mode = 4
+
+[node name="viewport camera" type="Camera3D" parent="Control/SubViewportContainer/SubViewport"]
+cull_mask = 524288
 
 [node name="CrossHair" type="TextureRect" parent="Control"]
 texture_filter = 1
@@ -96,7 +129,7 @@ offset_top = -30.0
 offset_right = -140.5
 offset_bottom = -7.0
 grow_horizontal = 2
-theme_override_colors/font_color = Color(1, 1, 1, 0)
+theme_override_colors/font_color = Color(1, 1, 1, 1)
 text = "Dirt Block"
 horizontal_alignment = 1
 
@@ -179,19 +212,269 @@ offset_top = 17.0
 offset_right = 454.5
 offset_bottom = 43.0
 
+[node name="Inventory" type="TextureRect" parent="Control"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -262.0
+offset_top = -273.0
+offset_right = 515.0
+offset_bottom = 504.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("6_yr1qv")
+
+[node name="Container" type="GridContainer" parent="Control/Inventory"]
+layout_mode = 0
+offset_left = 24.0
+offset_top = 255.0
+offset_right = 1328.0
+offset_bottom = 779.0
+scale = Vector2(0.372, 0.3)
+mouse_filter = 2
+theme_override_constants/h_separation = 19
+theme_override_constants/v_separation = 19
+columns = 9
+
+[node name="slot 0" type="TextureRect" parent="Control/Inventory/Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="slot 1" type="TextureRect" parent="Control/Inventory/Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="slot 2" type="TextureRect" parent="Control/Inventory/Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="slot 3" type="TextureRect" parent="Control/Inventory/Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="slot 4" type="TextureRect" parent="Control/Inventory/Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="slot 5" type="TextureRect" parent="Control/Inventory/Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="slot 6" type="TextureRect" parent="Control/Inventory/Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="slot 7" type="TextureRect" parent="Control/Inventory/Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="slot 8" type="TextureRect" parent="Control/Inventory/Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="slot 9" type="TextureRect" parent="Control/Inventory/Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="slot 10" type="TextureRect" parent="Control/Inventory/Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="slot 11" type="TextureRect" parent="Control/Inventory/Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="slot 12" type="TextureRect" parent="Control/Inventory/Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="slot 13" type="TextureRect" parent="Control/Inventory/Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="slot 14" type="TextureRect" parent="Control/Inventory/Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="slot 15" type="TextureRect" parent="Control/Inventory/Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="slot 16" type="TextureRect" parent="Control/Inventory/Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="slot 17" type="TextureRect" parent="Control/Inventory/Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="slot 18" type="TextureRect" parent="Control/Inventory/Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="slot 19" type="TextureRect" parent="Control/Inventory/Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="slot 20" type="TextureRect" parent="Control/Inventory/Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="slot 21" type="TextureRect" parent="Control/Inventory/Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="slot 22" type="TextureRect" parent="Control/Inventory/Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="slot 23" type="TextureRect" parent="Control/Inventory/Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="slot 24" type="TextureRect" parent="Control/Inventory/Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="slot 25" type="TextureRect" parent="Control/Inventory/Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="slot 26" type="TextureRect" parent="Control/Inventory/Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Container_Hotbar" type="GridContainer" parent="Control/Inventory"]
+layout_mode = 0
+offset_left = 24.0
+offset_top = 431.0
+offset_right = 1328.0
+offset_bottom = 955.0
+scale = Vector2(0.372, 0.091)
+mouse_filter = 2
+theme_override_constants/h_separation = 19
+columns = 9
+
+[node name="slot 0" type="TextureRect" parent="Control/Inventory/Container_Hotbar"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="slot 1" type="TextureRect" parent="Control/Inventory/Container_Hotbar"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="slot 2" type="TextureRect" parent="Control/Inventory/Container_Hotbar"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="slot 3" type="TextureRect" parent="Control/Inventory/Container_Hotbar"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="slot 4" type="TextureRect" parent="Control/Inventory/Container_Hotbar"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="slot 5" type="TextureRect" parent="Control/Inventory/Container_Hotbar"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="slot 6" type="TextureRect" parent="Control/Inventory/Container_Hotbar"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="slot 7" type="TextureRect" parent="Control/Inventory/Container_Hotbar"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="slot 8" type="TextureRect" parent="Control/Inventory/Container_Hotbar"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Slot Highlight" type="TextureRect" parent="Control/Inventory"]
+visible = false
+top_level = true
+texture_filter = 1
+layout_mode = 2
+offset_left = 340.0
+offset_top = 313.0
+offset_right = 388.5
+offset_bottom = 361.5
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = SubResource("GradientTexture2D_o1jy4")
+expand_mode = 1
+
+[node name="Held Cursor Object" type="TextureRect" parent="Control/Inventory"]
+visible = false
+top_level = true
+texture_filter = 1
+layout_mode = 2
+offset_left = 340.0
+offset_top = 313.0
+offset_right = 388.5
+offset_bottom = 361.5
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = SubResource("GradientTexture2D_o1jy4")
+expand_mode = 1
+
 [node name="Debug Screen" type="CanvasLayer" parent="Control"]
 
-[node name="Coordinates" type="Label" parent="Control/Debug Screen"]
-anchors_preset = 10
-anchor_right = 1.0
-offset_bottom = 23.0
-grow_horizontal = 2
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/Debug Screen"]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Coordinates" type="Label" parent="Control/Debug Screen/VBoxContainer"]
+layout_mode = 2
 text = "X: 0, y:0, z=0"
 
-[node name="FPS" type="Label" parent="Control/Debug Screen"]
-anchors_preset = 10
-anchor_right = 1.0
-offset_top = 19.0
-offset_bottom = 42.0
-grow_horizontal = 2
+[node name="Chunks" type="Label" parent="Control/Debug Screen/VBoxContainer"]
+layout_mode = 2
+text = "Chunk: 0,0
+"
+
+[node name="FPS" type="Label" parent="Control/Debug Screen/VBoxContainer"]
+layout_mode = 2
 text = "fps: 999"

@@ -9,14 +9,16 @@ public partial class PlayerBody : CharacterBody3D
 	private float sprintMultiplier = 1f;
 	private float currSpeed;
 	public float JumpVelocity = 8.4f;
+	private float jumpCooldown = 0.2f;
 	public Vector2 inputDir;
 	public Vector3 direction;
-	
+
 	private float movementAnimationLerper;
 
 	// Get the gravity from the project settings to be synced with RigidBody nodes.
 	public float gravity = 35;
 	private float gravityMultiplyer = 0.1f;
+	public bool lockMovement;
 
 	public override void _PhysicsProcess(double delta)
 	{
@@ -28,12 +30,15 @@ public partial class PlayerBody : CharacterBody3D
 			// Add the gravity.
 			if (!IsOnFloor())
 				velocity.Y -= gravity * (float)delta;
-
-			// Handle Jump.
-			if (Input.IsActionPressed("ui_accept") && IsOnFloor())
+			else
 			{
-				gravityMultiplyer = 0.1f;
-				velocity.Y = JumpVelocity;
+				if (jumpCooldown > 0) jumpCooldown -= (float)delta;
+				if (Input.IsActionPressed("jump") && jumpCooldown <= 0)
+				{
+					gravityMultiplyer = 0.1f;
+					velocity.Y = JumpVelocity;
+					jumpCooldown = 0.15f;
+				}
 			}
 
 			gravityMultiplyer += (float)delta / 3f;
@@ -43,8 +48,9 @@ public partial class PlayerBody : CharacterBody3D
 		else if (playerManager.gameMode == 1)
 		{
 			currSpeed = flySpeed;
-			if (Input.IsActionPressed("ui_accept"))
+			if (Input.IsActionPressed("jump"))
 				velocity.Y += JumpVelocity;
+
 
 			else if (Input.IsActionPressed("sneak"))
 				velocity.Y -= JumpVelocity;
@@ -54,7 +60,13 @@ public partial class PlayerBody : CharacterBody3D
 
 		// Get the input direction and handle the movement/deceleration.
 		// As good practice, you should replace UI actions with custom gameplay actions.
-		inputDir = Input.GetVector("left", "right", "forward", "backward");
+		if (lockMovement == false)
+		{
+			inputDir = Input.GetVector("left", "right", "forward", "backward");
+		} else 
+		{
+			inputDir = Vector2.Zero;
+		}
 		direction = (Transform.Basis * new Vector3(inputDir.X, 0, inputDir.Y)).Normalized();
 		if (direction != Vector3.Zero)
 		{

@@ -37,42 +37,42 @@ fog_sky_affect = 0.0
 [sub_resource type="Resource" id="Resource_1i5cw"]
 script = ExtResource("2_4vmcx")
 name = "Air"
-isTransparent = false
+isTransparent = true
 
 [sub_resource type="Resource" id="Resource_5wpis"]
 script = ExtResource("2_4vmcx")
 name = "Dirt Block"
-Texture_Top = ExtResource("3_xdyay")
 isTransparent = false
+Texture_Top = ExtResource("3_xdyay")
 
 [sub_resource type="Resource" id="Resource_swevy"]
 script = ExtResource("2_4vmcx")
 name = "Grass Block"
+isTransparent = false
 Texture_Top = ExtResource("4_beh1k")
 Texture_Bottom = ExtResource("3_xdyay")
 Texture_Right = ExtResource("4_epyh1")
 Texture_Left = ExtResource("4_epyh1")
 Texture_Forward = ExtResource("4_epyh1")
 Texture_Back = ExtResource("4_epyh1")
-isTransparent = false
 
 [sub_resource type="Resource" id="Resource_orqex"]
 script = ExtResource("2_4vmcx")
 name = "Stone Block"
-Texture_Top = ExtResource("5_ql5md")
 isTransparent = false
+Texture_Top = ExtResource("5_ql5md")
 
 [sub_resource type="Resource" id="Resource_chihm"]
 script = ExtResource("2_4vmcx")
 name = "Deepslate Block"
-Texture_Top = ExtResource("7_h0o6c")
 isTransparent = false
+Texture_Top = ExtResource("7_h0o6c")
 
 [sub_resource type="Resource" id="Resource_28mty"]
 script = ExtResource("2_4vmcx")
 name = "Bedrock Block"
-Texture_Top = ExtResource("8_jxegf")
 isTransparent = false
+Texture_Top = ExtResource("8_jxegf")
 
 [node name="World" type="Node3D"]
 
@@ -91,12 +91,15 @@ Stone = SubResource("Resource_orqex")
 Deepslate = SubResource("Resource_chihm")
 Bedrock = SubResource("Resource_28mty")
 
-[node name="Chunk World Manager" type="Node" parent="." node_paths=PackedStringArray("playerManager")]
+[node name="Chunk World Manager" type="Node" parent="." node_paths=PackedStringArray("chunkholderNode", "playerManager")]
 script = ExtResource("1_rxrwf")
 ChunkScene = ExtResource("3_nko5p")
+chunkholderNode = NodePath("../Chunk Holder")
 playerManager = NodePath("../Player")
 
 [node name="World Manager" type="Node" parent="."]
 
 [node name="Player" parent="." instance=ExtResource("1_wrubq")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 72.01, 8)
+
+[node name="Chunk Holder" type="Node3D" parent="."]
