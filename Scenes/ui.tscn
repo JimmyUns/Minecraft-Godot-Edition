@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://gn7kr4rv6xo0"]
+[gd_scene load_steps=19 format=3 uid="uid://gn7kr4rv6xo0"]
 
 [ext_resource type="Script" path="res://Scripts/UI_Manager.cs" id="1_aedfe"]
 [ext_resource type="Texture2D" uid="uid://dlkdjrf84ep4b" path="res://Textures/gui/crosshair.png" id="1_rn7cl"]
@@ -6,6 +6,10 @@
 [ext_resource type="Texture2D" uid="uid://bo8j7onc6sc45" path="res://Textures/gui/Hotbar.png" id="4_vfssn"]
 [ext_resource type="Texture2D" uid="uid://bp44g5g1pxca5" path="res://Textures/gui/Hotbar_Selected.png" id="5_1ccnn"]
 [ext_resource type="Texture2D" uid="uid://bglmbci4lrld4" path="res://Textures/gui/inventory_survival.png" id="6_yr1qv"]
+[ext_resource type="Texture2D" uid="uid://bidews83m4vie" path="res://Textures/block/dirt.png" id="7_g3bcb"]
+[ext_resource type="Texture2D" uid="uid://bjleukm26jq8s" path="res://Textures/gui/widget/button.png" id="7_webr1"]
+[ext_resource type="Texture2D" uid="uid://b8ahogfnip8hj" path="res://Textures/gui/widget/button_highlighted.png" id="8_w4u0d"]
+[ext_resource type="Texture2D" uid="uid://bxq6s8b1h2h6w" path="res://Textures/gui/widget/button_disabled.png" id="9_wnmxr"]
 
 [sub_resource type="Animation" id="Animation_aucct"]
 resource_name = "ObjectName_Hide"
@@ -36,6 +40,15 @@ colors = PackedColorArray(0.85098, 0.85098, 0.85098, 0.764706)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_o1jy4"]
 gradient = SubResource("Gradient_ueqbu")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_lbaoa"]
+texture = ExtResource("7_webr1")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_4uueq"]
+texture = ExtResource("8_w4u0d")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_0okrp"]
+texture = ExtResource("9_wnmxr")
 
 [node name="UI" type="CanvasLayer" node_paths=PackedStringArray("coordinates", "chunk", "fps", "hotbarObjectNamePopup", "hotbarSelected_TextureRect", "inventory_survival", "hotbar", "hotbarIcons", "ui_Anim", "debugScreen", "crosshair", "slotHighlight", "heldInventoryObjectTextureRect")]
 script = ExtResource("1_aedfe")
@@ -151,66 +164,192 @@ texture = ExtResource("5_1ccnn")
 
 [node name="slot 0" type="TextureRect" parent="Control/Hotbar"]
 layout_mode = 0
-offset_left = 15.5
-offset_top = 17.0
-offset_right = 41.5
-offset_bottom = 43.0
+offset_left = 9.0
+offset_top = 10.0
+offset_right = 49.0
+offset_bottom = 50.0
+
+[node name="amount" type="Label" parent="Control/Hotbar/slot 0"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -40.0
+offset_top = -20.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 15
+horizontal_alignment = 2
 
 [node name="slot 1" type="TextureRect" parent="Control/Hotbar"]
 layout_mode = 0
-offset_left = 67.5
-offset_top = 17.0
-offset_right = 93.5
-offset_bottom = 43.0
+offset_left = 62.0
+offset_top = 11.0
+offset_right = 100.0
+offset_bottom = 49.0
+
+[node name="amount" type="Label" parent="Control/Hotbar/slot 1"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -40.0
+offset_top = -20.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 15
+horizontal_alignment = 2
 
 [node name="slot 2" type="TextureRect" parent="Control/Hotbar"]
 layout_mode = 0
-offset_left = 119.5
-offset_top = 17.0
-offset_right = 145.5
-offset_bottom = 43.0
+offset_left = 114.0
+offset_top = 11.0
+offset_right = 152.0
+offset_bottom = 49.0
+
+[node name="amount" type="Label" parent="Control/Hotbar/slot 2"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -40.0
+offset_top = -20.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 15
+horizontal_alignment = 2
 
 [node name="slot 3" type="TextureRect" parent="Control/Hotbar"]
 layout_mode = 0
-offset_left = 170.5
-offset_top = 17.0
-offset_right = 196.5
-offset_bottom = 43.0
+offset_left = 164.0
+offset_top = 10.0
+offset_right = 204.0
+offset_bottom = 50.0
+
+[node name="amount" type="Label" parent="Control/Hotbar/slot 3"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -40.0
+offset_top = -20.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 15
+horizontal_alignment = 2
 
 [node name="slot 4" type="TextureRect" parent="Control/Hotbar"]
 layout_mode = 0
-offset_left = 223.5
-offset_top = 17.0
-offset_right = 249.5
-offset_bottom = 43.0
+offset_left = 219.0
+offset_top = 12.0
+offset_right = 255.0
+offset_bottom = 48.0
+
+[node name="amount" type="Label" parent="Control/Hotbar/slot 4"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -40.0
+offset_top = -20.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 15
+horizontal_alignment = 2
 
 [node name="slot 5" type="TextureRect" parent="Control/Hotbar"]
 layout_mode = 0
-offset_left = 274.5
-offset_top = 17.0
-offset_right = 300.5
-offset_bottom = 43.0
+offset_left = 269.0
+offset_top = 11.0
+offset_right = 307.0
+offset_bottom = 49.0
+
+[node name="amount" type="Label" parent="Control/Hotbar/slot 5"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -40.0
+offset_top = -20.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 15
+horizontal_alignment = 2
 
 [node name="slot 6" type="TextureRect" parent="Control/Hotbar"]
 layout_mode = 0
-offset_left = 326.5
-offset_top = 17.0
-offset_right = 352.5
-offset_bottom = 43.0
+offset_left = 321.0
+offset_top = 11.0
+offset_right = 359.0
+offset_bottom = 49.0
+
+[node name="amount" type="Label" parent="Control/Hotbar/slot 6"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -40.0
+offset_top = -20.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 15
+horizontal_alignment = 2
 
 [node name="slot 7" type="TextureRect" parent="Control/Hotbar"]
 layout_mode = 0
-offset_left = 378.5
-offset_top = 17.0
-offset_right = 404.5
-offset_bottom = 43.0
+offset_left = 372.0
+offset_top = 10.0
+offset_right = 412.0
+offset_bottom = 50.0
+
+[node name="amount" type="Label" parent="Control/Hotbar/slot 7"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -40.0
+offset_top = -20.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 15
+horizontal_alignment = 2
 
 [node name="slot 8" type="TextureRect" parent="Control/Hotbar"]
 layout_mode = 0
-offset_left = 428.5
-offset_top = 17.0
-offset_right = 454.5
-offset_bottom = 43.0
+offset_left = 423.0
+offset_top = 11.0
+offset_right = 461.0
+offset_bottom = 49.0
+
+[node name="amount" type="Label" parent="Control/Hotbar/slot 8"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -40.0
+offset_top = -20.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 15
+horizontal_alignment = 2
 
 [node name="Inventory" type="TextureRect" parent="Control"]
 texture_filter = 1
@@ -246,135 +385,594 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
+[node name="amount" type="Label" parent="Control/Inventory/Container/slot 0"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -34.8656
+offset_top = -77.3333
+offset_right = 55.1344
+offset_bottom = -1.33331
+grow_horizontal = 2
+grow_vertical = 0
+scale = Vector2(1, 1.2)
+theme_override_font_sizes/font_size = 55
+horizontal_alignment = 2
+
 [node name="slot 1" type="TextureRect" parent="Control/Inventory/Container"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+
+[node name="amount" type="Label" parent="Control/Inventory/Container/slot 1"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -34.8656
+offset_top = -77.3333
+offset_right = 55.1344
+offset_bottom = -1.33331
+grow_horizontal = 2
+grow_vertical = 0
+scale = Vector2(1, 1.2)
+theme_override_font_sizes/font_size = 55
+horizontal_alignment = 2
 
 [node name="slot 2" type="TextureRect" parent="Control/Inventory/Container"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
+[node name="amount" type="Label" parent="Control/Inventory/Container/slot 2"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -34.8656
+offset_top = -77.3333
+offset_right = 55.1344
+offset_bottom = -1.33331
+grow_horizontal = 2
+grow_vertical = 0
+scale = Vector2(1, 1.2)
+theme_override_font_sizes/font_size = 55
+horizontal_alignment = 2
+
 [node name="slot 3" type="TextureRect" parent="Control/Inventory/Container"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+
+[node name="amount" type="Label" parent="Control/Inventory/Container/slot 3"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -34.8656
+offset_top = -77.3333
+offset_right = 55.1344
+offset_bottom = -1.33331
+grow_horizontal = 2
+grow_vertical = 0
+scale = Vector2(1, 1.2)
+theme_override_font_sizes/font_size = 55
+horizontal_alignment = 2
 
 [node name="slot 4" type="TextureRect" parent="Control/Inventory/Container"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
+[node name="amount" type="Label" parent="Control/Inventory/Container/slot 4"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -34.8656
+offset_top = -77.3333
+offset_right = 55.1344
+offset_bottom = -1.33331
+grow_horizontal = 2
+grow_vertical = 0
+scale = Vector2(1, 1.2)
+theme_override_font_sizes/font_size = 55
+horizontal_alignment = 2
+
 [node name="slot 5" type="TextureRect" parent="Control/Inventory/Container"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+
+[node name="amount" type="Label" parent="Control/Inventory/Container/slot 5"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -34.8656
+offset_top = -77.3333
+offset_right = 55.1344
+offset_bottom = -1.33331
+grow_horizontal = 2
+grow_vertical = 0
+scale = Vector2(1, 1.2)
+theme_override_font_sizes/font_size = 55
+horizontal_alignment = 2
 
 [node name="slot 6" type="TextureRect" parent="Control/Inventory/Container"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
+[node name="amount" type="Label" parent="Control/Inventory/Container/slot 6"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -34.8656
+offset_top = -77.3333
+offset_right = 55.1344
+offset_bottom = -1.33331
+grow_horizontal = 2
+grow_vertical = 0
+scale = Vector2(1, 1.2)
+theme_override_font_sizes/font_size = 55
+horizontal_alignment = 2
+
 [node name="slot 7" type="TextureRect" parent="Control/Inventory/Container"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+
+[node name="amount" type="Label" parent="Control/Inventory/Container/slot 7"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -34.8656
+offset_top = -77.3333
+offset_right = 55.1344
+offset_bottom = -1.33331
+grow_horizontal = 2
+grow_vertical = 0
+scale = Vector2(1, 1.2)
+theme_override_font_sizes/font_size = 55
+horizontal_alignment = 2
 
 [node name="slot 8" type="TextureRect" parent="Control/Inventory/Container"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
+[node name="amount" type="Label" parent="Control/Inventory/Container/slot 8"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -34.8656
+offset_top = -77.3333
+offset_right = 55.1344
+offset_bottom = -1.33331
+grow_horizontal = 2
+grow_vertical = 0
+scale = Vector2(1, 1.2)
+theme_override_font_sizes/font_size = 55
+horizontal_alignment = 2
+
 [node name="slot 9" type="TextureRect" parent="Control/Inventory/Container"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+
+[node name="amount" type="Label" parent="Control/Inventory/Container/slot 9"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -34.8656
+offset_top = -77.3333
+offset_right = 55.1344
+offset_bottom = -1.33331
+grow_horizontal = 2
+grow_vertical = 0
+scale = Vector2(1, 1.2)
+theme_override_font_sizes/font_size = 55
+horizontal_alignment = 2
 
 [node name="slot 10" type="TextureRect" parent="Control/Inventory/Container"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
+[node name="amount" type="Label" parent="Control/Inventory/Container/slot 10"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -34.8656
+offset_top = -77.3333
+offset_right = 55.1344
+offset_bottom = -1.33331
+grow_horizontal = 2
+grow_vertical = 0
+scale = Vector2(1, 1.2)
+theme_override_font_sizes/font_size = 55
+horizontal_alignment = 2
+
 [node name="slot 11" type="TextureRect" parent="Control/Inventory/Container"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+
+[node name="amount" type="Label" parent="Control/Inventory/Container/slot 11"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -34.8656
+offset_top = -77.3333
+offset_right = 55.1344
+offset_bottom = -1.33331
+grow_horizontal = 2
+grow_vertical = 0
+scale = Vector2(1, 1.2)
+theme_override_font_sizes/font_size = 55
+horizontal_alignment = 2
 
 [node name="slot 12" type="TextureRect" parent="Control/Inventory/Container"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
+[node name="amount" type="Label" parent="Control/Inventory/Container/slot 12"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -34.8656
+offset_top = -77.3333
+offset_right = 55.1344
+offset_bottom = -1.33331
+grow_horizontal = 2
+grow_vertical = 0
+scale = Vector2(1, 1.2)
+theme_override_font_sizes/font_size = 55
+horizontal_alignment = 2
+
 [node name="slot 13" type="TextureRect" parent="Control/Inventory/Container"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+
+[node name="amount" type="Label" parent="Control/Inventory/Container/slot 13"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -34.8656
+offset_top = -77.3333
+offset_right = 55.1344
+offset_bottom = -1.33331
+grow_horizontal = 2
+grow_vertical = 0
+scale = Vector2(1, 1.2)
+theme_override_font_sizes/font_size = 55
+horizontal_alignment = 2
 
 [node name="slot 14" type="TextureRect" parent="Control/Inventory/Container"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
+[node name="amount" type="Label" parent="Control/Inventory/Container/slot 14"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -34.8656
+offset_top = -77.3333
+offset_right = 55.1344
+offset_bottom = -1.33331
+grow_horizontal = 2
+grow_vertical = 0
+scale = Vector2(1, 1.2)
+theme_override_font_sizes/font_size = 55
+horizontal_alignment = 2
+
 [node name="slot 15" type="TextureRect" parent="Control/Inventory/Container"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+
+[node name="amount" type="Label" parent="Control/Inventory/Container/slot 15"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -34.8656
+offset_top = -77.3333
+offset_right = 55.1344
+offset_bottom = -1.33331
+grow_horizontal = 2
+grow_vertical = 0
+scale = Vector2(1, 1.2)
+theme_override_font_sizes/font_size = 55
+horizontal_alignment = 2
 
 [node name="slot 16" type="TextureRect" parent="Control/Inventory/Container"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
+[node name="amount" type="Label" parent="Control/Inventory/Container/slot 16"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -34.8656
+offset_top = -77.3333
+offset_right = 55.1344
+offset_bottom = -1.33331
+grow_horizontal = 2
+grow_vertical = 0
+scale = Vector2(1, 1.2)
+theme_override_font_sizes/font_size = 55
+horizontal_alignment = 2
+
 [node name="slot 17" type="TextureRect" parent="Control/Inventory/Container"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+
+[node name="amount" type="Label" parent="Control/Inventory/Container/slot 17"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -34.8656
+offset_top = -77.3333
+offset_right = 55.1344
+offset_bottom = -1.33331
+grow_horizontal = 2
+grow_vertical = 0
+scale = Vector2(1, 1.2)
+theme_override_font_sizes/font_size = 55
+horizontal_alignment = 2
 
 [node name="slot 18" type="TextureRect" parent="Control/Inventory/Container"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
+[node name="amount" type="Label" parent="Control/Inventory/Container/slot 18"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -34.8656
+offset_top = -77.3333
+offset_right = 55.1344
+offset_bottom = -1.33331
+grow_horizontal = 2
+grow_vertical = 0
+scale = Vector2(1, 1.2)
+theme_override_font_sizes/font_size = 55
+horizontal_alignment = 2
+
 [node name="slot 19" type="TextureRect" parent="Control/Inventory/Container"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+
+[node name="amount" type="Label" parent="Control/Inventory/Container/slot 19"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -34.8656
+offset_top = -77.3333
+offset_right = 55.1344
+offset_bottom = -1.33331
+grow_horizontal = 2
+grow_vertical = 0
+scale = Vector2(1, 1.2)
+theme_override_font_sizes/font_size = 55
+horizontal_alignment = 2
 
 [node name="slot 20" type="TextureRect" parent="Control/Inventory/Container"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
+[node name="amount" type="Label" parent="Control/Inventory/Container/slot 20"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -34.8656
+offset_top = -77.3333
+offset_right = 55.1344
+offset_bottom = -1.33331
+grow_horizontal = 2
+grow_vertical = 0
+scale = Vector2(1, 1.2)
+theme_override_font_sizes/font_size = 55
+horizontal_alignment = 2
+
 [node name="slot 21" type="TextureRect" parent="Control/Inventory/Container"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+
+[node name="amount" type="Label" parent="Control/Inventory/Container/slot 21"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -34.8656
+offset_top = -77.3333
+offset_right = 55.1344
+offset_bottom = -1.33331
+grow_horizontal = 2
+grow_vertical = 0
+scale = Vector2(1, 1.2)
+theme_override_font_sizes/font_size = 55
+horizontal_alignment = 2
 
 [node name="slot 22" type="TextureRect" parent="Control/Inventory/Container"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
+[node name="amount" type="Label" parent="Control/Inventory/Container/slot 22"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -34.8656
+offset_top = -77.3333
+offset_right = 55.1344
+offset_bottom = -1.33331
+grow_horizontal = 2
+grow_vertical = 0
+scale = Vector2(1, 1.2)
+theme_override_font_sizes/font_size = 55
+horizontal_alignment = 2
+
 [node name="slot 23" type="TextureRect" parent="Control/Inventory/Container"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+
+[node name="amount" type="Label" parent="Control/Inventory/Container/slot 23"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -34.8656
+offset_top = -77.3333
+offset_right = 55.1344
+offset_bottom = -1.33331
+grow_horizontal = 2
+grow_vertical = 0
+scale = Vector2(1, 1.2)
+theme_override_font_sizes/font_size = 55
+horizontal_alignment = 2
 
 [node name="slot 24" type="TextureRect" parent="Control/Inventory/Container"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
+[node name="amount" type="Label" parent="Control/Inventory/Container/slot 24"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -34.8656
+offset_top = -77.3333
+offset_right = 55.1344
+offset_bottom = -1.33331
+grow_horizontal = 2
+grow_vertical = 0
+scale = Vector2(1, 1.2)
+theme_override_font_sizes/font_size = 55
+horizontal_alignment = 2
+
 [node name="slot 25" type="TextureRect" parent="Control/Inventory/Container"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
+[node name="amount" type="Label" parent="Control/Inventory/Container/slot 25"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -34.8656
+offset_top = -77.3333
+offset_right = 55.1344
+offset_bottom = -1.33331
+grow_horizontal = 2
+grow_vertical = 0
+scale = Vector2(1, 1.2)
+theme_override_font_sizes/font_size = 55
+horizontal_alignment = 2
+
 [node name="slot 26" type="TextureRect" parent="Control/Inventory/Container"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+
+[node name="amount" type="Label" parent="Control/Inventory/Container/slot 26"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -34.8656
+offset_top = -77.3333
+offset_right = 55.1344
+offset_bottom = -1.33331
+grow_horizontal = 2
+grow_vertical = 0
+scale = Vector2(1, 1.2)
+theme_override_font_sizes/font_size = 55
+horizontal_alignment = 2
 
 [node name="Container_Hotbar" type="GridContainer" parent="Control/Inventory"]
 layout_mode = 0
@@ -392,48 +990,200 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
+[node name="amount" type="Label" parent="Control/Inventory/Container_Hotbar/slot 0"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -107.366
+offset_top = -260.264
+offset_right = -17.3658
+offset_bottom = -184.263
+grow_horizontal = 0
+grow_vertical = 0
+scale = Vector2(1, 3.91)
+theme_override_font_sizes/font_size = 55
+horizontal_alignment = 2
+
 [node name="slot 1" type="TextureRect" parent="Control/Inventory/Container_Hotbar"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+
+[node name="amount" type="Label" parent="Control/Inventory/Container_Hotbar/slot 1"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -107.366
+offset_top = -260.264
+offset_right = -17.3658
+offset_bottom = -184.263
+grow_horizontal = 0
+grow_vertical = 0
+scale = Vector2(1, 3.91)
+theme_override_font_sizes/font_size = 55
+horizontal_alignment = 2
 
 [node name="slot 2" type="TextureRect" parent="Control/Inventory/Container_Hotbar"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
+[node name="amount" type="Label" parent="Control/Inventory/Container_Hotbar/slot 2"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -107.366
+offset_top = -260.264
+offset_right = -17.3658
+offset_bottom = -184.263
+grow_horizontal = 0
+grow_vertical = 0
+scale = Vector2(1, 3.91)
+theme_override_font_sizes/font_size = 55
+horizontal_alignment = 2
+
 [node name="slot 3" type="TextureRect" parent="Control/Inventory/Container_Hotbar"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+
+[node name="amount" type="Label" parent="Control/Inventory/Container_Hotbar/slot 3"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -107.366
+offset_top = -260.264
+offset_right = -17.3658
+offset_bottom = -184.263
+grow_horizontal = 0
+grow_vertical = 0
+scale = Vector2(1, 3.91)
+theme_override_font_sizes/font_size = 55
+horizontal_alignment = 2
 
 [node name="slot 4" type="TextureRect" parent="Control/Inventory/Container_Hotbar"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
+[node name="amount" type="Label" parent="Control/Inventory/Container_Hotbar/slot 4"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -107.366
+offset_top = -260.264
+offset_right = -17.3658
+offset_bottom = -184.263
+grow_horizontal = 0
+grow_vertical = 0
+scale = Vector2(1, 3.91)
+theme_override_font_sizes/font_size = 55
+horizontal_alignment = 2
+
 [node name="slot 5" type="TextureRect" parent="Control/Inventory/Container_Hotbar"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+
+[node name="amount" type="Label" parent="Control/Inventory/Container_Hotbar/slot 5"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -107.366
+offset_top = -260.264
+offset_right = -17.3658
+offset_bottom = -184.263
+grow_horizontal = 0
+grow_vertical = 0
+scale = Vector2(1, 3.91)
+theme_override_font_sizes/font_size = 55
+horizontal_alignment = 2
 
 [node name="slot 6" type="TextureRect" parent="Control/Inventory/Container_Hotbar"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
+[node name="amount" type="Label" parent="Control/Inventory/Container_Hotbar/slot 6"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -107.366
+offset_top = -260.264
+offset_right = -17.3658
+offset_bottom = -184.263
+grow_horizontal = 0
+grow_vertical = 0
+scale = Vector2(1, 3.91)
+theme_override_font_sizes/font_size = 55
+horizontal_alignment = 2
+
 [node name="slot 7" type="TextureRect" parent="Control/Inventory/Container_Hotbar"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+
+[node name="amount" type="Label" parent="Control/Inventory/Container_Hotbar/slot 7"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -107.366
+offset_top = -260.264
+offset_right = -17.3658
+offset_bottom = -184.263
+grow_horizontal = 0
+grow_vertical = 0
+scale = Vector2(1, 3.91)
+theme_override_font_sizes/font_size = 55
+horizontal_alignment = 2
 
 [node name="slot 8" type="TextureRect" parent="Control/Inventory/Container_Hotbar"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
+[node name="amount" type="Label" parent="Control/Inventory/Container_Hotbar/slot 8"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -107.366
+offset_top = -260.264
+offset_right = -17.3658
+offset_bottom = -184.263
+grow_horizontal = 0
+grow_vertical = 0
+scale = Vector2(1, 3.91)
+theme_override_font_sizes/font_size = 55
+horizontal_alignment = 2
+
 [node name="Slot Highlight" type="TextureRect" parent="Control/Inventory"]
-visible = false
 top_level = true
 texture_filter = 1
 layout_mode = 2
@@ -457,8 +1207,21 @@ offset_right = 388.5
 offset_bottom = 361.5
 size_flags_horizontal = 3
 size_flags_vertical = 3
-texture = SubResource("GradientTexture2D_o1jy4")
+texture = ExtResource("7_g3bcb")
 expand_mode = 1
+
+[node name="amount" type="Label" parent="Control/Inventory/Held Cursor Object"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 20
+text = "64"
+horizontal_alignment = 2
+vertical_alignment = 2
 
 [node name="Debug Screen" type="CanvasLayer" parent="Control"]
 
@@ -478,3 +1241,149 @@ text = "Chunk: 0,0
 [node name="FPS" type="Label" parent="Control/Debug Screen/VBoxContainer"]
 layout_mode = 2
 text = "fps: 999"
+
+[node name="Pause Menu" type="CanvasLayer" parent="Control"]
+visible = false
+
+[node name="Background" type="ColorRect" parent="Control/Pause Menu"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.286275)
+
+[node name="Game Menu" type="Label" parent="Control/Pause Menu"]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -50.0
+offset_top = 117.0
+offset_right = 50.0
+offset_bottom = 137.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 20
+text = "Game Menu"
+
+[node name="Back to Game" type="Button" parent="Control/Pause Menu"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -180.0
+offset_top = -91.0
+offset_right = 180.0
+offset_bottom = -55.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_lbaoa")
+theme_override_styles/hover = SubResource("StyleBoxTexture_4uueq")
+theme_override_styles/disabled = SubResource("StyleBoxTexture_0okrp")
+text = "Back to Game"
+
+[node name="Advancements" type="Button" parent="Control/Pause Menu"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -180.0
+offset_top = -46.0
+offset_right = -5.0
+offset_bottom = -10.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_lbaoa")
+text = "Advancements
+"
+
+[node name="Statistics" type="Button" parent="Control/Pause Menu"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 3.0
+offset_top = -46.0
+offset_right = 180.0
+offset_bottom = -10.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_lbaoa")
+text = "Statistics"
+
+[node name="Give Feedback" type="Button" parent="Control/Pause Menu"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -180.0
+offset_top = 0.100006
+offset_right = -5.0
+offset_bottom = 36.1
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_lbaoa")
+text = "Give Feedback"
+
+[node name="Report Bugs" type="Button" parent="Control/Pause Menu"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 3.0
+offset_top = 0.100006
+offset_right = 180.0
+offset_bottom = 36.1
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_lbaoa")
+text = "Report Bugs"
+
+[node name="Options" type="Button" parent="Control/Pause Menu"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -180.0
+offset_top = 44.83
+offset_right = -5.0
+offset_bottom = 80.83
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_lbaoa")
+text = "Options..."
+
+[node name="Open To Lan" type="Button" parent="Control/Pause Menu"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 3.0
+offset_top = 44.83
+offset_right = 180.0
+offset_bottom = 80.83
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_lbaoa")
+text = "Open To Lan"
+
+[node name="Save And Quit" type="Button" parent="Control/Pause Menu"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -180.0
+offset_top = 90.0
+offset_right = 180.0
+offset_bottom = 126.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_lbaoa")
+text = "Save and Quit to Title"

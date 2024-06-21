@@ -5,7 +5,8 @@ public partial class Held_Object_Maker : Node3D
 {
 	[Export] public MeshInstance3D meshInstance;
 	[Export] public MeshInstance3D heldobjectMeshInstance;
-	
+	public ArrayMesh handMesh;
+
 
 	public static Vector3I dimensions = new Vector3I(16, 64, 16);
 
@@ -82,10 +83,13 @@ public partial class Held_Object_Maker : Node3D
 		_surfaceTool.AddTriangleFan(triangle_1, UV_Triangle1, normals: normals);
 		_surfaceTool.AddTriangleFan(triangle_2, UV_Triangle2, normals: normals);
 	}
-	
-	public void HandMesh()
+
+	public void SetHandMesh()
 	{
-		meshInstance.Mesh = null;
-		heldobjectMeshInstance.Mesh = null;
+		meshInstance.Mesh = handMesh;
+		heldobjectMeshInstance.Mesh = handMesh;
 	}
+
+
+	
 }

@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Diagnostics;
+using System.Threading.Tasks;
 
 public partial class Player_Manager : Node3D
 {
@@ -19,10 +20,10 @@ public partial class Player_Manager : Node3D
 	[Export] public Node3D chunkOutline;
 
 	public Block blockInHand;
-	public int gameMode = 1;
+	public int gameMode = 0;
 	public int perspectiveMode = 0; //0=fps, 1=tps back view, 2=tps front view
 	public bool guiVisible = true;
-	public bool interactiveGUIVisible = false;
+	public bool inventoryVisible = false;
 	private bool debugscreenExtra;
 	private bool isFullScreen = false;
 
@@ -36,27 +37,7 @@ public partial class Player_Manager : Node3D
 		//Perspective Change
 		if (Input.IsActionJustPressed("toggle_perspective"))
 		{
-			perspectiveMode++;
-			if (perspectiveMode >= 3)
-			{
-				perspectiveMode = 0;
-				if (guiVisible == true)
-				{
-					heldObjectMaker.meshInstance.Visible = true;
-					uiManager.crosshair.Visible = true;
-				}
-
-			}
-			else
-			{
-				if (guiVisible == true)
-				{
-					heldObjectMaker.meshInstance.Visible = false;
-					uiManager.crosshair.Visible = false;
-
-				}
-			}
-			cameraController.TogglePerspective(perspectiveMode);
+			TogglePerspective();
 		}
 		else if (Input.IsActionJustPressed("toggle_gui"))
 		{
@@ -84,7 +65,7 @@ public partial class Player_Manager : Node3D
 				playerBody.lockMovement = true;
 				cameraController.lockRotation = true;
 				uiManager.ToggleInventory(true);
-				interactiveGUIVisible = true;
+				inventoryVisible = true;
 			}
 			else
 			{
@@ -92,7 +73,7 @@ public partial class Player_Manager : Node3D
 				playerBody.lockMovement = false;
 				cameraController.lockRotation = false;
 				uiManager.ToggleInventory(false);
-				interactiveGUIVisible = false;
+				inventoryVisible = false;
 			}
 		}
 
@@ -161,6 +142,32 @@ public partial class Player_Manager : Node3D
 	public Vector2I GetChunkPosition()
 	{
 		return new Vector2I(Mathf.FloorToInt(playerBody.GlobalPosition.X / 16), Mathf.FloorToInt(playerBody.GlobalPosition.Z / 16));
+	}
+
+	private async void TogglePerspective()
+	{
+		perspectiveMode++;
+		if (perspectiveMode >= 3)
+		{
+			perspectiveMode = 0;
+			if (guiVisible == true)
+			{
+				heldObjectMaker.meshInstance.Visible = true;
+				uiManager.crosshair.Visible = true;
+			}
+
+		}
+		else
+		{
+			if (guiVisible == true)
+			{
+				heldObjectMaker.meshInstance.Visible = false;
+				uiManager.crosshair.Visible = false;
+
+			}
+		}
+		await Task.Delay(10);
+		cameraController.TogglePerspective(perspectiveMode);
 	}
 
 }

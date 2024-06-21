@@ -20,7 +20,7 @@ public partial class Actions_Manager : Node
 	{
 		if (currBreakCooldown > 0) currBreakCooldown -= (float)delta;
 		if (currPlaceCooldown > 0) currPlaceCooldown -= (float)delta;
-		
+
 		playerRaycast.GlobalRotationDegrees = new Vector3(playerManager.cameraController.playerHead.GlobalRotationDegrees.X, playerRaycast.GlobalRotationDegrees.Y, playerRaycast.GlobalRotationDegrees.Z);
 
 		if (playerRaycast.IsColliding() && playerRaycast.GetCollider() is Chunk_Manager chunk)
@@ -33,21 +33,29 @@ public partial class Actions_Manager : Node
 			if (block_outline_node.GlobalPosition != block_outline_node_newPos)
 				block_outline_node.GlobalPosition = block_outline_node_newPos;
 
-			if (Input.IsActionPressed("action_0") && currBreakCooldown <= 0 && playerManager.interactiveGUIVisible == false) //break
+			if (Input.IsActionPressed("action_0") && currBreakCooldown <= 0 && playerManager.inventoryVisible == false) //break
 			{
+				playerManager.inventoryManager.GiveObject(chunk.GetBlock((Vector3I)(intbPos - chunk.GlobalPosition)), 1);
 				chunk.SetBlock((Vector3I)(intbPos - chunk.GlobalPosition), Block_Manager.Instance.Air);
 				currBreakCooldown = 0.1f;
 			}
 
-			if (Input.IsActionPressed("action_1") && currPlaceCooldown <= 0 && playerManager.interactiveGUIVisible == false) //place
+			if (Input.IsActionPressed("action_1") && currPlaceCooldown <= 0 && playerManager.inventoryVisible == false && playerManager.blockInHand != null) //place
 			{
 				var placeblockPos = (Vector3I)(intbPos + playerRaycast.GetCollisionNormal());
 				if (placeblockPos == playerManager.GetCoordinatesGround() || placeblockPos == playerManager.GetCoordinatesHead()) return;
 
 				Chunk_World_Manager.instance.SetBlock(placeblockPos, playerManager.blockInHand);
-				currPlaceCooldown = 0.25f;
 
-			} else if (Input.IsActionJustReleased("action_1"))
+				if (playerManager.gameMode != 1)
+				{
+					playerManager.inventoryManager.RemoveObject(1, playerManager.inventoryManager.focusedHotbar, 0);
+					playerManager.inventoryManager.isHotbarSelectionChanged = true;
+				}
+
+				currPlaceCooldown = 0.25f;
+			}
+			else if (Input.IsActionJustReleased("action_1"))
 			{
 				currPlaceCooldown = 0;
 			}

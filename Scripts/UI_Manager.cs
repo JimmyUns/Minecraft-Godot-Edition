@@ -9,6 +9,7 @@ public partial class UI_Manager : CanvasLayer
 	[Export] private TextureRect hotbarSelected_TextureRect;
 	[Export] public TextureRect inventory_survival, hotbar;
 	public TextureRect[,] inventoryIcons = new TextureRect[10, 4];
+
 	[Export] public TextureRect[] hotbarIcons;
 	[Export] public AnimationPlayer ui_Anim;
 	[Export] public CanvasLayer debugScreen;
@@ -56,84 +57,147 @@ public partial class UI_Manager : CanvasLayer
 		chunk.Text = "Chunk: " + playerManager.GetChunkPosition().ToString();
 		fps.Text = "fps: " + Engine.GetFramesPerSecond().ToString();
 
-
-		Vector2 mousePosition = GetViewport().GetMousePosition();
-		bool isMouseOverSlot = false;
-
-		foreach (TextureRect textureRect in inventoryIcons)
+		if (playerManager.inventoryVisible)
 		{
-			if (textureRect != null && textureRect.GetGlobalRect().HasPoint(mousePosition))
+			Vector2 mousePosition = GetViewport().GetMousePosition();
+			bool isMouseOverSlot = false;
+
+			foreach (TextureRect textureRect in inventoryIcons)
 			{
-				slotHighlight.Visible = true;
-				slotHighlight.GlobalPosition = textureRect.GlobalPosition;
-				isMouseOverSlot = true;
-
-				if (Input.IsActionJustPressed("action_0"))
+				if (textureRect != null && textureRect.GetGlobalRect().HasPoint(mousePosition)) //If mouse is on slot
 				{
-					for (int y = 0; y < 4; y++)
+					slotHighlight.Visible = true;
+					slotHighlight.GlobalPosition = textureRect.GlobalPosition;
+					isMouseOverSlot = true;
+
+					if (Input.IsActionJustPressed("action_0"))
 					{
-						for (int x = 0; x < 9; x++)
+						for (int y = 0; y < 4; y++)
 						{
-							if (inventoryIcons[x, y] == textureRect)
+							for (int x = 0; x < 9; x++)
 							{
-								if (!heldInventoryObjectTextureRect.Visible && inventoryIcons[x, y].Texture != null) //isnt holding something
+								if (inventoryIcons[x, y] == textureRect) //If the inventory slot the one for the icon, as in find the inventoryIcons related to that textureRect
 								{
-
-									playerManager.inventoryManager.heldInventoryObject = playerManager.inventoryManager._inventorySlots[x, y]; //Save the selected block and its data
-									heldInventoryObjectTextureRect.Texture = playerManager.inventoryManager._inventorySlots[x, y].Block.Texture_Top;
-									heldInventoryObjectTextureRect.Visible = true;
-
-									playerManager.inventoryManager._inventorySlots[x, y] = null; //Remove it from inventory
-									textureRect.Texture = Block_Manager.Instance.Air.Texture_Top;
-
-									//Updating Hotbar
-									if (y == 0)
+									if (Input.IsKeyPressed(Key.Shift))
 									{
-										FillHotbarIcons(Block_Manager.Instance.Air.Texture_Top, x);
-										playerManager.inventoryManager.isHotbarSelectionChanged = true;
+										if (y == 0)
+										{
+											if (inventoryIcons[x, y].Texture != null)
+											{
+												var temp = playerManager.inventoryManager._inventorySlots[x, y];
+												playerManager.inventoryManager.RemoveObject(64, x, y);
+												playerManager.inventoryManager.GiveObjectNotHotbar(temp.Block, temp.Amount);
+												(inventoryIcons[x, y].GetNode("amount") as Label).Text = "";
+												UpdateInventory();
+											}
+										}
+										else
+										{
+											var temp = playerManager.inventoryManager._inventorySlots[x, y];
+											playerManager.inventoryManager.RemoveObject(64, x, y);
+											playerManager.inventoryManager.GiveObjectHotbar(temp.Block, temp.Amount);
+											(inventoryIcons[x, y].GetNode("amount") as Label).Text = "";
+											UpdateInventory();
+
+										}
+
 									}
-								}
-								else if (heldInventoryObjectTextureRect.Visible) //Is holding something
-								{
-									if (playerManager.inventoryManager._inventorySlots[x, y] == null) //Theres no object in that slot
+									else
 									{
-										playerManager.inventoryManager.GiveOject(playerManager.inventoryManager.heldInventoryObject.Block, playerManager.inventoryManager.heldInventoryObject.Amount, x, y);
+										if (!heldInventoryObjectTextureRect.Visible && inventoryIcons[x, y].Texture != null) // Not holding something
+										{
+											playerManager.inventoryManager.heldInventoryObject = playerManager.inventoryManager._inventorySlots[x, y]; // Save the selected block and its data
+											heldInventoryObjectTextureRect.Texture = playerManager.inventoryManager._inventorySlots[x, y].Block.Texture_Top;
+											(heldInventoryObjectTextureRect.GetNode("amount") as Label).Text = playerManager.inventoryManager.heldInventoryObject.Amount.ToString();
+											heldInventoryObjectTextureRect.Visible = true;
 
-										playerManager.inventoryManager.heldInventoryObject = null; //Save the selected block and its data
-										heldInventoryObjectTextureRect.Texture = null;
-										heldInventoryObjectTextureRect.Visible = false;
+
+											playerManager.inventoryManager.RemoveObject(64, x, y); // Remove from inventory
+											textureRect.Texture = Block_Manager.Instance.Air.Texture_Top;
+											(inventoryIcons[x, y].GetNode("amount") as Label).Text = "";
+
+											// Updating Hotbar
+											if (y == 0)
+											{
+												FillHotbarIcons(Block_Manager.Instance.Air.Texture_Top, 0, x);
+												playerManager.inventoryManager.isHotbarSelectionChanged = true;
+											}
+										}
+										else if (heldInventoryObjectTextureRect.Visible) // Is holding something
+										{
+											if (playerManager.inventoryManager._inventorySlots[x, y] == null) // No object in that slot
+											{
+												playerManager.inventoryManager.GiveObject(playerManager.inventoryManager.heldInventoryObject.Block, playerManager.inventoryManager.heldInventoryObject.Amount, x, y);
+
+												playerManager.inventoryManager.heldInventoryObject = null; // Clear held object
+												heldInventoryObjectTextureRect.Texture = null;
+												heldInventoryObjectTextureRect.Visible = false;
+											}
+											else // Object found in slot, replace it
+											{
+												if (playerManager.inventoryManager._inventorySlots[x, y].Block == playerManager.inventoryManager.heldInventoryObject.Block)
+												{
+													// Add amount from held block to slot
+													int totalAmount = playerManager.inventoryManager._inventorySlots[x, y].Amount + playerManager.inventoryManager.heldInventoryObject.Amount;
+													if (totalAmount > 64)
+													{
+														int excessAmount = totalAmount - 64;
+														playerManager.inventoryManager._inventorySlots[x, y].Amount = 64;
+														playerManager.inventoryManager.heldInventoryObject.Amount = excessAmount;
+														(heldInventoryObjectTextureRect.GetNode("amount") as Label).Text = playerManager.inventoryManager.heldInventoryObject.Amount.ToString();
+													}
+													else
+													{
+														playerManager.inventoryManager._inventorySlots[x, y].Amount = totalAmount;
+														playerManager.inventoryManager.heldInventoryObject = null;
+														heldInventoryObjectTextureRect.Texture = null;
+														heldInventoryObjectTextureRect.Visible = false;
+													}
+												}
+												else
+												{
+													// Swap items
+													var _heldInventoryObject = playerManager.inventoryManager.heldInventoryObject; // Save held object in a temp variable for switch
+
+													playerManager.inventoryManager.heldInventoryObject = playerManager.inventoryManager._inventorySlots[x, y];
+													heldInventoryObjectTextureRect.Texture = playerManager.inventoryManager.heldInventoryObject.Block.Texture_Top;
+
+													playerManager.inventoryManager.RemoveObject(64, x, y); // Remove old object from inventory
+													playerManager.inventoryManager.GiveObject(_heldInventoryObject.Block, _heldInventoryObject.Amount, x, y); // Add held item into inventory
+													(heldInventoryObjectTextureRect.GetNode("amount") as Label).Text = playerManager.inventoryManager.heldInventoryObject.Amount.ToString();
+
+												}
+											}
+											UpdateInventory();
+										}
 									}
-									else //Object found in slot, replace it
-									{
-										var _heldInventoryObject = playerManager.inventoryManager.heldInventoryObject; //Save held object in a temp variable for switch
-
-										playerManager.inventoryManager.heldInventoryObject = playerManager.inventoryManager._inventorySlots[x, y];
-										heldInventoryObjectTextureRect.Texture = playerManager.inventoryManager.heldInventoryObject.Block.Texture_Top;
-
-										playerManager.inventoryManager._inventorySlots[x, y] = null; //Remove the old object
-										playerManager.inventoryManager.GiveOject(_heldInventoryObject.Block, _heldInventoryObject.Amount, x, y); //Add held item into inventory
-									}
-									UpdateInventory();
 								}
 							}
 						}
 					}
 				}
 			}
-		}
 
-		if (!isMouseOverSlot || inventory_survival.Visible == false)
-		{
-			slotHighlight.Visible = false;
-		}
 
-		if (playerManager.inventoryManager.heldInventoryObject != null)
-		{
-			heldInventoryObjectTextureRect.GlobalPosition = mousePosition - new Vector2(24.25f, 24.25f);
-		}
-		else
-		{
-			heldInventoryObjectTextureRect.Visible = false;
+			if (!isMouseOverSlot)
+			{
+				slotHighlight.Visible = false; // Hide slot highlight when not hovering over any slot
+			}
+
+
+			if (!isMouseOverSlot || inventory_survival.Visible == false)
+			{
+				slotHighlight.Visible = false;
+			}
+
+			if (playerManager.inventoryManager.heldInventoryObject != null)
+			{
+				heldInventoryObjectTextureRect.GlobalPosition = mousePosition - new Vector2(24.25f, 24.25f);
+			}
+			else
+			{
+				heldInventoryObjectTextureRect.Visible = false;
+			}
 		}
 	}
 
@@ -188,9 +252,18 @@ public partial class UI_Manager : CanvasLayer
 					var texture = inventorySlot.Block.Texture_Top;
 					inventoryIcons[x, y].Texture = texture;
 
+					if (inventorySlot.Amount == 0 || inventorySlot.Amount == 1)
+					{
+						(inventoryIcons[x, y].GetNode("amount") as Label).Text = "";
+					}
+					else
+					{
+						(inventoryIcons[x, y].GetNode("amount") as Label).Text = inventorySlot.Amount.ToString();
+					}
+
 					if (y == 0)
 					{
-						FillHotbarIcons(texture, x);
+						FillHotbarIcons(texture, inventorySlot.Amount, x);
 					}
 				}
 			}
@@ -198,11 +271,19 @@ public partial class UI_Manager : CanvasLayer
 		playerManager.inventoryManager.isHotbarSelectionChanged = true;
 	}
 
-	private void FillHotbarIcons(Texture2D texture, int index)
+	private void FillHotbarIcons(Texture2D texture, int amount, int index)
 	{
 		if (index >= 0 && index < hotbarIcons.Length)
 		{
 			hotbarIcons[index].Texture = texture;
+			if (amount == 0 || amount == 1)
+			{
+				(hotbarIcons[index].GetNode("amount") as Label).Text = "";
+			}
+			else
+			{
+				(hotbarIcons[index].GetNode("amount") as Label).Text = amount.ToString();
+			}
 		}
 	}
 

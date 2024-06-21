@@ -6,9 +6,11 @@ using System.Diagnostics;
 [Tool]
 public partial class Player_Mesh_Maker : Node
 {
+	[Export] public Node3D playerManager;
 	[Export] public CompressedTexture2D skin;
 	[Export] public MeshInstance3D head, body, armL, armR, legL, legR;
 	[Export] public MeshInstance3D headOL, bodyOL, armLOL, armROL, legLOL, legROL;
+	[Export] public Node3D armROverride;
 	private SurfaceTool _surfaceTool = new SurfaceTool(); //Tool that creates the 3dShape
 	Texture2D[] skinTextures = new Texture2D[12];
 
@@ -366,6 +368,7 @@ public partial class Player_Mesh_Maker : Node
 
 		var meshOL = _surfaceTool.Commit();
 		armROL.Mesh = meshOL;
+		(playerManager as Player_Manager).heldObjectMaker.handMesh = mesh;
 	}
 
 	private void CreateLegLeft()
