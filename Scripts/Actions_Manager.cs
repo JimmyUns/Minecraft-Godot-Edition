@@ -9,6 +9,8 @@ public partial class Actions_Manager : Node
 	[Export] private RayCast3D playerRaycast, blockbreakRaycast;
 	[Export] private Node3D block_outline_node;
 	[Export] private Player_Manager playerManager;
+	[Export] public AnimationPlayer handheldobjectAnim;
+
 
 	private float currBreakCooldown, currPlaceCooldown;
 
@@ -33,11 +35,21 @@ public partial class Actions_Manager : Node
 			if (block_outline_node.GlobalPosition != block_outline_node_newPos)
 				block_outline_node.GlobalPosition = block_outline_node_newPos;
 
+
 			if (Input.IsActionPressed("action_0") && currBreakCooldown <= 0 && playerManager.inventoryVisible == false) //break
 			{
+
 				playerManager.inventoryManager.GiveObject(chunk.GetBlock((Vector3I)(intbPos - chunk.GlobalPosition)), 1);
 				chunk.SetBlock((Vector3I)(intbPos - chunk.GlobalPosition), Block_Manager.Instance.Air);
 				currBreakCooldown = 0.1f;
+
+				if (handheldobjectAnim.IsPlaying() == false)
+				{
+					if (playerManager.blockInHand != null)
+						handheldobjectAnim.Play("break_block");
+					else
+						handheldobjectAnim.Play("break_hand");
+				}
 			}
 
 			if (Input.IsActionPressed("action_1") && currPlaceCooldown <= 0 && playerManager.inventoryVisible == false && playerManager.blockInHand != null) //place
@@ -53,6 +65,9 @@ public partial class Actions_Manager : Node
 					playerManager.inventoryManager.isHotbarSelectionChanged = true;
 				}
 
+				if (handheldobjectAnim.IsPlaying() == false)
+					handheldobjectAnim.Play("place_block");
+
 				currPlaceCooldown = 0.25f;
 			}
 			else if (Input.IsActionJustReleased("action_1"))
@@ -63,6 +78,18 @@ public partial class Actions_Manager : Node
 		else
 		{
 			block_outline_node.Visible = false;
+			
+			//Same as attacking
+			if (Input.IsActionJustPressed("action_0"))
+				{
+					if (handheldobjectAnim.IsPlaying() == false)
+					{
+						if (playerManager.blockInHand != null)
+							handheldobjectAnim.Play("break_block");
+						else
+							handheldobjectAnim.Play("break_hand");
+					}
+				}
 		}
 	}
 

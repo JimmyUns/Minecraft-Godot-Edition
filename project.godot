@@ -163,6 +163,7 @@ drop={
 
 [layer_names]
 
+3d_render/layer_2="Player"
 3d_render/layer_6="Hidden From Camera Layer"
 3d_render/layer_20="Held Object Layer"
 3d_physics/layer_2="Player Layer"

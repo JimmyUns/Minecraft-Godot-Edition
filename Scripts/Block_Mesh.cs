@@ -62,8 +62,8 @@ public partial class Block_Mesh : MeshInstance3D
 			// Create the material for the face
 			StandardMaterial3D material = new StandardMaterial3D();
 			material.AlbedoTexture = textures[i];
-			material.ShadingMode = BaseMaterial3D.ShadingModeEnum.Unshaded;
-			material.DisableReceiveShadows = true;
+			//material.ShadingMode = BaseMaterial3D.ShadingModeEnum.Unshaded;
+			//material.DisableReceiveShadows = true;
 			material.TextureFilter = BaseMaterial3D.TextureFilterEnum.Nearest;
 
 			// Set the mesh and material

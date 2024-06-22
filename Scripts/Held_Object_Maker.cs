@@ -4,7 +4,11 @@ using System;
 public partial class Held_Object_Maker : Node3D
 {
 	[Export] public MeshInstance3D meshInstance;
+	[Export] public Node3D meshOffset;
+	
 	[Export] public MeshInstance3D heldobjectMeshInstance;
+	
+	[Export] public AnimationPlayer switchheldAnim;
 	public ArrayMesh handMesh;
 
 
@@ -87,7 +91,7 @@ public partial class Held_Object_Maker : Node3D
 	public void SetHandMesh()
 	{
 		meshInstance.Mesh = handMesh;
-		heldobjectMeshInstance.Mesh = handMesh;
+		heldobjectMeshInstance.Mesh = null;
 	}
 
 

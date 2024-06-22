@@ -9,9 +9,14 @@ public partial class Inventory_Manager : Node
 	public int focusedHotbar = 0;
 	[Export] public Player_Manager playerManager;
 	public bool isHotbarSelectionChanged = true;
+	private Block lastheldBlock;
+	private bool lastheldBlockFix = true;
+
+	private float currTime;
 
 	public InventorySlot[,] _inventorySlots = new InventorySlot[10, 4];
 	public InventorySlot heldInventoryObject;
+	[Export] public AnimationPlayer switchheldAnim;
 
 	public override void _Ready()
 	{
@@ -24,6 +29,7 @@ public partial class Inventory_Manager : Node
 		*/
 
 	}
+
 
 	public override void _Process(double delta)
 	{
@@ -78,40 +84,66 @@ public partial class Inventory_Manager : Node
 		if (isHotbarSelectionChanged)
 		{
 			isHotbarSelectionChanged = false;
+
 			var currentSlot = _inventorySlots[focusedHotbar, 0];
 
-			if (currentSlot == null || currentSlot.Block == Block_Manager.Instance.Air)
+			if (currentSlot == null || currentSlot.Block == Block_Manager.Instance.Air) //Hand
 			{
-				ChangeHeldItem(Block_Manager.Instance.Air);
-				playerManager.heldObjectMaker.SetHandMesh();
+				playerManager.blockInHand = null;
 				playerManager.uiManager.ChangeSelectedHotbar(focusedHotbar, "");
-				playerManager.heldObjectMaker.meshInstance.Position = new Vector3(-0.17f, 0.755f, 1.575f);
-				playerManager.heldObjectMaker.meshInstance.RotationDegrees = new Vector3(193.5f, 89f, 41f);
+
+				playerManager.bodyMeshMaker.armROverride.RotationDegrees = new Vector3(0f, 0f, 0f);//Tps object hand
+
+				if (lastheldBlock != null || lastheldBlockFix == true)
+					ChangeHeldObject(null);
+			}
+			else //Object
+			{
+				playerManager.blockInHand = currentSlot.Block;
+				playerManager.uiManager.ChangeSelectedHotbar(focusedHotbar, currentSlot.Block.name);
+
+				playerManager.bodyMeshMaker.armROverride.RotationDegrees = new Vector3(15f, 0f, 0f); //Tps hand
+
+				if (lastheldBlock != currentSlot.Block)
+					ChangeHeldObject(currentSlot.Block);
+			}
+		}
+
+		if (currTime > 0)
+		{
+			currTime -= (float)delta;
+		}
+		else
+		{
+			if (_inventorySlots[focusedHotbar, 0] == null)
+			{
+				playerManager.heldObjectMaker.meshOffset.Position = new Vector3(0.575f, -0.555f, -0.85f);
+				playerManager.heldObjectMaker.meshOffset.RotationDegrees = new Vector3(-17f, -103f, -117.5f);
+				playerManager.heldObjectMaker.SetHandMesh();
 			}
 			else
 			{
-				ChangeHeldItem(currentSlot.Block);
-				playerManager.uiManager.ChangeSelectedHotbar(focusedHotbar, currentSlot.Block.name);
-				playerManager.heldObjectMaker.meshInstance.Position = new Vector3(0f, 0f, 0.41f);
-				playerManager.heldObjectMaker.meshInstance.RotationDegrees = new Vector3(0f, 30.5f, 0f);
+				playerManager.heldObjectMaker.meshOffset.Position = new Vector3(0.725f, -1.34f, -2.12f);
+				playerManager.heldObjectMaker.meshOffset.RotationDegrees = new Vector3(4.5f, 5f, 0f);
+				playerManager.heldObjectMaker.CreateBlockMesh(_inventorySlots[focusedHotbar, 0].Block);
 			}
+
 		}
 	}
 
-	public void ChangeHeldItem(Block block)
+	private void ChangeHeldObject(Block block)
 	{
-		playerManager.heldObjectMaker.CreateBlockMesh(block);
-		if (block == Block_Manager.Instance.Air)
-			playerManager.blockInHand = null;
-		else
-			playerManager.blockInHand = block;
+		lastheldBlockFix = false;
+		lastheldBlock = block;
 
-		//The hand infront thingie when holding blocks
-		if (block != Block_Manager.Instance.Air)
-			playerManager.bodyMeshMaker.armROverride.RotationDegrees = new Vector3(15f, 0f, 0f);
-		else
-			playerManager.bodyMeshMaker.armROverride.RotationDegrees = new Vector3(0f, 0f, 0f);
+		currTime = 0.125f;
+
+		if (playerManager.heldObjectMaker.switchheldAnim.IsPlaying() == false)
+		{
+			playerManager.heldObjectMaker.switchheldAnim.Play("change");
+		}
 	}
+
 
 	public class InventorySlot
 	{

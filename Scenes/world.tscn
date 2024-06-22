@@ -80,7 +80,10 @@ Texture_Top = ExtResource("8_jxegf")
 environment = SubResource("Environment_mlvxh")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.54074, 0.84119, 0, -0.84119, 0.54074, 0, 0, 0)
+transform = Transform3D(0.785695, -0.163048, 0.59674, -0.209335, 0.837655, 0.504493, -0.582119, -0.521296, 0.62401, 0.0385373, 0, 0)
+light_indirect_energy = 0.0
+light_cull_mask = 4294967293
+shadow_blur = 0.0
 
 [node name="Block Manager" type="Node" parent="."]
 script = ExtResource("1_iut7u")
