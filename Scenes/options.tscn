@@ -1,0 +1,34 @@
+[gd_scene load_steps=3 format=3 uid="uid://c67onh00tec51"]
+
+[ext_resource type="Texture2D" uid="uid://m377fmcspjrc" path="res://Textures/gui/Main Menu/Menus_Background.png" id="1_bc5xo"]
+[ext_resource type="Texture2D" uid="uid://bunxi56bj4r2j" path="res://Textures/gui/vignette_0.png" id="2_rwmra"]
+
+[node name="Options" type="Control"]
+texture_filter = 1
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Background" type="TextureRect" parent="."]
+modulate = Color(0.525101, 0.525101, 0.525101, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_bc5xo")
+stretch_mode = 1
+
+[node name="Vignette" type="TextureRect" parent="."]
+modulate = Color(1, 1, 1, 0.470588)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_rwmra")

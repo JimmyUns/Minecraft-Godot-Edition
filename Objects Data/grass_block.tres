@@ -4,7 +4,6 @@
 [ext_resource type="Texture2D" uid="uid://c6ytnsi1sw4hg" path="res://Textures/block/grass_top_temp.png" id="2_4lqck"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_pm1u6"]
-load_path = "res://.godot/imported/grass_side.png-5c77ecd3184c8a86d38d1930fe17666b.ctex"
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_i7hyp"]
 load_path = "res://.godot/imported/dirt.png-3ac4b1a70f9c4f625c091c4dac28f8ed.ctex"

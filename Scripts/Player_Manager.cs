@@ -25,7 +25,6 @@ public partial class Player_Manager : Node3D
 	public bool guiVisible = true;
 	public bool inventoryVisible = false;
 	private bool debugscreenExtra;
-	private bool isFullScreen = false;
 
 	public override void _Ready()
 	{
@@ -114,18 +113,6 @@ public partial class Player_Manager : Node3D
 			chunkOutline.GlobalPosition = newPoss * 16;
 
 
-		if (Input.IsActionJustPressed("toggle_windowmode"))
-		{
-			isFullScreen = !isFullScreen;
-			if (isFullScreen)
-			{
-				DisplayServer.WindowSetMode(DisplayServer.WindowMode.ExclusiveFullscreen);
-			}
-			else
-			{
-				DisplayServer.WindowSetMode(DisplayServer.WindowMode.Windowed);
-			}
-		}
 	}
 
 	public Vector3 GetCoordinatesGround()

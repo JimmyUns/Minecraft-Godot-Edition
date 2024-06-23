@@ -11,9 +11,13 @@ config_version=5
 [application]
 
 config/name="Minecraft Godot Edition"
-run/main_scene="res://Scenes/world.tscn"
+run/main_scene="res://Scenes/game.tscn"
 config/features=PackedStringArray("4.2", "C#", "Forward Plus")
-config/icon="res://icon.svg"
+config/icon="res://icon.png"
+
+[display]
+
+window/vsync/vsync_mode=0
 
 [dotnet]
 

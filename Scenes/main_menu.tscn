@@ -1,0 +1,344 @@
+[gd_scene load_steps=28 format=3 uid="uid://c646cyjywyv1g"]
+
+[ext_resource type="Script" path="res://Scripts/Main_Menu_Manager.cs" id="1_66021"]
+[ext_resource type="Texture2D" uid="uid://cai3wgf4fdwnm" path="res://Textures/gui/Main Menu/panorama_0.png" id="1_a8nbk"]
+[ext_resource type="Texture2D" uid="uid://cslyfpf03vh7f" path="res://Textures/gui/Main Menu/panorama_1.png" id="2_m642k"]
+[ext_resource type="Texture2D" uid="uid://dl58vkuumyoe8" path="res://Textures/gui/Main Menu/panorama_2.png" id="3_bwtlg"]
+[ext_resource type="Texture2D" uid="uid://4tb5epof428y" path="res://Textures/gui/Main Menu/panorama_3.png" id="4_6w7kt"]
+[ext_resource type="Texture2D" uid="uid://rl1rulpdy7yy" path="res://Textures/gui/Main Menu/panorama_4.png" id="5_1bbli"]
+[ext_resource type="Texture2D" uid="uid://1ma08j5vcghy" path="res://Textures/gui/Main Menu/panorama_5.png" id="6_tis7h"]
+[ext_resource type="Texture2D" uid="uid://bjleukm26jq8s" path="res://Textures/gui/widget/button.png" id="7_qbnmb"]
+[ext_resource type="Texture2D" uid="uid://bqpkqim4y87fs" path="res://Textures/download.png" id="8_y5g3s"]
+[ext_resource type="Texture2D" uid="uid://bga7jntwxdbto" path="res://Textures/gui/Main Menu/mcTitle.png" id="9_8hjgt"]
+[ext_resource type="Texture2D" uid="uid://ded2dybrwv55x" path="res://Textures/gui/Main Menu/GODOT-EDITION.png" id="10_qh3bj"]
+[ext_resource type="Texture2D" uid="uid://b8ahogfnip8hj" path="res://Textures/gui/widget/button_highlighted.png" id="12_g0tg5"]
+[ext_resource type="Texture2D" uid="uid://bxq6s8b1h2h6w" path="res://Textures/gui/widget/button_disabled.png" id="13_vnnqj"]
+[ext_resource type="Texture2D" uid="uid://dyou3jsj0tecj" path="res://Textures/gui/Main Menu/LoadingLogo.png" id="15_y0qvd"]
+
+[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_v3pjh"]
+dof_blur_far_enabled = true
+dof_blur_near_enabled = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yk6yu"]
+shading_mode = 0
+albedo_color = Color(0.521141, 0.521141, 0.521141, 1)
+albedo_texture = ExtResource("1_a8nbk")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_co67e"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4ad5b"]
+shading_mode = 0
+albedo_color = Color(0.521569, 0.521569, 0.521569, 1)
+albedo_texture = ExtResource("2_m642k")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_x1tka"]
+shading_mode = 0
+albedo_color = Color(0.521569, 0.521569, 0.521569, 1)
+albedo_texture = ExtResource("3_bwtlg")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jkfw4"]
+shading_mode = 0
+albedo_color = Color(0.521569, 0.521569, 0.521569, 1)
+albedo_texture = ExtResource("4_6w7kt")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tcttr"]
+shading_mode = 0
+albedo_color = Color(0.521569, 0.521569, 0.521569, 1)
+albedo_texture = ExtResource("5_1bbli")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_goopq"]
+shading_mode = 0
+albedo_color = Color(0.521569, 0.521569, 0.521569, 1)
+albedo_texture = ExtResource("6_tis7h")
+
+[sub_resource type="Animation" id="Animation_ah7ue"]
+resource_name = "new_animation"
+loop_mode = 2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Splash Text:theme_override_font_sizes/font_size")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [40, 30]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_1ofr2"]
+_data = {
+"new_animation": SubResource("Animation_ah7ue")
+}
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_kfnc5"]
+texture = ExtResource("7_qbnmb")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_to3sa"]
+texture = ExtResource("12_g0tg5")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_2c3i0"]
+texture = ExtResource("13_vnnqj")
+
+[node name="Main Menu" type="Node3D"]
+
+[node name="Main Menu Manager" type="Node" parent="." node_paths=PackedStringArray("mainCamera", "logoscreenTexture", "splashtextAnim")]
+script = ExtResource("1_66021")
+mainCamera = NodePath("../Camera3D")
+logoscreenTexture = NodePath("../Control/Logo Screen")
+splashtextAnim = NodePath("../Control/Splash Text Anim")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+attributes = SubResource("CameraAttributesPractical_v3pjh")
+fov = 100.0
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, -1)
+material_override = SubResource("StandardMaterial3D_yk6yu")
+mesh = SubResource("PlaneMesh_co67e")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+transform = Transform3D(-4.37114e-08, -1, 4.37114e-08, 0, -4.37114e-08, -1, 1, -4.37114e-08, 1.91069e-15, 0.991361, 0, 0)
+material_override = SubResource("StandardMaterial3D_4ad5b")
+mesh = SubResource("PlaneMesh_co67e")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="."]
+transform = Transform3D(-1, 8.74228e-08, -3.82137e-15, 0, -4.37114e-08, -1, -8.74228e-08, -1, 4.37114e-08, 0, 0, 0.997943)
+material_override = SubResource("StandardMaterial3D_x1tka")
+mesh = SubResource("PlaneMesh_co67e")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.31134e-07, 1, -4.37114e-08, 0, -4.37114e-08, -1, -1, 1.31134e-07, -5.73206e-15, -0.992401, 0, 0)
+material_override = SubResource("StandardMaterial3D_jkfw4")
+mesh = SubResource("PlaneMesh_co67e")
+
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="."]
+transform = Transform3D(-1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 0, 0, 1, 0, 0.991831, 0)
+material_override = SubResource("StandardMaterial3D_tcttr")
+mesh = SubResource("PlaneMesh_co67e")
+
+[node name="MeshInstance3D6" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.99155, 0)
+material_override = SubResource("StandardMaterial3D_goopq")
+mesh = SubResource("PlaneMesh_co67e")
+
+[node name="Control" type="Control" parent="."]
+texture_filter = 1
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Splash Text Anim" type="AnimationPlayer" parent="Control"]
+libraries = {
+"": SubResource("AnimationLibrary_1ofr2")
+}
+
+[node name="TextureRect" type="TextureRect" parent="Control"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("8_y5g3s")
+
+[node name="Title" type="TextureRect" parent="Control"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -380.0
+offset_top = -76.0
+offset_right = 377.0
+offset_bottom = 350.0
+grow_horizontal = 2
+texture = ExtResource("9_8hjgt")
+expand_mode = 1
+
+[node name="Sub-Title" type="TextureRect" parent="Control"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -157.0
+offset_top = 175.0
+offset_right = 166.0
+offset_bottom = 235.0
+grow_horizontal = 2
+texture = ExtResource("10_qh3bj")
+
+[node name="Splash Text" type="Label" parent="Control"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = 85.0001
+offset_top = 238.0
+offset_right = 599.0
+offset_bottom = 295.0
+grow_horizontal = 2
+rotation = -0.357792
+theme_override_colors/font_color = Color(0.964706, 0.92549, 0.160784, 1)
+theme_override_colors/font_shadow_color = Color(0.173944, 0.164631, 0.00155235, 1)
+theme_override_font_sizes/font_size = 30
+text = "Totally not a ripoff!"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Singleplayer Button" type="Button" parent="Control"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -272.0
+offset_top = -33.0
+offset_right = 272.0
+offset_bottom = 21.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 4
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxTexture_kfnc5")
+theme_override_styles/hover = SubResource("StyleBoxTexture_to3sa")
+theme_override_styles/disabled = SubResource("StyleBoxTexture_2c3i0")
+text = "Singleplayer"
+
+[node name="Multiplayer Button" type="Button" parent="Control"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -272.0
+offset_top = 32.0
+offset_right = 272.0
+offset_bottom = 86.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 4
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxTexture_kfnc5")
+theme_override_styles/hover = SubResource("StyleBoxTexture_to3sa")
+theme_override_styles/disabled = SubResource("StyleBoxTexture_2c3i0")
+text = "Multiplayer"
+
+[node name="Realms Button" type="Button" parent="Control"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -272.0
+offset_top = 97.0
+offset_right = 272.0
+offset_bottom = 151.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 4
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxTexture_kfnc5")
+theme_override_styles/hover = SubResource("StyleBoxTexture_to3sa")
+theme_override_styles/disabled = SubResource("StyleBoxTexture_2c3i0")
+text = "Minecraft Realms"
+
+[node name="Options Button" type="Button" parent="Control"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -272.0
+offset_top = 194.0
+offset_right = -7.0
+offset_bottom = 248.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 4
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxTexture_kfnc5")
+theme_override_styles/hover = SubResource("StyleBoxTexture_to3sa")
+theme_override_styles/disabled = SubResource("StyleBoxTexture_2c3i0")
+text = "Options...
+"
+
+[node name="Quit Button" type="Button" parent="Control"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 4.0
+offset_top = 194.0
+offset_right = 269.0
+offset_bottom = 248.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 4
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxTexture_kfnc5")
+theme_override_styles/hover = SubResource("StyleBoxTexture_to3sa")
+theme_override_styles/disabled = SubResource("StyleBoxTexture_2c3i0")
+text = "Quit Game"
+
+[node name="Game Version" type="Label" parent="Control"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 5.0
+offset_top = -33.0
+offset_right = 248.0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 22
+text = "Minecraft Beta 1"
+
+[node name="Copyright" type="Label" parent="Control"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -559.0
+offset_top = -33.0
+offset_right = -7.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 22
+text = "Copyright open source JY. Do distribute!"
+horizontal_alignment = 2
+
+[node name="Logo Screen" type="TextureRect" parent="Control"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("15_y0qvd")
+
+[connection signal="pressed" from="Control/Singleplayer Button" to="Main Menu Manager" method="_on_singleplayer_button_pressed"]
+[connection signal="pressed" from="Control/Quit Button" to="Main Menu Manager" method="_on_quit_button_pressed"]

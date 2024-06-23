@@ -76,6 +76,8 @@ Texture_Top = ExtResource("8_jxegf")
 
 [node name="World" type="Node3D"]
 
+[node name="World Manager" type="Node" parent="."]
+
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_mlvxh")
 
@@ -99,8 +101,6 @@ script = ExtResource("1_rxrwf")
 ChunkScene = ExtResource("3_nko5p")
 chunkholderNode = NodePath("../Chunk Holder")
 playerManager = NodePath("../Player")
-
-[node name="World Manager" type="Node" parent="."]
 
 [node name="Player" parent="." instance=ExtResource("1_wrubq")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 72.01, 8)
