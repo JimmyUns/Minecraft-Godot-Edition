@@ -8,7 +8,12 @@ public partial class Main_Menu_Manager : Node
 	[Export] public Camera3D mainCamera;
 	[Export] public TextureRect logoscreenTexture;
 	[Export] private AnimationPlayer splashtextAnim;
+	[Export] private Control options;
+	[Export] private FileDialog skinFileDialogue;
+	[Export] private Button changeskinButton;
 	
+
+
 	private bool isshowingMenu;
 	public override void _Ready()
 	{
@@ -38,8 +43,8 @@ public partial class Main_Menu_Manager : Node
 		await ToSignal(GetTree().CreateTimer(5), "timeout");
 		DisplayServer.WindowSetFlag(DisplayServer.WindowFlags.Borderless, false);
 		isshowingMenu = true;
-			splashtextAnim.Play("new_animation");
-		
+		splashtextAnim.Play("new_animation");
+
 	}
 
 	public void _on_singleplayer_button_pressed()
@@ -50,5 +55,35 @@ public partial class Main_Menu_Manager : Node
 	public void _on_quit_button_pressed()
 	{
 		GetTree().Quit();
+	}
+
+	public void _on_options_button_pressed()
+	{
+		options.Visible = true;
+		options.MouseFilter = Control.MouseFilterEnum.Pass;
+		changeskinButton.Text = "Change Skin";
+		
+	}
+
+	public void _on_back_button_pressed()
+	{
+		options.Visible = false;
+		options.MouseFilter = Control.MouseFilterEnum.Ignore;
+	}
+
+	public void _on_change_skin_button_pressed()
+	{
+		skinFileDialogue.Popup();
+
+	}
+
+	public void _on_file_dialog_file_selected(String path)
+	{
+		var image = new Image();
+		image.Load(path);
+		image.Convert(Image.Format.Rgba8);
+		Game_manager.instance.skin = ImageTexture.CreateFromImage(image);
+		changeskinButton.Text = "Skin Changed!";
+
 	}
 }

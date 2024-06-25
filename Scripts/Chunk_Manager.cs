@@ -37,15 +37,16 @@ public partial class Chunk_Manager : StaticBody3D
 
 	[Export] public FastNoiseLite Noise;
 
-	public void SetChunkPosition(Vector2I positions)
+	public void SetChunkPosition(Vector2I position)
 	{
-		chunkPosition = new Vector2I(positions.X, positions.Y);
-
-		GlobalPosition = new Vector3(chunkPosition.X * dimensions.X, 0, chunkPosition.Y * dimensions.Z);
+		chunkPosition = position;
+		Vector3 globalPosition = new Vector3(chunkPosition.X * 16, 0, chunkPosition.Y * 16);
+		GlobalPosition = globalPosition;
 	}
 
+
 	//Generate Mesh Chunk
-	public void Generate()
+	public void GenerateData()
 	{
 		for (int x = 0; x < dimensions.X; x++)
 		{
@@ -86,12 +87,12 @@ public partial class Chunk_Manager : StaticBody3D
 
 	public void GenerateAndUpdate()
 	{
-		Generate();
-		Update();
+		GenerateData();
+		UpdateMesh();
 	}
 
 	//Generate Collision and mesh for chunk
-	public void Update()
+	public void UpdateMesh()
 	{
 		_surfaceTool.Begin(Mesh.PrimitiveType.Triangles);
 
@@ -182,40 +183,22 @@ public partial class Chunk_Manager : StaticBody3D
 
 	private bool CheckTransparent(Vector3I bPos)
 	{
-		if (bPos.X < 0 || bPos.X >= dimensions.X)
+		if (bPos.Y < 0 || bPos.Y >= dimensions.Y) return true;
+		if (bPos.X < 0 || bPos.X >= dimensions.X ||
+			bPos.Z < 0 || bPos.Z >= dimensions.Z)
 		{
-			//return bPos.X < 0 ? CheckEdgeTransparentX(bPos, false) : CheckEdgeTransparentX(bPos, true);
-			return Chunk_World_Manager.instance.GetBlock(new Vector3I(bPos.X, bPos.Y, bPos.Z)) == Block_Manager.Instance.Air;
-			
-			//return false;
-		}
-		if (bPos.Y < 0 || bPos.Y >= dimensions.Y) return false;
-		if (bPos.Z < 0 || bPos.Z >= dimensions.Z)
-		{
-			//return bPos.Z < 0 ? CheckEdgeTransparentZ(bPos, false) : CheckEdgeTransparentZ(bPos, true);
-			return Chunk_World_Manager.instance.GetBlock(new Vector3I(bPos.X, bPos.Y, bPos.Z)) == Block_Manager.Instance.Air;
-			
-			//return false;
-			
-		}
+			Vector3I globalPos = bPos + GetGlobalChunkOffset();
 
-		//Adds transparent blocks
+			return Chunk_World_Manager.instance.GetBlock(globalPos) == Block_Manager.Instance.Air;
+		}
 		return _blocks[bPos.X, bPos.Y, bPos.Z] == Block_Manager.Instance.Air;
 	}
 
-	private bool CheckEdgeTransparentX(Vector3I bPos, bool isPositive)
+	private Vector3I GetGlobalChunkOffset()
 	{
-		int adjacentX = isPositive ? bPos.X + 1 : bPos.X - 1;
-
-		if (adjacentX < 0 || adjacentX >= dimensions.X)
-		{
-			return Chunk_World_Manager.instance.GetBlock(new Vector3I(adjacentX, bPos.Y, bPos.Z)) == Block_Manager.Instance.Air;
-		}
-		else
-		{
-			return _blocks[adjacentX, bPos.Y, bPos.Z] == Block_Manager.Instance.Air;
-		}
+		return new Vector3I(chunkPosition.X * dimensions.X, 0, chunkPosition.Y * dimensions.Z);
 	}
+
 
 
 	private bool CheckEdgeTransparentZ(Vector3I bPos, bool isPositive)
@@ -237,16 +220,61 @@ public partial class Chunk_Manager : StaticBody3D
 	public void SetBlock(Vector3I bPos, Block block)
 	{
 		_blocks[bPos.X, bPos.Y, bPos.Z] = block;
-		Update();
+		UpdateMesh();
+
+		if (bPos.X == 0 || bPos.X == dimensions.X - 1 ||
+		bPos.Z == 0 || bPos.Z == dimensions.Z - 1)
+		{
+			UpdateAdjacentChunks(bPos);
+		}
 	}
 
-	public Block GetBlock(Vector3I bPos)
+	public Block GetBlock(Vector3I localPosition)
 	{
-		return _blocks[bPos.X, bPos.Y, bPos.Z];
+		if (localPosition.X >= 0 && localPosition.X < dimensions.X &&
+			localPosition.Y >= 0 && localPosition.Y < dimensions.Y &&
+			localPosition.Z >= 0 && localPosition.Z < dimensions.Z)
+		{
+			return _blocks[localPosition.X, localPosition.Y, localPosition.Z];
+		}
+		return null;
 	}
+
 
 	public Vector2I GetChunkPosition()
 	{
 		return new Vector2I((int)GlobalPosition.X / 16, (int)GlobalPosition.Z / 16);
 	}
+
+	private void UpdateAdjacentChunks(Vector3I bPos)
+	{
+		if (bPos.X == 0)
+		{
+			UpdateAdjacentChunk(chunkPosition + new Vector2I(-1, 0));
+		}
+		if (bPos.X == dimensions.X - 1)
+		{
+			UpdateAdjacentChunk(chunkPosition + new Vector2I(1, 0));
+		}
+		if (bPos.Z == 0)
+		{
+			UpdateAdjacentChunk(chunkPosition + new Vector2I(0, -1));
+		}
+		if (bPos.Z == dimensions.Z - 1)
+		{
+			UpdateAdjacentChunk(chunkPosition + new Vector2I(0, 1));
+		}
+	}
+
+	private void UpdateAdjacentChunk(Vector2I adjacentChunkPos)
+	{
+		Chunk_Manager adjacentChunk = Chunk_World_Manager.instance.GetChunkManagerFromDictionary(adjacentChunkPos);
+		if (adjacentChunk != null)
+		{
+			adjacentChunk.UpdateMesh();
+		}
+	}
+
+
+
 }

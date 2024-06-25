@@ -382,6 +382,7 @@ mouse_filter = 2
 texture = ExtResource("6_yr1qv")
 
 [node name="Armor Slots" type="GridContainer" parent="Control/Inventory"]
+layout_mode = 0
 offset_left = 25.0
 offset_top = 25.0
 offset_right = 151.0

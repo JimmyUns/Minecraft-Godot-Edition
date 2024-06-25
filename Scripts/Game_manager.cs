@@ -5,12 +5,13 @@ using System.Runtime.InteropServices;
 public partial class Game_manager : Node
 {
 	[Export] private PackedScene MainMenu_Scene;
-	[Export] private PackedScene World_Scene;
+	[Export] private PackedScene World_Scene; 
+	[Export] public Texture2D skin;
 	public static Game_manager instance { get; private set; }
 
 	private Node3D MainMenu_Node;
 	private Node3D World_Node;
-	
+
 	private bool firstLaunch = true;
 
 	public override void _Ready()
@@ -21,7 +22,7 @@ public partial class Game_manager : Node
 	{
 		Change_Window_Mode();
 	}
-	
+
 	public void Start_Main_Menu()
 	{
 		instance = this;

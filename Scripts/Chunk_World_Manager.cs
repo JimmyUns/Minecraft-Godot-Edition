@@ -105,6 +105,7 @@ public partial class Chunk_World_Manager : Node
 		foreach (var pos in chunksToAdd)
 		{
 			_chunkPositions.Add(pos);
+			await GenerateAdjacentChunksBlockData(pos.Item1, pos.Item2);
 			CallDeferred(nameof(SpawnChunk), pos.Item1, pos.Item2);
 			await ToSignal(GetTree().CreateTimer(0.002f), "timeout");
 		}
@@ -114,6 +115,10 @@ public partial class Chunk_World_Manager : Node
 
 	private async void SpawnChunk(int x, int y)
 	{
+		// Generate block data for adjacent chunks
+		await GenerateAdjacentChunksBlockData(x, y);
+
+		// Generate and render the main chunk
 		var chunk = ChunkScene.Instantiate<Chunk_Manager>();
 		chunkholderNode.AddChild(chunk);
 
@@ -124,6 +129,7 @@ public partial class Chunk_World_Manager : Node
 		_chunks.Add(chunk);
 		_positionToChunk[new Vector2I(x, y)] = chunk;
 	}
+
 
 	private void RemoveChunk(int x, int y)
 	{
@@ -172,6 +178,37 @@ public partial class Chunk_World_Manager : Node
 			return null;
 		}
 	}
+
+
+	private async Task GenerateAdjacentChunksBlockData(int centerX, int centerY)
+	{
+		List<(int, int)> adjacentPositions = new List<(int, int)>
+	{
+		(centerX + 1, centerY),
+		(centerX - 1, centerY),
+		(centerX, centerY + 1),
+		(centerX, centerY - 1)
+	};
+
+		foreach (var pos in adjacentPositions)
+		{
+			Vector2I chunkPos = new Vector2I(pos.Item1, pos.Item2);
+			if (!_positionToChunk.ContainsKey(chunkPos))
+			{
+				var chunk = ChunkScene.Instantiate<Chunk_Manager>();
+				chunkholderNode.AddChild(chunk);
+
+				await ToSignal(GetTree().CreateTimer(0.002f), "timeout");
+
+				chunk.SetChunkPosition(chunkPos);
+				chunk.GenerateData();
+
+				_positionToChunk[chunkPos] = chunk;
+			}
+		}
+	}
+
+
 
 }
 

@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://bkn55xoy4o46w"]
+[gd_scene load_steps=5 format=3 uid="uid://bkn55xoy4o46w"]
 
 [ext_resource type="Script" path="res://Scripts/Game_manager.cs" id="1_tbcuj"]
 [ext_resource type="PackedScene" uid="uid://c646cyjywyv1g" path="res://Scenes/main_menu.tscn" id="2_aiv38"]
 [ext_resource type="PackedScene" uid="uid://dbsahl043aa4t" path="res://Scenes/world.tscn" id="3_oi181"]
+[ext_resource type="Texture2D" uid="uid://d0sagm4wnk8w0" path="res://Skins/skin_steve.png" id="4_u31ul"]
 
 [node name="Game" type="Node3D"]
 
@@ -10,3 +11,4 @@
 script = ExtResource("1_tbcuj")
 MainMenu_Scene = ExtResource("2_aiv38")
 World_Scene = ExtResource("3_oi181")
+skin = ExtResource("4_u31ul")

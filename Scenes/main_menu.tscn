@@ -8,11 +8,11 @@
 [ext_resource type="Texture2D" uid="uid://rl1rulpdy7yy" path="res://Textures/gui/Main Menu/panorama_4.png" id="5_1bbli"]
 [ext_resource type="Texture2D" uid="uid://1ma08j5vcghy" path="res://Textures/gui/Main Menu/panorama_5.png" id="6_tis7h"]
 [ext_resource type="Texture2D" uid="uid://bjleukm26jq8s" path="res://Textures/gui/widget/button.png" id="7_qbnmb"]
-[ext_resource type="Texture2D" uid="uid://bqpkqim4y87fs" path="res://Textures/download.png" id="8_y5g3s"]
 [ext_resource type="Texture2D" uid="uid://bga7jntwxdbto" path="res://Textures/gui/Main Menu/mcTitle.png" id="9_8hjgt"]
 [ext_resource type="Texture2D" uid="uid://ded2dybrwv55x" path="res://Textures/gui/Main Menu/GODOT-EDITION.png" id="10_qh3bj"]
 [ext_resource type="Texture2D" uid="uid://b8ahogfnip8hj" path="res://Textures/gui/widget/button_highlighted.png" id="12_g0tg5"]
 [ext_resource type="Texture2D" uid="uid://bxq6s8b1h2h6w" path="res://Textures/gui/widget/button_disabled.png" id="13_vnnqj"]
+[ext_resource type="PackedScene" uid="uid://c67onh00tec51" path="res://Scenes/options.tscn" id="14_i2psn"]
 [ext_resource type="Texture2D" uid="uid://dyou3jsj0tecj" path="res://Textures/gui/Main Menu/LoadingLogo.png" id="15_y0qvd"]
 
 [sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_v3pjh"]
@@ -83,14 +83,16 @@ texture = ExtResource("13_vnnqj")
 
 [node name="Main Menu" type="Node3D"]
 
-[node name="Main Menu Manager" type="Node" parent="." node_paths=PackedStringArray("mainCamera", "logoscreenTexture", "splashtextAnim")]
+[node name="Main Menu Manager" type="Node" parent="." node_paths=PackedStringArray("mainCamera", "logoscreenTexture", "splashtextAnim", "options", "skinFileDialogue", "changeskinButton")]
 script = ExtResource("1_66021")
 mainCamera = NodePath("../Camera3D")
 logoscreenTexture = NodePath("../Control/Logo Screen")
 splashtextAnim = NodePath("../Control/Splash Text Anim")
+options = NodePath("../Control/Options")
+skinFileDialogue = NodePath("../Control/Options/FileDialog")
+changeskinButton = NodePath("../Control/Options/Change Skin Button")
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 attributes = SubResource("CameraAttributesPractical_v3pjh")
 fov = 100.0
 
@@ -137,16 +139,6 @@ grow_vertical = 2
 libraries = {
 "": SubResource("AnimationLibrary_1ofr2")
 }
-
-[node name="TextureRect" type="TextureRect" parent="Control"]
-visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("8_y5g3s")
 
 [node name="Title" type="TextureRect" parent="Control"]
 layout_mode = 1
@@ -340,5 +332,75 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("15_y0qvd")
 
+[node name="Options" type="Control" parent="Control"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Options" parent="Control/Options" instance=ExtResource("14_i2psn")]
+layout_mode = 1
+offset_right = -10.38
+
+[node name="Change Skin Button" type="Button" parent="Control/Options"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -292.0
+offset_top = 194.0
+offset_right = -27.0
+offset_bottom = 248.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 4
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxTexture_kfnc5")
+theme_override_styles/hover = SubResource("StyleBoxTexture_to3sa")
+theme_override_styles/disabled = SubResource("StyleBoxTexture_2c3i0")
+text = "Change Skin"
+
+[node name="Back Button" type="Button" parent="Control/Options"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 35.0
+offset_top = 194.0
+offset_right = 300.0
+offset_bottom = 248.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 4
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxTexture_kfnc5")
+theme_override_styles/hover = SubResource("StyleBoxTexture_to3sa")
+theme_override_styles/disabled = SubResource("StyleBoxTexture_2c3i0")
+text = "Back"
+
+[node name="FileDialog" type="FileDialog" parent="Control/Options"]
+title = "Open a File"
+position = Vector2i(199, 102)
+size = Vector2i(708, 458)
+popup_window = true
+ok_button_text = "Open"
+file_mode = 0
+access = 2
+
 [connection signal="pressed" from="Control/Singleplayer Button" to="Main Menu Manager" method="_on_singleplayer_button_pressed"]
+[connection signal="pressed" from="Control/Options Button" to="Main Menu Manager" method="_on_options_button_pressed"]
 [connection signal="pressed" from="Control/Quit Button" to="Main Menu Manager" method="_on_quit_button_pressed"]
+[connection signal="pressed" from="Control/Options/Change Skin Button" to="Main Menu Manager" method="_on_change_skin_button_pressed"]
+[connection signal="pressed" from="Control/Options/Back Button" to="Main Menu Manager" method="_on_back_button_pressed"]
+[connection signal="file_selected" from="Control/Options/FileDialog" to="Main Menu Manager" method="_on_file_dialog_file_selected"]

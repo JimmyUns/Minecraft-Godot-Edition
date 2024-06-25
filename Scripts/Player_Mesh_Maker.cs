@@ -3,11 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
-[Tool]
 public partial class Player_Mesh_Maker : Node
 {
 	[Export] public Node3D playerManager;
-	[Export] public CompressedTexture2D skin;
+	private Texture2D skin;
 	[Export] public MeshInstance3D head, body, armL, armR, legL, legR;
 	[Export] public MeshInstance3D headOL, bodyOL, armLOL, armROL, legLOL, legROL;
 	[Export] public Node3D armROverride;
@@ -20,6 +19,7 @@ public partial class Player_Mesh_Maker : Node
 
 	public override void _Ready()
 	{
+		skin = Game_manager.instance.skin;
 		LoadTextures();
 		CreateHead();
 		CreateBody();
