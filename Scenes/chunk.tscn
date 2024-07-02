@@ -1,13 +1,17 @@
-[gd_scene load_steps=3 format=3 uid="uid://v1b67nixagfo"]
+[gd_scene load_steps=5 format=3 uid="uid://v1b67nixagfo"]
 
 [ext_resource type="Script" path="res://Scripts/Chunk_Manager.cs" id="1_h2mrt"]
 [ext_resource type="FastNoiseLite" uid="uid://c6yskkgcvxop" path="res://CurrentWorldNoise.tres" id="2_md6ua"]
+[ext_resource type="FastNoiseLite" uid="uid://b23fbic0h1j6b" path="res://TreesNoise.tres" id="3_6hi7q"]
+[ext_resource type="FastNoiseLite" uid="uid://sv1ysm36q8ee" path="res://RiverNoise.tres" id="4_ba4mb"]
 
 [node name="Chunk" type="StaticBody3D" node_paths=PackedStringArray("colShape", "meshInstance")]
 script = ExtResource("1_h2mrt")
 colShape = NodePath("Collision")
 meshInstance = NodePath("Mesh")
-Noise = ExtResource("2_md6ua")
+terrainNoise = ExtResource("2_md6ua")
+treeNoise = ExtResource("3_6hi7q")
+riverNoise = ExtResource("4_ba4mb")
 
 [node name="Collision" type="CollisionShape3D" parent="."]
 

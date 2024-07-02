@@ -5,7 +5,8 @@ using System.Linq;
 
 public partial class Block_Manager : Node
 {
-	[Export] public Block Air, Dirt, Grass, Stone, Deepslate, Bedrock;
+	[Export] public Block 
+	Air, Dirt, Grass, Stone, Deepslate, Bedrock, Sand, Oak_Log, Oak_Leaves, Water;
 	
 	private readonly Dictionary<Texture2D, Vector2I> _atlasLookup = new Dictionary<Texture2D, Vector2I>();
 	private int _gridWidth = 4;
@@ -23,7 +24,7 @@ public partial class Block_Manager : Node
 		//Set The textures of the block into one Sheet
 		//So that we can reuse some of its sprites
 		//for example the bottom side of a grass block is the same as a dirt block	
-		Texture2D[] blockTextures = new Block[] {Air, Dirt, Grass, Stone, Deepslate, Bedrock}.SelectMany(block => block.Textures).Where(texture => texture != null).Distinct().ToArray();
+		Texture2D[] blockTextures = new Block[] {Air, Dirt, Grass, Stone, Deepslate, Bedrock, Sand, Oak_Log, Oak_Leaves, Water}.SelectMany(block => block.Textures).Where(texture => texture != null).Distinct().ToArray();
 		
 		for (int i = 0; i < blockTextures.Length; i++)
 		{
@@ -56,6 +57,7 @@ public partial class Block_Manager : Node
 		{
 			AlbedoTexture = textureAtlas,
 			TextureFilter = BaseMaterial3D.TextureFilterEnum.Nearest,
+			ShadingMode = BaseMaterial3D.ShadingModeEnum.Unshaded,
 		};
 		
 		textureAtlasSize = new Vector2(_gridWidth, _gridHeight);

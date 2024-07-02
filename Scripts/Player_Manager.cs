@@ -14,6 +14,8 @@ public partial class Player_Manager : Node3D
 	[Export] public Held_Object_Maker heldObjectMaker;
 	[Export] public Player_Mesh_Maker bodyMeshMaker;
 	[Export] public AnimationTree bodyAnimTree;
+	[Export] public Paperdoll_Controller paperdollController;
+
 
 
 
@@ -23,7 +25,7 @@ public partial class Player_Manager : Node3D
 	public int gameMode = 0;
 	public int perspectiveMode = 0; //0=fps, 1=tps back view, 2=tps front view
 	public bool guiVisible = true;
-	public bool inventoryVisible = false;
+	public bool inventoryVisible = false, pausemenuVisible;
 	private bool debugscreenExtra;
 
 	public override void _Ready()
@@ -58,22 +60,26 @@ public partial class Player_Manager : Node3D
 
 		if (Input.IsActionJustPressed("toggle_inventory"))
 		{
-			if (Input.MouseMode == Input.MouseModeEnum.Captured)
+			if (pausemenuVisible) return;
+			inventoryVisible = !inventoryVisible;
+			uiManager.ToggleInventory(inventoryVisible);
+			LockMouse(!inventoryVisible);
+			PausePlayerInput(inventoryVisible);
+		}
+		else if (Input.IsActionJustPressed("toggle_pause_menu"))
+		{
+			if (inventoryVisible)
 			{
-				Input.MouseMode = Input.MouseModeEnum.Visible;
-				playerBody.lockMovement = true;
-				cameraController.lockRotation = true;
-				uiManager.ToggleInventory(true);
-				inventoryVisible = true;
-			}
-			else
-			{
-				Input.MouseMode = Input.MouseModeEnum.Captured;
-				playerBody.lockMovement = false;
-				cameraController.lockRotation = false;
-				uiManager.ToggleInventory(false);
 				inventoryVisible = false;
+				LockMouse(false);
+				PausePlayerInput(false);
+				uiManager.ToggleInventory(false);
+				return;
 			}
+			pausemenuVisible = !pausemenuVisible;
+			uiManager.pauseMenu.Visible = pausemenuVisible;
+			PausePlayerInput(pausemenuVisible);
+
 		}
 
 
@@ -155,6 +161,21 @@ public partial class Player_Manager : Node3D
 		}
 		await Task.Delay(10);
 		cameraController.TogglePerspective(perspectiveMode);
+	}
+
+	public void LockMouse(bool state)
+	{
+		if (state)
+			Input.MouseMode = Input.MouseModeEnum.Captured;
+		else
+			Input.MouseMode = Input.MouseModeEnum.Visible;
+	}
+
+	public void PausePlayerInput(bool state)
+	{
+		LockMouse(!state);
+		playerBody.lockMovement = state;
+		cameraController.lockRotation = state;
 	}
 
 }

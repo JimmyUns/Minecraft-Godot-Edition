@@ -1,4 +1,4 @@
-[gd_scene load_steps=47 format=3 uid="uid://cmg0782dxuoqe"]
+[gd_scene load_steps=48 format=3 uid="uid://cmg0782dxuoqe"]
 
 [ext_resource type="Script" path="res://Scripts/PlayerBody.cs" id="1_2ctm6"]
 [ext_resource type="Script" path="res://Scripts/Player_Manager.cs" id="1_cvkl3"]
@@ -13,6 +13,10 @@
 [ext_resource type="Texture2D" uid="uid://bhqsbw5n251ha" path="res://Textures/Miscs/shadow.png" id="11_2mayk"]
 [ext_resource type="Script" path="res://Scripts/Held_Object_Maker.cs" id="12_eavra"]
 [ext_resource type="Script" path="res://Scripts/Body_Mesh_Controller.cs" id="12_uifak"]
+[ext_resource type="Script" path="res://Scripts/Paperdoll_Controller.cs" id="14_pf80d"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_pb84e"]
+viewport_path = NodePath("Paperdoll/Paperdoll Viewport")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jbuw4"]
 shading_mode = 0
@@ -344,9 +348,6 @@ _surfaces = [{
 "vertex_data": PackedByteArray(219, 249, 126, 190, 174, 71, 225, 62, 219, 249, 254, 189, 128, 18, 131, 58, 174, 71, 225, 62, 219, 249, 254, 189, 128, 18, 131, 58, 174, 71, 225, 62, 18, 131, 0, 62, 219, 249, 126, 190, 174, 71, 225, 62, 219, 249, 254, 189, 128, 18, 131, 58, 174, 71, 225, 62, 18, 131, 0, 62, 219, 249, 126, 190, 174, 71, 225, 62, 18, 131, 0, 62, 219, 249, 126, 190, 82, 184, 158, 190, 219, 249, 254, 189, 219, 249, 126, 190, 82, 184, 158, 190, 18, 131, 0, 62, 128, 18, 131, 58, 82, 184, 158, 190, 18, 131, 0, 62, 219, 249, 126, 190, 82, 184, 158, 190, 219, 249, 254, 189, 128, 18, 131, 58, 82, 184, 158, 190, 18, 131, 0, 62, 128, 18, 131, 58, 82, 184, 158, 190, 219, 249, 254, 189, 219, 249, 126, 190, 174, 71, 225, 62, 18, 131, 0, 62, 219, 249, 126, 190, 82, 184, 158, 190, 18, 131, 0, 62, 219, 249, 126, 190, 82, 184, 158, 190, 219, 249, 254, 189, 219, 249, 126, 190, 174, 71, 225, 62, 18, 131, 0, 62, 219, 249, 126, 190, 82, 184, 158, 190, 219, 249, 254, 189, 219, 249, 126, 190, 174, 71, 225, 62, 219, 249, 254, 189, 128, 18, 131, 58, 174, 71, 225, 62, 219, 249, 254, 189, 128, 18, 131, 58, 82, 184, 158, 190, 219, 249, 254, 189, 128, 18, 131, 58, 82, 184, 158, 190, 18, 131, 0, 62, 128, 18, 131, 58, 174, 71, 225, 62, 219, 249, 254, 189, 128, 18, 131, 58, 82, 184, 158, 190, 18, 131, 0, 62, 128, 18, 131, 58, 174, 71, 225, 62, 18, 131, 0, 62, 219, 249, 126, 190, 174, 71, 225, 62, 219, 249, 254, 189, 219, 249, 126, 190, 82, 184, 158, 190, 219, 249, 254, 189, 128, 18, 131, 58, 82, 184, 158, 190, 219, 249, 254, 189, 219, 249, 126, 190, 174, 71, 225, 62, 219, 249, 254, 189, 128, 18, 131, 58, 82, 184, 158, 190, 219, 249, 254, 189, 128, 18, 131, 58, 174, 71, 225, 62, 219, 249, 254, 189, 128, 18, 131, 58, 174, 71, 225, 62, 18, 131, 0, 62, 128, 18, 131, 58, 82, 184, 158, 190, 18, 131, 0, 62, 219, 249, 126, 190, 82, 184, 158, 190, 18, 131, 0, 62, 128, 18, 131, 58, 174, 71, 225, 62, 18, 131, 0, 62, 219, 249, 126, 190, 82, 184, 158, 190, 18, 131, 0, 62, 219, 249, 126, 190, 174, 71, 225, 62, 18, 131, 0, 62, 255, 127, 255, 255, 0, 0, 255, 191, 255, 127, 255, 255, 0, 0, 255, 191, 255, 127, 255, 255, 0, 0, 255, 191, 255, 127, 255, 255, 0, 0, 255, 191, 255, 127, 255, 255, 0, 0, 255, 191, 255, 127, 255, 255, 0, 0, 255, 191, 255, 127, 0, 0, 0, 0, 255, 191, 255, 127, 0, 0, 0, 0, 255, 191, 255, 127, 0, 0, 0, 0, 255, 191, 255, 127, 0, 0, 0, 0, 255, 191, 255, 127, 0, 0, 0, 0, 255, 191, 255, 127, 0, 0, 0, 0, 255, 191, 0, 0, 255, 127, 255, 127, 255, 191, 0, 0, 255, 127, 255, 127, 255, 191, 0, 0, 255, 127, 255, 127, 255, 191, 0, 0, 255, 127, 255, 127, 255, 191, 0, 0, 255, 127, 255, 127, 255, 191, 0, 0, 255, 127, 255, 127, 255, 191, 255, 255, 255, 127, 255, 127, 255, 191, 255, 255, 255, 127, 255, 127, 255, 191, 255, 255, 255, 127, 255, 127, 255, 191, 255, 255, 255, 127, 255, 127, 255, 191, 255, 255, 255, 127, 255, 127, 255, 191, 255, 255, 255, 127, 255, 127, 255, 191, 255, 255, 255, 255, 255, 127, 0, 128, 255, 255, 255, 255, 255, 127, 0, 128, 255, 255, 255, 255, 255, 127, 0, 128, 255, 255, 255, 255, 255, 127, 0, 128, 255, 255, 255, 255, 255, 127, 0, 128, 255, 255, 255, 255, 255, 127, 0, 128, 255, 127, 255, 127, 255, 127, 0, 128, 255, 127, 255, 127, 255, 127, 0, 128, 255, 127, 255, 127, 255, 127, 0, 128, 255, 127, 255, 127, 255, 127, 0, 128, 255, 127, 255, 127, 255, 127, 0, 128, 255, 127, 255, 127, 255, 127, 0, 128)
 }]
 
-[sub_resource type="BoxMesh" id="BoxMesh_pl4xt"]
-size = Vector3(0.3, 0.3, 0.3)
-
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_uqamj"]
 shading_mode = 0
 albedo_texture = ExtResource("8_clqo5")
@@ -406,7 +407,7 @@ _surfaces = [{
 "vertex_data": PackedByteArray(219, 249, 126, 190, 174, 71, 225, 62, 219, 249, 254, 189, 128, 18, 131, 58, 174, 71, 225, 62, 219, 249, 254, 189, 128, 18, 131, 58, 174, 71, 225, 62, 18, 131, 0, 62, 219, 249, 126, 190, 174, 71, 225, 62, 219, 249, 254, 189, 128, 18, 131, 58, 174, 71, 225, 62, 18, 131, 0, 62, 219, 249, 126, 190, 174, 71, 225, 62, 18, 131, 0, 62, 219, 249, 126, 190, 82, 184, 158, 190, 219, 249, 254, 189, 219, 249, 126, 190, 82, 184, 158, 190, 18, 131, 0, 62, 128, 18, 131, 58, 82, 184, 158, 190, 18, 131, 0, 62, 219, 249, 126, 190, 82, 184, 158, 190, 219, 249, 254, 189, 128, 18, 131, 58, 82, 184, 158, 190, 18, 131, 0, 62, 128, 18, 131, 58, 82, 184, 158, 190, 219, 249, 254, 189, 219, 249, 126, 190, 174, 71, 225, 62, 18, 131, 0, 62, 219, 249, 126, 190, 82, 184, 158, 190, 18, 131, 0, 62, 219, 249, 126, 190, 82, 184, 158, 190, 219, 249, 254, 189, 219, 249, 126, 190, 174, 71, 225, 62, 18, 131, 0, 62, 219, 249, 126, 190, 82, 184, 158, 190, 219, 249, 254, 189, 219, 249, 126, 190, 174, 71, 225, 62, 219, 249, 254, 189, 128, 18, 131, 58, 174, 71, 225, 62, 219, 249, 254, 189, 128, 18, 131, 58, 82, 184, 158, 190, 219, 249, 254, 189, 128, 18, 131, 58, 82, 184, 158, 190, 18, 131, 0, 62, 128, 18, 131, 58, 174, 71, 225, 62, 219, 249, 254, 189, 128, 18, 131, 58, 82, 184, 158, 190, 18, 131, 0, 62, 128, 18, 131, 58, 174, 71, 225, 62, 18, 131, 0, 62, 219, 249, 126, 190, 174, 71, 225, 62, 219, 249, 254, 189, 219, 249, 126, 190, 82, 184, 158, 190, 219, 249, 254, 189, 128, 18, 131, 58, 82, 184, 158, 190, 219, 249, 254, 189, 219, 249, 126, 190, 174, 71, 225, 62, 219, 249, 254, 189, 128, 18, 131, 58, 82, 184, 158, 190, 219, 249, 254, 189, 128, 18, 131, 58, 174, 71, 225, 62, 219, 249, 254, 189, 128, 18, 131, 58, 174, 71, 225, 62, 18, 131, 0, 62, 128, 18, 131, 58, 82, 184, 158, 190, 18, 131, 0, 62, 219, 249, 126, 190, 82, 184, 158, 190, 18, 131, 0, 62, 128, 18, 131, 58, 174, 71, 225, 62, 18, 131, 0, 62, 219, 249, 126, 190, 82, 184, 158, 190, 18, 131, 0, 62, 219, 249, 126, 190, 174, 71, 225, 62, 18, 131, 0, 62, 255, 127, 255, 255, 0, 0, 255, 191, 255, 127, 255, 255, 0, 0, 255, 191, 255, 127, 255, 255, 0, 0, 255, 191, 255, 127, 255, 255, 0, 0, 255, 191, 255, 127, 255, 255, 0, 0, 255, 191, 255, 127, 255, 255, 0, 0, 255, 191, 255, 127, 0, 0, 0, 0, 255, 191, 255, 127, 0, 0, 0, 0, 255, 191, 255, 127, 0, 0, 0, 0, 255, 191, 255, 127, 0, 0, 0, 0, 255, 191, 255, 127, 0, 0, 0, 0, 255, 191, 255, 127, 0, 0, 0, 0, 255, 191, 0, 0, 255, 127, 255, 127, 255, 191, 0, 0, 255, 127, 255, 127, 255, 191, 0, 0, 255, 127, 255, 127, 255, 191, 0, 0, 255, 127, 255, 127, 255, 191, 0, 0, 255, 127, 255, 127, 255, 191, 0, 0, 255, 127, 255, 127, 255, 191, 255, 255, 255, 127, 255, 127, 255, 191, 255, 255, 255, 127, 255, 127, 255, 191, 255, 255, 255, 127, 255, 127, 255, 191, 255, 255, 255, 127, 255, 127, 255, 191, 255, 255, 255, 127, 255, 127, 255, 191, 255, 255, 255, 127, 255, 127, 255, 191, 255, 255, 255, 255, 255, 127, 0, 128, 255, 255, 255, 255, 255, 127, 0, 128, 255, 255, 255, 255, 255, 127, 0, 128, 255, 255, 255, 255, 255, 127, 0, 128, 255, 255, 255, 255, 255, 127, 0, 128, 255, 255, 255, 255, 255, 127, 0, 128, 255, 127, 255, 127, 255, 127, 0, 128, 255, 127, 255, 127, 255, 127, 0, 128, 255, 127, 255, 127, 255, 127, 0, 128, 255, 127, 255, 127, 255, 127, 0, 128, 255, 127, 255, 127, 255, 127, 0, 128, 255, 127, 255, 127, 255, 127, 0, 128)
 }]
 
-[node name="Player" type="Node3D" node_paths=PackedStringArray("playerBody", "cameraController", "lowerbodyMesh", "uiManager", "actionsManager", "inventoryManager", "heldObjectMaker", "bodyMeshMaker", "bodyAnimTree", "chunkOutline")]
+[node name="Player" type="Node3D" node_paths=PackedStringArray("playerBody", "cameraController", "lowerbodyMesh", "uiManager", "actionsManager", "inventoryManager", "heldObjectMaker", "bodyMeshMaker", "bodyAnimTree", "paperdollController", "chunkOutline")]
 script = ExtResource("1_cvkl3")
 playerBody = NodePath("Body")
 cameraController = NodePath("Camera Controller")
@@ -417,6 +418,7 @@ inventoryManager = NodePath("Inventory Manager")
 heldObjectMaker = NodePath("Cam Holder/Head Rotater/SpringArm3D/Main Camera/Held Object Maker")
 bodyMeshMaker = NodePath("Mesh Maker")
 bodyAnimTree = NodePath("Body/Body Anim Tree")
+paperdollController = NodePath("Paperdoll/Paperdoll Controller")
 chunkOutline = NodePath("Chunk Outline")
 
 [node name="UI" parent="." node_paths=PackedStringArray("playerManager") instance=ExtResource("1_lp3y2")]
@@ -427,6 +429,13 @@ offset_left = 0.0
 offset_top = 0.0
 offset_right = 126.0
 offset_bottom = 2319.0
+
+[node name="Paperdoll" parent="UI/Control/Inventory" index="5"]
+offset_left = -35.7
+offset_top = -149.634
+offset_right = 35.893
+offset_bottom = 151.022
+texture = SubResource("ViewportTexture_pb84e")
 
 [node name="Inventory Manager" type="Node" parent="." node_paths=PackedStringArray("playerManager")]
 script = ExtResource("3_a3ji4")
@@ -443,7 +452,7 @@ handheldobjectAnim = NodePath("../Cam Holder/Head Rotater/SpringArm3D/Main Camer
 
 [node name="Camera Controller" type="Node" parent="." node_paths=PackedStringArray("mainCamera", "subviewportCamera", "camHolder", "playerHead", "mainBody", "headPivot", "playerManager", "cameraSpringArm")]
 script = ExtResource("2_y1166")
-mouseSensitivity = 1.0
+mouseSensitivity = 0.3
 mainCamera = NodePath("../Cam Holder/Head Rotater/SpringArm3D/Main Camera")
 subviewportCamera = NodePath("../UI/Control/SubViewportContainer/SubViewport/viewport camera")
 camHolder = NodePath("../Cam Holder")
@@ -458,8 +467,8 @@ script = ExtResource("7_tjpyf")
 playerManager = NodePath("..")
 head = NodePath("../Cam Holder/Head Pivot/head mesh")
 body = NodePath("../Body/mesh/Lower Body/body")
-armL = NodePath("../Body/mesh/Lower Body/ArmL Pivot/armL")
-armR = NodePath("../Body/mesh/Lower Body/ArnR Pivot/ArmR Pivot Override/armR")
+armL = NodePath("../Body/mesh/Lower Body/ArnR Pivot/ArmR Pivot Override/armR")
+armR = NodePath("../Body/mesh/Lower Body/ArmL Pivot/armL")
 legL = NodePath("../Body/mesh/Lower Body/LegL Pivot/legL")
 legR = NodePath("../Body/mesh/Lower Body/LegR Pivot/legR")
 headOL = NodePath("../Cam Holder/Head Pivot/head mesh/outer layer")
@@ -474,7 +483,7 @@ armROverride = NodePath("../Body/mesh/Lower Body/ArnR Pivot/ArmR Pivot Override"
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.653051, 0)
 
 [node name="Head Pivot" type="Node3D" parent="Cam Holder"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.22843, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.228, 0)
 
 [node name="head mesh" type="MeshInstance3D" parent="Cam Holder/Head Pivot"]
 transform = Transform3D(0.95, 0, 0, 0, 0.95, 0, 0, 0, 0.95, 0, 0.22843, 0)
@@ -493,8 +502,9 @@ mesh = SubResource("ArrayMesh_y0k03")
 spring_length = 0.0
 
 [node name="Main Camera" type="Camera3D" parent="Cam Holder/Head Rotater/SpringArm3D"]
-cull_mask = 524255
+cull_mask = 262111
 fov = 100.0
+far = 1000.0
 
 [node name="Held Object Maker" type="Node3D" parent="Cam Holder/Head Rotater/SpringArm3D/Main Camera" node_paths=PackedStringArray("meshInstance", "meshOffset", "heldobjectMeshInstance", "switchheldAnim")]
 transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0, 0, 0)
@@ -574,7 +584,7 @@ size = Vector3(0.6, 1.27026, 0.6)
 texture_albedo = ExtResource("11_2mayk")
 
 [node name="ArmL Pivot" type="Node3D" parent="Body/mesh/Lower Body"]
-transform = Transform3D(0.997071, 0.0764674, 0, -0.0764674, 0.997071, 0, 0, 0, 0.999999, -0.357, 0.331, 0)
+transform = Transform3D(0.999748, 0.0224104, 0, -0.0224104, 0.999748, 0, 0, 0, 0.999999, -0.357, 0.331, 0)
 
 [node name="armL" type="MeshInstance3D" parent="Body/mesh/Lower Body/ArmL Pivot"]
 transform = Transform3D(0.95, 0, 0, 0, 0.95, 0, 0, 0, 0.95, 0.12, -0.306, 0)
@@ -588,7 +598,7 @@ layers = 2
 mesh = SubResource("ArrayMesh_j4w25")
 
 [node name="ArnR Pivot" type="Node3D" parent="Body/mesh/Lower Body"]
-transform = Transform3D(0.997071, -0.0764674, 0, 0.0764674, 0.997071, 0, 0, 0, 0.999999, 0.357218, 0.330626, 0)
+transform = Transform3D(0.999748, -0.0224104, 0, 0.0224104, 0.999748, 0, 0, 0, 0.999999, 0.357218, 0.330626, 0)
 
 [node name="ArmR Pivot Override" type="Node3D" parent="Body/mesh/Lower Body/ArnR Pivot"]
 transform = Transform3D(0.998441, 0.0558215, 0, -0.0558215, 0.998441, 0, 0, 0, 1, 0, 0, 0)
@@ -607,7 +617,6 @@ mesh = SubResource("ArrayMesh_a4dlc")
 [node name="Held Block Mesh" type="MeshInstance3D" parent="Body/mesh/Lower Body/ArnR Pivot/ArmR Pivot Override/armR"]
 transform = Transform3D(0.268233, -0.0164053, 0.268667, 0.0172358, 0.379562, 0.00596878, -0.268615, 0.00797284, 0.268667, -0.38, -0.466, -0.365)
 layers = 2
-mesh = SubResource("BoxMesh_pl4xt")
 
 [node name="LegL Pivot" type="Node3D" parent="Body/mesh/Lower Body"]
 transform = Transform3D(1, 0, 0, 0, 0.999999, 0, 0, 0, 0.999999, -0.117348, -0.293113, 0)
@@ -659,5 +668,111 @@ visible = false
 
 [node name="mesh" parent="Chunk Outline" instance=ExtResource("8_pga75")]
 transform = Transform3D(8.048, 0, 0, 0, 128, 0, 0, 0, 8.048, 8, 128, 8)
+
+[node name="Paperdoll" type="Node3D" parent="."]
+
+[node name="Paperdoll Controller" type="Node" parent="Paperdoll" node_paths=PackedStringArray("paperdollHolder", "playerManager", "head", "body", "armL", "armR", "legL", "legR", "headOL", "bodyOL", "armLOL", "armROL", "legLOL", "legROL")]
+script = ExtResource("14_pf80d")
+paperdollHolder = NodePath("../Paperdoll Viewport/Paperdoll Holder")
+playerManager = NodePath("../..")
+head = NodePath("../Paperdoll body/head")
+body = NodePath("../Paperdoll body/body")
+armL = NodePath("../Paperdoll body/ArmL Pivot/armL")
+armR = NodePath("../Paperdoll body/ArnR Pivot/ArmR Pivot Override/armR")
+legL = NodePath("../Paperdoll body/LegL Pivot/legL")
+legR = NodePath("../Paperdoll body/LegR Pivot/legR")
+headOL = NodePath("../Paperdoll body/head/outer layer")
+bodyOL = NodePath("../Paperdoll body/body/upper layer")
+armLOL = NodePath("../Paperdoll body/ArmL Pivot/armL/upper layer")
+armROL = NodePath("../Paperdoll body/ArnR Pivot/ArmR Pivot Override/armR/upper layer")
+legLOL = NodePath("../Paperdoll body/LegL Pivot/legL/upper layer")
+legROL = NodePath("../Paperdoll body/LegR Pivot/legR/upper layer")
+
+[node name="Paperdoll Viewport" type="SubViewport" parent="Paperdoll"]
+transparent_bg = true
+
+[node name="Paperdoll Holder" type="Node3D" parent="Paperdoll/Paperdoll Viewport"]
+
+[node name="Paperdoll Camera" type="Camera3D" parent="Paperdoll/Paperdoll Viewport/Paperdoll Holder"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0.005, -0.02, -4.085)
+keep_aspect = 0
+cull_mask = 262144
+current = true
+fov = 71.0
+near = 1.0
+far = 24.9
+
+[node name="Paperdoll body" type="Node3D" parent="Paperdoll"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.961809, 0)
+top_level = true
+
+[node name="head" type="MeshInstance3D" parent="Paperdoll/Paperdoll body"]
+transform = Transform3D(0.95, 0, 0, 0, 0.95, 0, 0, 0, 0.95, 0, 0.669597, 0)
+layers = 262144
+skeleton = NodePath("../../../Body")
+
+[node name="outer layer" type="MeshInstance3D" parent="Paperdoll/Paperdoll body/head"]
+transform = Transform3D(1.1, 0, 0, 0, 1.1, 0, 0, 0, 1.1, 0, 0, 0)
+layers = 262144
+
+[node name="body" type="MeshInstance3D" parent="Paperdoll/Paperdoll body"]
+transform = Transform3D(0.95, 0, 0, 0, 0.95, 0, 0, 0, 0.95, 0, 0.025, 0)
+layers = 262144
+skeleton = NodePath("../..")
+
+[node name="upper layer" type="MeshInstance3D" parent="Paperdoll/Paperdoll body/body"]
+transform = Transform3D(1.05, 0, 0, 0, 1.05, 0, 0, 0, 1.1, 0, 0, 0)
+layers = 262144
+
+[node name="ArmL Pivot" type="Node3D" parent="Paperdoll/Paperdoll body"]
+transform = Transform3D(0.996472, 0.0839076, 0, -0.0839076, 0.996472, 0, 0, 0, 0.999999, -0.357, 0.331, 0)
+
+[node name="armL" type="MeshInstance3D" parent="Paperdoll/Paperdoll body/ArmL Pivot"]
+transform = Transform3D(0.95, 0, 0, 0, 0.95, 0, 0, 0, 0.95, 0.12, -0.306, 0)
+layers = 262144
+skeleton = NodePath("../../..")
+
+[node name="upper layer" type="MeshInstance3D" parent="Paperdoll/Paperdoll body/ArmL Pivot/armL"]
+transform = Transform3D(1.1, 0, 0, 0, 1.05, 0, 0, 0, 1.1, 0.0154841, 0, 0)
+layers = 262144
+
+[node name="ArnR Pivot" type="Node3D" parent="Paperdoll/Paperdoll body"]
+transform = Transform3D(0.996472, -0.0839076, 0, 0.0839076, 0.996472, 0, 0, 0, 0.999999, 0.357218, 0.330626, 0)
+
+[node name="ArmR Pivot Override" type="Node3D" parent="Paperdoll/Paperdoll body/ArnR Pivot"]
+transform = Transform3D(0.998441, 0.0558215, 0, -0.0558215, 0.998441, 0, 0, 0, 1, 0, 0, 0)
+
+[node name="armR" type="MeshInstance3D" parent="Paperdoll/Paperdoll body/ArnR Pivot/ArmR Pivot Override"]
+transform = Transform3D(0.948481, -0.0536921, 0, 0.0536921, 0.948481, 0, 0, 0, 0.95, 0.134867, -0.298481, 0)
+layers = 262144
+skeleton = NodePath("../../../..")
+
+[node name="upper layer" type="MeshInstance3D" parent="Paperdoll/Paperdoll body/ArnR Pivot/ArmR Pivot Override/armR"]
+transform = Transform3D(1.09999, -0.00542895, 0, 0.00568748, 1.04999, 0, 0, 0, 1.1, 0.0123798, 0.0171329, 0)
+layers = 262144
+
+[node name="LegL Pivot" type="Node3D" parent="Paperdoll/Paperdoll body"]
+transform = Transform3D(1, 0, 0, 0, 0.999999, 0, 0, 0, 0.999999, -0.117348, -0.293113, 0)
+
+[node name="legL" type="MeshInstance3D" parent="Paperdoll/Paperdoll body/LegL Pivot"]
+transform = Transform3D(0.95, 0, 0, 0, 0.95, 0, 0, 0, 0.95, 0.117348, -0.393887, 0)
+layers = 262144
+skeleton = NodePath("../../..")
+
+[node name="upper layer" type="MeshInstance3D" parent="Paperdoll/Paperdoll body/LegL Pivot/legL"]
+transform = Transform3D(1.1, 0, 0, 0, 1.05, 0, 0, 0, 1.1, 0.015, 0, 0)
+layers = 262144
+
+[node name="LegR Pivot" type="Node3D" parent="Paperdoll/Paperdoll body"]
+transform = Transform3D(0.95, 0, 0, 0, 0.95, 0, 0, 0, 0.95, 0.117, -0.293, 0)
+
+[node name="legR" type="MeshInstance3D" parent="Paperdoll/Paperdoll body/LegR Pivot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.127368, -0.414737, 0)
+layers = 262144
+skeleton = NodePath("../../..")
+
+[node name="upper layer" type="MeshInstance3D" parent="Paperdoll/Paperdoll body/LegR Pivot/legR"]
+transform = Transform3D(1.1, 0, 0, 0, 1.05, 0, 0, 0, 1.1, 0.015, 0, 0)
+layers = 262144
 
 [editable path="UI"]

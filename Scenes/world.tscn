@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://dbsahl043aa4t"]
+[gd_scene load_steps=32 format=3 uid="uid://dbsahl043aa4t"]
 
 [ext_resource type="Script" path="res://Scripts/Block_Manager.cs" id="1_iut7u"]
 [ext_resource type="Script" path="res://Scripts/Chunk_World_Manager.cs" id="1_rxrwf"]
@@ -11,6 +11,11 @@
 [ext_resource type="Texture2D" uid="uid://bmwq8rt5wryvr" path="res://Textures/block/stone.png" id="5_ql5md"]
 [ext_resource type="Texture2D" uid="uid://ccinnisnilmbv" path="res://Textures/block/deepslate.png" id="7_h0o6c"]
 [ext_resource type="Texture2D" uid="uid://b2xoq5vxi0lsq" path="res://Textures/block/bedrock.png" id="8_jxegf"]
+[ext_resource type="Texture2D" uid="uid://xtuolurmjfhm" path="res://Textures/block/sand.png" id="9_33mxb"]
+[ext_resource type="Texture2D" uid="uid://4nr4xkvke2un" path="res://Textures/block/oak_log.png" id="10_ahvf7"]
+[ext_resource type="Texture2D" uid="uid://ceydvo125724o" path="res://Textures/block/oak_log_top.png" id="11_u27qw"]
+[ext_resource type="Texture2D" uid="uid://bb8i5cr50qb6n" path="res://Textures/block/oak_leaves.png" id="12_43eao"]
+[ext_resource type="Texture2D" uid="uid://bs2aonex0aidm" path="res://Textures/block/water_still.png" id="13_r1o7g"]
 
 [sub_resource type="Gradient" id="Gradient_p6iue"]
 colors = PackedColorArray(1, 1, 1, 1, 0.470588, 0.654902, 1, 1)
@@ -74,18 +79,41 @@ name = "Bedrock Block"
 isTransparent = false
 Texture_Top = ExtResource("8_jxegf")
 
+[sub_resource type="Resource" id="Resource_20x7m"]
+script = ExtResource("2_4vmcx")
+name = "Sand"
+isTransparent = false
+Texture_Top = ExtResource("9_33mxb")
+
+[sub_resource type="Resource" id="Resource_gslbk"]
+script = ExtResource("2_4vmcx")
+name = "Oak Log"
+isTransparent = false
+Texture_Top = ExtResource("11_u27qw")
+Texture_Bottom = ExtResource("11_u27qw")
+Texture_Right = ExtResource("10_ahvf7")
+Texture_Left = ExtResource("10_ahvf7")
+Texture_Forward = ExtResource("10_ahvf7")
+Texture_Back = ExtResource("10_ahvf7")
+
+[sub_resource type="Resource" id="Resource_arojb"]
+script = ExtResource("2_4vmcx")
+name = "Oak Leaves"
+isTransparent = true
+Texture_Top = ExtResource("12_43eao")
+
+[sub_resource type="Resource" id="Resource_x63vp"]
+script = ExtResource("2_4vmcx")
+name = "Water"
+isTransparent = false
+Texture_Top = ExtResource("13_r1o7g")
+
 [node name="World" type="Node3D"]
 
 [node name="World Manager" type="Node" parent="."]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_mlvxh")
-
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(0.785695, -0.163048, 0.59674, -0.209335, 0.837655, 0.504493, -0.582119, -0.521296, 0.62401, 0.0385373, 0, 0)
-light_indirect_energy = 0.0
-light_cull_mask = 4294967293
-shadow_blur = 0.0
 
 [node name="Block Manager" type="Node" parent="."]
 script = ExtResource("1_iut7u")
@@ -95,6 +123,10 @@ Grass = SubResource("Resource_swevy")
 Stone = SubResource("Resource_orqex")
 Deepslate = SubResource("Resource_chihm")
 Bedrock = SubResource("Resource_28mty")
+Sand = SubResource("Resource_20x7m")
+Oak_Log = SubResource("Resource_gslbk")
+Oak_Leaves = SubResource("Resource_arojb")
+Water = SubResource("Resource_x63vp")
 
 [node name="Chunk World Manager" type="Node" parent="." node_paths=PackedStringArray("chunkholderNode", "playerManager")]
 script = ExtResource("1_rxrwf")

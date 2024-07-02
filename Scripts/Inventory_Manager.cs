@@ -17,6 +17,7 @@ public partial class Inventory_Manager : Node
 	public InventorySlot[,] _inventorySlots = new InventorySlot[10, 4];
 	public InventorySlot heldInventoryObject;
 	[Export] public AnimationPlayer switchheldAnim;
+	
 
 	public override void _Ready()
 	{
@@ -24,9 +25,9 @@ public partial class Inventory_Manager : Node
 		/*GiveObject(Block_Manager.Instance.Dirt, 1);
 		GiveObject(Block_Manager.Instance.Grass, 2);
 		GiveObject(Block_Manager.Instance.Stone, 3);
-		GiveObject(Block_Manager.Instance.Deepslate, 4);
-		GiveObject(Block_Manager.Instance.Bedrock, 5);
+		GiveObject(Block_Manager.Instance.Sand, 5);
 		*/
+		GiveObject(Block_Manager.Instance.Oak_Leaves, 64);
 
 	}
 

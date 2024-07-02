@@ -5,14 +5,17 @@ using System.Diagnostics;
 public partial class UI_Manager : CanvasLayer
 {
 	[Export] public Player_Manager playerManager;
-	[Export] public Label coordinates, chunk, fps, hotbarObjectNamePopup;
+	[Export] public Control controlParentNode;
+	
+	[Export] public Label coordinates, chunk, fps, hotbarObjectNamePopup, memoryUsage;
 	[Export] private TextureRect hotbarSelected_TextureRect;
 	[Export] public TextureRect inventory_survival, hotbar;
 	public TextureRect[,] inventoryIcons = new TextureRect[10, 4];
 
 	[Export] public TextureRect[] hotbarIcons;
 	[Export] public AnimationPlayer ui_Anim;
-	[Export] public CanvasLayer debugScreen;
+	[Export] public Control pauseMenu;
+	[Export] public Control debugScreen;
 	[Export] public TextureRect crosshair, slotHighlight, heldInventoryObjectTextureRect;
 
 
@@ -56,6 +59,7 @@ public partial class UI_Manager : CanvasLayer
 		coordinates.Text = "X:" + playerManager.GetCoordinatesGround().X + ", Y:" + playerManager.GetCoordinatesGround().Y + ", Z:" + playerManager.GetCoordinatesGround().Z;
 		chunk.Text = "Chunk: " + playerManager.GetChunkPosition().ToString();
 		fps.Text = "fps: " + Engine.GetFramesPerSecond().ToString();
+		memoryUsage.Text = "Memory usage: " + (OS.GetStaticMemoryUsage() / 1048576).ToString() + " MB";
 
 		InventoryActions();
 	}
@@ -180,6 +184,7 @@ public partial class UI_Manager : CanvasLayer
 		if (playerManager.inventoryVisible)
 		{
 			Vector2 mousePosition = GetViewport().GetMousePosition();
+
 			bool isMouseOverSlot = false;
 
 			foreach (TextureRect textureRect in inventoryIcons)
@@ -396,4 +401,20 @@ public partial class UI_Manager : CanvasLayer
 			}
 		}
 	}
+
+	#region Pause Menu
+
+	public void _on_save_and_quit_pressed()
+	{
+		Game_manager.instance.Exit_World();
+	}
+
+	public void _on_options_pressed()
+	{
+		Options_Manager.instance.ShowOptions(true);
+		controlParentNode.Visible = false;
+		controlParentNode.MouseFilter = Control.MouseFilterEnum.Ignore;
+	}
+
+	#endregion
 }

@@ -1,7 +1,19 @@
-[gd_scene load_steps=3 format=3 uid="uid://c67onh00tec51"]
+[gd_scene load_steps=9 format=3 uid="uid://c67onh00tec51"]
 
 [ext_resource type="Texture2D" uid="uid://m377fmcspjrc" path="res://Textures/gui/Main Menu/Menus_Background.png" id="1_bc5xo"]
 [ext_resource type="Texture2D" uid="uid://bunxi56bj4r2j" path="res://Textures/gui/vignette_0.png" id="2_rwmra"]
+[ext_resource type="Texture2D" uid="uid://bjleukm26jq8s" path="res://Textures/gui/widget/button.png" id="3_q0div"]
+[ext_resource type="Texture2D" uid="uid://b8ahogfnip8hj" path="res://Textures/gui/widget/button_highlighted.png" id="4_7s8pf"]
+[ext_resource type="Texture2D" uid="uid://bxq6s8b1h2h6w" path="res://Textures/gui/widget/button_disabled.png" id="5_6vunh"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_hjers"]
+texture = ExtResource("3_q0div")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_n4jyb"]
+texture = ExtResource("4_7s8pf")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_3ropw"]
+texture = ExtResource("5_6vunh")
 
 [node name="Options" type="Control"]
 texture_filter = 1
@@ -32,3 +44,57 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("2_rwmra")
+
+[node name="Change Skin Button" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -292.0
+offset_top = 194.0
+offset_right = -27.0
+offset_bottom = 248.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 4
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxTexture_hjers")
+theme_override_styles/hover = SubResource("StyleBoxTexture_n4jyb")
+theme_override_styles/disabled = SubResource("StyleBoxTexture_3ropw")
+text = "Change Skin"
+
+[node name="Back Button" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 35.0
+offset_top = 194.0
+offset_right = 300.0
+offset_bottom = 248.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 4
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxTexture_hjers")
+theme_override_styles/hover = SubResource("StyleBoxTexture_n4jyb")
+theme_override_styles/disabled = SubResource("StyleBoxTexture_3ropw")
+text = "Back"
+
+[node name="FileDialog" type="FileDialog" parent="."]
+title = "Open a File"
+position = Vector2i(199, 102)
+size = Vector2i(708, 458)
+popup_window = true
+ok_button_text = "Open"
+file_mode = 0
+access = 2
+use_native_dialog = true

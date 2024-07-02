@@ -1,14 +1,35 @@
-[gd_scene load_steps=5 format=3 uid="uid://bkn55xoy4o46w"]
+[gd_scene load_steps=7 format=3 uid="uid://bkn55xoy4o46w"]
 
 [ext_resource type="Script" path="res://Scripts/Game_manager.cs" id="1_tbcuj"]
 [ext_resource type="PackedScene" uid="uid://c646cyjywyv1g" path="res://Scenes/main_menu.tscn" id="2_aiv38"]
 [ext_resource type="PackedScene" uid="uid://dbsahl043aa4t" path="res://Scenes/world.tscn" id="3_oi181"]
 [ext_resource type="Texture2D" uid="uid://d0sagm4wnk8w0" path="res://Skins/skin_steve.png" id="4_u31ul"]
+[ext_resource type="PackedScene" uid="uid://c67onh00tec51" path="res://Scenes/options.tscn" id="5_6b85x"]
+[ext_resource type="Script" path="res://Scripts/Options_Manager.cs" id="5_os5bx"]
 
 [node name="Game" type="Node3D"]
 
-[node name="Game manager" type="Node" parent="."]
+[node name="Game manager" type="Node" parent="." node_paths=PackedStringArray("active_scenes_Node")]
 script = ExtResource("1_tbcuj")
 MainMenu_Scene = ExtResource("2_aiv38")
 World_Scene = ExtResource("3_oi181")
+active_scenes_Node = NodePath("../Active Scenes")
 skin = ExtResource("4_u31ul")
+
+[node name="Options Manager" type="Node" parent="." node_paths=PackedStringArray("options", "changeskinButton", "skinFileDialogue")]
+script = ExtResource("5_os5bx")
+options = NodePath("../Options")
+changeskinButton = NodePath("../Options/Change Skin Button")
+skinFileDialogue = NodePath("../Options/FileDialog")
+
+[node name="Active Scenes" type="Node3D" parent="."]
+
+[node name="Options" parent="." instance=ExtResource("5_6b85x")]
+visible = false
+top_level = true
+
+[connection signal="pressed" from="Options/Change Skin Button" to="Options Manager" method="_on_change_skin_button_pressed"]
+[connection signal="pressed" from="Options/Back Button" to="Options Manager" method="_on_back_button_pressed"]
+[connection signal="file_selected" from="Options/FileDialog" to="Options Manager" method="_on_file_dialog_file_selected"]
+
+[editable path="Options"]

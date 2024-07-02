@@ -3,3 +3,5 @@
 [resource]
 noise_type = 3
 seed = 12
+domain_warp_type = 2
+domain_warp_amplitude = 0.0

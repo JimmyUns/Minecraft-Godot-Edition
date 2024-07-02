@@ -22,6 +22,10 @@ public partial class PlayerBody : CharacterBody3D
 
 	public override void _PhysicsProcess(double delta)
 	{
+		if(GlobalPosition.Y <= -5)
+		{
+			GlobalPosition = new Vector3(GlobalPosition.X, GlobalPosition.Y + 100f, GlobalPosition.Z);
+		}
 		Vector3 velocity = Velocity;
 		if (playerManager.gameMode == 0)
 		{
@@ -33,7 +37,7 @@ public partial class PlayerBody : CharacterBody3D
 			else
 			{
 				if (jumpCooldown > 0) jumpCooldown -= (float)delta;
-				if (Input.IsActionPressed("jump") && jumpCooldown <= 0)
+				if (Input.IsActionPressed("jump") && jumpCooldown <= 0 && lockMovement == false)
 				{
 					gravityMultiplyer = 0.1f;
 					velocity.Y = JumpVelocity;
@@ -67,6 +71,7 @@ public partial class PlayerBody : CharacterBody3D
 		{
 			inputDir = Vector2.Zero;
 		}
+		
 		direction = (Transform.Basis * new Vector3(inputDir.X, 0, inputDir.Y)).Normalized();
 		if (direction != Vector3.Zero)
 		{

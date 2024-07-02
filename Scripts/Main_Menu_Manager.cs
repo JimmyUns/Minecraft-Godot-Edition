@@ -8,16 +8,21 @@ public partial class Main_Menu_Manager : Node
 	[Export] public Camera3D mainCamera;
 	[Export] public TextureRect logoscreenTexture;
 	[Export] private AnimationPlayer splashtextAnim;
-	[Export] private Control options;
-	[Export] private FileDialog skinFileDialogue;
-	[Export] private Button changeskinButton;
-	
 
 
 	private bool isshowingMenu;
 	public override void _Ready()
 	{
-		FakeLoadingScreenLOL();
+		if (Game_manager.instance.firstLaunch)
+		{
+			Game_manager.instance.firstLaunch = false;
+			FakeLoadingScreenLOL();
+		}
+		else
+		{
+			isshowingMenu = true;
+			splashtextAnim.Play("new_animation");
+		}
 	}
 	public override void _Process(double delta)
 	{
@@ -40,7 +45,7 @@ public partial class Main_Menu_Manager : Node
 	{
 		logoscreenTexture.Visible = true;
 		DisplayServer.WindowSetFlag(DisplayServer.WindowFlags.Borderless, true);
-		await ToSignal(GetTree().CreateTimer(5), "timeout");
+		await ToSignal(GetTree().CreateTimer(0), "timeout");
 		DisplayServer.WindowSetFlag(DisplayServer.WindowFlags.Borderless, false);
 		isshowingMenu = true;
 		splashtextAnim.Play("new_animation");
@@ -56,34 +61,10 @@ public partial class Main_Menu_Manager : Node
 	{
 		GetTree().Quit();
 	}
-
+	
 	public void _on_options_button_pressed()
 	{
-		options.Visible = true;
-		options.MouseFilter = Control.MouseFilterEnum.Pass;
-		changeskinButton.Text = "Change Skin";
-		
-	}
-
-	public void _on_back_button_pressed()
-	{
-		options.Visible = false;
-		options.MouseFilter = Control.MouseFilterEnum.Ignore;
-	}
-
-	public void _on_change_skin_button_pressed()
-	{
-		skinFileDialogue.Popup();
-
-	}
-
-	public void _on_file_dialog_file_selected(String path)
-	{
-		var image = new Image();
-		image.Load(path);
-		image.Convert(Image.Format.Rgba8);
-		Game_manager.instance.skin = ImageTexture.CreateFromImage(image);
-		changeskinButton.Text = "Skin Changed!";
+		Options_Manager.instance.ShowOptions(true);
 
 	}
 }

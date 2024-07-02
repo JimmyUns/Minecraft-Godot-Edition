@@ -27,6 +27,8 @@ public partial class Player_Mesh_Maker : Node
 		CreateArmRight();
 		CreateLegLeft();
 		CreateLegRight();
+		
+		(playerManager as Player_Manager).paperdollController.CreatePaperdoll();
 	}
 
 	private void LoadTextures()

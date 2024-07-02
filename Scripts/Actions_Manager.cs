@@ -36,7 +36,9 @@ public partial class Actions_Manager : Node
 				block_outline_node.GlobalPosition = block_outline_node_newPos;
 
 
-			if (Input.IsActionPressed("action_0") && currBreakCooldown <= 0 && playerManager.inventoryVisible == false) //break
+			if (playerManager.inventoryVisible || playerManager.pausemenuVisible) return;
+
+			if (Input.IsActionPressed("action_0") && currBreakCooldown <= 0) //break
 			{
 
 				playerManager.inventoryManager.GiveObject(chunk.GetBlock((Vector3I)(intbPos - chunk.GlobalPosition)), 1);
@@ -78,18 +80,19 @@ public partial class Actions_Manager : Node
 		else
 		{
 			block_outline_node.Visible = false;
-			
+
+			if (playerManager.inventoryVisible || playerManager.pausemenuVisible) return;
 			//Same as attacking
 			if (Input.IsActionJustPressed("action_0"))
+			{
+				if (handheldobjectAnim.IsPlaying() == false)
 				{
-					if (handheldobjectAnim.IsPlaying() == false)
-					{
-						if (playerManager.blockInHand != null)
-							handheldobjectAnim.Play("break_block");
-						else
-							handheldobjectAnim.Play("break_hand");
-					}
+					if (playerManager.blockInHand != null)
+						handheldobjectAnim.Play("break_block");
+					else
+						handheldobjectAnim.Play("break_hand");
 				}
+			}
 		}
 	}
 

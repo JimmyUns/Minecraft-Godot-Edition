@@ -51,17 +51,20 @@ texture = ExtResource("8_w4u0d")
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_0okrp"]
 texture = ExtResource("9_wnmxr")
 
-[node name="UI" type="CanvasLayer" node_paths=PackedStringArray("coordinates", "chunk", "fps", "hotbarObjectNamePopup", "hotbarSelected_TextureRect", "inventory_survival", "hotbar", "hotbarIcons", "ui_Anim", "debugScreen", "crosshair", "slotHighlight", "heldInventoryObjectTextureRect")]
+[node name="UI" type="CanvasLayer" node_paths=PackedStringArray("controlParentNode", "coordinates", "chunk", "fps", "hotbarObjectNamePopup", "memoryUsage", "hotbarSelected_TextureRect", "inventory_survival", "hotbar", "hotbarIcons", "ui_Anim", "pauseMenu", "debugScreen", "crosshair", "slotHighlight", "heldInventoryObjectTextureRect")]
 script = ExtResource("1_aedfe")
+controlParentNode = NodePath("Control")
 coordinates = NodePath("Control/Debug Screen/VBoxContainer/Coordinates")
 chunk = NodePath("Control/Debug Screen/VBoxContainer/Chunks")
 fps = NodePath("Control/Debug Screen/VBoxContainer/FPS")
 hotbarObjectNamePopup = NodePath("Control/Hotbar/Object Name")
+memoryUsage = NodePath("Control/Debug Screen/VBoxContainer/Memory")
 hotbarSelected_TextureRect = NodePath("Control/Hotbar/Outline")
 inventory_survival = NodePath("Control/Inventory")
 hotbar = NodePath("Control/Hotbar")
 hotbarIcons = [NodePath("Control/Hotbar/slot 0"), NodePath("Control/Hotbar/slot 1"), NodePath("Control/Hotbar/slot 2"), NodePath("Control/Hotbar/slot 3"), NodePath("Control/Hotbar/slot 4"), NodePath("Control/Hotbar/slot 5"), NodePath("Control/Hotbar/slot 6"), NodePath("Control/Hotbar/slot 7"), NodePath("Control/Hotbar/slot 8")]
 ui_Anim = NodePath("UI Animation Player")
+pauseMenu = NodePath("Control/Pause Menu")
 debugScreen = NodePath("Control/Debug Screen")
 crosshair = NodePath("Control/CrossHair")
 slotHighlight = NodePath("Control/Inventory/Slot Highlight")
@@ -1312,9 +1315,26 @@ text = "64"
 horizontal_alignment = 2
 vertical_alignment = 2
 
-[node name="Debug Screen" type="CanvasLayer" parent="Control"]
+[node name="Paperdoll" type="TextureRect" parent="Control/Inventory"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.1
+anchor_top = 0.042
+anchor_right = 0.291
+anchor_bottom = 0.314
+offset_left = 0.299995
+offset_top = 0.365997
+offset_right = -0.10701
+offset_bottom = 0.0219879
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Debug Screen" type="Control" parent="Control"]
+anchors_preset = 0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Control/Debug Screen"]
+layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
@@ -1331,18 +1351,30 @@ text = "Chunk: 0,0
 layout_mode = 2
 text = "fps: 999"
 
-[node name="Pause Menu" type="CanvasLayer" parent="Control"]
-visible = false
+[node name="Memory" type="Label" parent="Control/Debug Screen/VBoxContainer"]
+layout_mode = 2
+text = "Memory usage: 9999"
 
-[node name="Background" type="ColorRect" parent="Control/Pause Menu"]
+[node name="Pause Menu" type="Control" parent="Control"]
+visible = false
+layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0, 0, 0, 0.286275)
+
+[node name="Background" type="ColorRect" parent="Control/Pause Menu"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.627451)
 
 [node name="Game Menu" type="Label" parent="Control/Pause Menu"]
+layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
@@ -1355,6 +1387,7 @@ theme_override_font_sizes/font_size = 20
 text = "Game Menu"
 
 [node name="Back to Game" type="Button" parent="Control/Pause Menu"]
+layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -1372,6 +1405,7 @@ theme_override_styles/disabled = SubResource("StyleBoxTexture_0okrp")
 text = "Back to Game"
 
 [node name="Advancements" type="Button" parent="Control/Pause Menu"]
+layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -1388,6 +1422,7 @@ text = "Advancements
 "
 
 [node name="Statistics" type="Button" parent="Control/Pause Menu"]
+layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -1403,6 +1438,7 @@ theme_override_styles/normal = SubResource("StyleBoxTexture_lbaoa")
 text = "Statistics"
 
 [node name="Give Feedback" type="Button" parent="Control/Pause Menu"]
+layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -1418,6 +1454,7 @@ theme_override_styles/normal = SubResource("StyleBoxTexture_lbaoa")
 text = "Give Feedback"
 
 [node name="Report Bugs" type="Button" parent="Control/Pause Menu"]
+layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -1433,6 +1470,7 @@ theme_override_styles/normal = SubResource("StyleBoxTexture_lbaoa")
 text = "Report Bugs"
 
 [node name="Options" type="Button" parent="Control/Pause Menu"]
+layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -1448,6 +1486,7 @@ theme_override_styles/normal = SubResource("StyleBoxTexture_lbaoa")
 text = "Options..."
 
 [node name="Open To Lan" type="Button" parent="Control/Pause Menu"]
+layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -1463,6 +1502,7 @@ theme_override_styles/normal = SubResource("StyleBoxTexture_lbaoa")
 text = "Open To Lan"
 
 [node name="Save And Quit" type="Button" parent="Control/Pause Menu"]
+layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -1476,3 +1516,6 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/normal = SubResource("StyleBoxTexture_lbaoa")
 text = "Save and Quit to Title"
+
+[connection signal="pressed" from="Control/Pause Menu/Options" to="." method="_on_options_pressed"]
+[connection signal="pressed" from="Control/Pause Menu/Save And Quit" to="." method="_on_save_and_quit_pressed"]

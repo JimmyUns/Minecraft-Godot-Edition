@@ -1,6 +1,8 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading.Tasks;
 
 public partial class Chunk_Manager : StaticBody3D
 {
@@ -31,11 +33,14 @@ public partial class Chunk_Manager : StaticBody3D
 	private SurfaceTool _surfaceTool = new SurfaceTool();//Tool that creats the 3dShape
 
 	private Block[,,] _blocks = new Block[dimensions.X, dimensions.Y, dimensions.Z];
+	private Dictionary<Vector3I, Block> treeTrunks = new Dictionary<Vector3I, Block>();
+
 
 	//chunk location in the chunk list
 	public Vector2I chunkPosition { get; private set; }
 
-	[Export] public FastNoiseLite Noise;
+	[Export] public FastNoiseLite terrainNoise, treeNoise, riverNoise;
+
 
 	public void SetChunkPosition(Vector2I position)
 	{
@@ -48,36 +53,71 @@ public partial class Chunk_Manager : StaticBody3D
 	//Generate Mesh Chunk
 	public void GenerateData()
 	{
+		Vector2I globalChunkOffset = chunkPosition * new Vector2I(dimensions.X, dimensions.Z);
+
 		for (int x = 0; x < dimensions.X; x++)
 		{
 			for (int y = 0; y < dimensions.Y; y++)
 			{
 				for (int z = 0; z < dimensions.Z; z++)
 				{
-					Block block;
+					Block block = Block_Manager.Instance.Air;
 
-					var globalBlockPosition = chunkPosition * new Vector2I(dimensions.X, dimensions.Z) + new Vector2I(x, z);
-					var groundHeight = (int)(dimensions.Y * ((Noise.GetNoise2D(globalBlockPosition.X, globalBlockPosition.Y) + 1f) / 2f)); //World Height 0 to dimensions.y which is 64
+					Vector2I globalBlockPosition = globalChunkOffset + new Vector2I(x, z);
+					float terrainNoiseValue = (terrainNoise.GetNoise2D(globalBlockPosition.X, globalBlockPosition.Y) + 1f) / 2f;
+					int groundHeight = (int)(dimensions.Y * terrainNoiseValue * 0.8f);
 
-					if (y == 0)
+					float riverNoiseValue = riverNoise.GetNoise2D(globalBlockPosition.X, globalBlockPosition.Y);
+					bool isRiver = riverNoiseValue > -0.1f && riverNoiseValue < 0.1f;
+
+					if (isRiver && y <= groundHeight)
 					{
-						block = Block_Manager.Instance.Bedrock;
-					}
-					else if (y < groundHeight - 3)
-					{
-						block = Block_Manager.Instance.Stone;
-					}
-					else if (y < groundHeight)
-					{
-						block = Block_Manager.Instance.Dirt;
-					}
-					else if (y == groundHeight)
-					{
-						block = Block_Manager.Instance.Grass;
+						if (y == groundHeight || y == groundHeight - 1)
+						{
+							block = Block_Manager.Instance.Air;
+						}
+						else if (y == groundHeight - 2)
+						{
+							block = Block_Manager.Instance.Water;
+						}
+						else if (y == 0)
+						{
+							block = Block_Manager.Instance.Bedrock;
+						}
+						else
+						{
+							block = Block_Manager.Instance.Dirt;
+						}
 					}
 					else
 					{
-						block = Block_Manager.Instance.Air;
+						if (y == 0)
+						{
+							block = Block_Manager.Instance.Bedrock;
+						}
+						else if (y < groundHeight - 3)
+						{
+							block = Block_Manager.Instance.Stone;
+						}
+						else if (y < groundHeight)
+						{
+							block = Block_Manager.Instance.Dirt;
+						}
+						else if (y == groundHeight)
+						{
+							block = Block_Manager.Instance.Grass;
+						}
+						else if (y == groundHeight + 1)
+						{
+							float treeNoiseValue = (treeNoise.GetNoise2D(globalBlockPosition.X, globalBlockPosition.Y) + 1f) / 2f;
+							if (treeNoiseValue >= 0.75f) // Adjust this threshold for density
+							{
+								block = Block_Manager.Instance.Oak_Log;
+								Vector3I globalTrunkPosition = new Vector3I(globalBlockPosition.X, y, globalBlockPosition.Y);
+								treeTrunks[globalTrunkPosition] = block;
+								Chunk_World_Manager.instance.SetBlock(globalTrunkPosition + new Vector3I(0, 1, 0), block);
+							}
+						}
 					}
 					_blocks[x, y, z] = block;
 				}
@@ -91,7 +131,7 @@ public partial class Chunk_Manager : StaticBody3D
 		UpdateMesh();
 	}
 
-	//Generate Collision and mesh for chunk
+	
 	public void UpdateMesh()
 	{
 		_surfaceTool.Begin(Mesh.PrimitiveType.Triangles);
@@ -113,6 +153,10 @@ public partial class Chunk_Manager : StaticBody3D
 		meshInstance.Mesh = mesh;
 		colShape.Shape = mesh.CreateTrimeshShape();
 	}
+
+	
+	#region Creating Block
+
 
 	private void CreateBlockMesh(Vector3I bPos)
 	{
@@ -194,12 +238,6 @@ public partial class Chunk_Manager : StaticBody3D
 		return _blocks[bPos.X, bPos.Y, bPos.Z] == Block_Manager.Instance.Air;
 	}
 
-	private Vector3I GetGlobalChunkOffset()
-	{
-		return new Vector3I(chunkPosition.X * dimensions.X, 0, chunkPosition.Y * dimensions.Z);
-	}
-
-
 
 	private bool CheckEdgeTransparentZ(Vector3I bPos, bool isPositive)
 	{
@@ -214,9 +252,10 @@ public partial class Chunk_Manager : StaticBody3D
 			return _blocks[bPos.X, bPos.Y, adjacentZ] == Block_Manager.Instance.Air;
 		}
 	}
+	#endregion
 
-
-
+	
+	#region Get/Set
 	public void SetBlock(Vector3I bPos, Block block)
 	{
 		_blocks[bPos.X, bPos.Y, bPos.Z] = block;
@@ -240,11 +279,19 @@ public partial class Chunk_Manager : StaticBody3D
 		return null;
 	}
 
-
 	public Vector2I GetChunkPosition()
 	{
 		return new Vector2I((int)GlobalPosition.X / 16, (int)GlobalPosition.Z / 16);
 	}
+
+
+	private Vector3I GetGlobalChunkOffset()
+	{
+		return new Vector3I(chunkPosition.X * dimensions.X, 0, chunkPosition.Y * dimensions.Z);
+	}
+
+	#endregion
+
 
 	private void UpdateAdjacentChunks(Vector3I bPos)
 	{
@@ -265,6 +312,7 @@ public partial class Chunk_Manager : StaticBody3D
 			UpdateAdjacentChunk(chunkPosition + new Vector2I(0, 1));
 		}
 	}
+
 
 	private void UpdateAdjacentChunk(Vector2I adjacentChunkPos)
 	{
